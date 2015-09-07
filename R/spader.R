@@ -69,7 +69,7 @@ ChaoSpecies <- function(data, datatype = c("abundance", "incidence"), k = 10, co
       z <- (list(Basic.Data.Information = basicInci(data, k)[[1]], Infreq.Species.Group = InfreqSpeciesGroup(data, k),
                  Species.Table = round(SpecInciOut(data, method, k, conf),3)))
     }
-    class(z) <- c("species")
+    class(z) <- c("ChaoSpecies")
     z
   }
 
@@ -395,7 +395,7 @@ SimilarityPair=function(X, datatype = c("abundance","incidence"),nboot=200)
     colnames(temp[[3]]) <- c("Estimate", "Est_s.e.", "95%.LCL", "95%.UCL")
     rownames(temp[[3]]) <- c("Chao2", "Chao2-bc", "ICE", "ICE-1")
     temp[[3]] <- as.data.frame(temp[[3]])
-    z <- list("datatype"=type, "info1"=info1, "info2"=info2, "similarity"=temp[[1]], "assemblage1"=temp[[2]], "assemblage2"=temp[[3]])
+    z <- list("datatype"=type, "info1"=info1, "info2"=info2, "similarity"=as.data.frame(temp[[1]]), "assemblage1"=temp[[2]], "assemblage2"=temp[[3]])
   }  
   class(z) <- c("spadeTwo")
   return(z)   
