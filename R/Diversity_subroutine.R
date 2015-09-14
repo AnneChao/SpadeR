@@ -529,6 +529,19 @@ Simpson_index=function(x,boot=200)
    return(a)
 }
 ######################################################2015.09.14
+SpecInci <- function(data, k=10, conf=0.95)
+{
+  Chao2   <- SpecInciChao2(data, k = k, conf = conf)
+  Chao2bc <- SpecInciChao2bc(data, k = k, conf = conf)
+  Modelh  <- SpecInciModelh(data, k = k, conf = conf)[-c(5)]
+  Modelh1 <- SpecInciModelh1(data, k = k, conf = conf)[-c(5)]
+  table   <- rbind(Chao2, Chao2bc, Modelh, Modelh1)
+  table   <- round(table,1)
+  colnames(table) <- c("Estimator", "Est_s.e.", "95% Lower Bound", "95% Upper Bound")
+  rownames(table) <- c("Chao2 (Chao, 1987)", "Chao2-bc", "ICE (Lee & Chao, 1994)", "ICE-1 (Lee & Chao, 1994)")
+  return(table)
+}
+
 EstiBootComm.Sam <- function(data)
 {
   data = data[data>0]
@@ -800,6 +813,8 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
   }else{
     cat("\n(1)  BASIC DATA INFORMATION:\n")
     print(x$BASIC.DATA)
+    cat("\n(2)  ESTIMATION OF SPECIES RICHNESS (DIVERSITY OF ORDER 0):\n\n")
+    print(x$SPECIES.RICHNESS)
     cat("\n(3a)  SHANNON INDEX:\n\n")
     print(x$SHANNON.INDEX)
     cat("\n(3b)  EXPONENTIAL OF SHANNON INDEX (DIVERSITY OF ORDER 1):\n\n")

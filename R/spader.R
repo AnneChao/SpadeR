@@ -253,6 +253,7 @@ Diversity=function(data, datatype=c("abundance","incidence"))
     type="incidence"
     BASIC.DATA <- basicInci(X, k=10)[[1]]
     ############################################################
+    table0=SpecInci(X, k=10, conf=0.95)
     SHANNON=Shannon_Inci_index(X)
     table1=round(SHANNON[c(1:4),],3)
     colnames(table1) <- c("Estimator", "Est_s.e.", paste("95% Lower Bound"), paste("95% Upper Bound"))
@@ -279,8 +280,8 @@ Diversity=function(data, datatype=c("abundance","incidence"))
     Hill <- data.frame(Hill)
     colnames(Hill)<-c("q","Chao","Empirical","Chao(s.e.)","Empirical(s.e.)")
     #z <- list("BASIC.DATA"=BASIC.DATA,"HILL.NUMBERS"= Hill)
-    #"SPECIES.RICHNESS"=table0, 
-    z <- list("datatype"= type,"BASIC.DATA"=BASIC.DATA,
+     
+    z <- list("datatype"= type,"BASIC.DATA"=BASIC.DATA,"SPECIES.RICHNESS"=table0,
               "SHANNON.INDEX"=table1,"EXPONENTIAL.OF.SHANNON.INDEX"=table1_exp,
               "SIMPSON.INDEX"=table2,"INVERSE.OF.SIMPSON.INDEX"=table2_recip,
               "HILL.NUMBERS"= Hill)
