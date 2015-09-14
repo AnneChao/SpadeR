@@ -197,6 +197,7 @@ Diversity=function(data, datatype=c("abundance","incidence"))
 {
   X <- data
   if(datatype=="abundance"){
+    type="abundance"
     if(!is.vector(X)) X <- as.numeric(unlist(c(X)))
     
     BASIC.DATA <- matrix(round(c(sum(X), sum(X>0), 1-sum(X==1)/sum(X), CV.Ind(X)),3), ncol = 1)
@@ -243,20 +244,46 @@ Diversity=function(data, datatype=c("abundance","incidence"))
     Hill <- data.frame(Hill)
     colnames(Hill)<-c("q","Chao","Empirical","Chao(s.e.)","Empirical(s.e.)")
     
-    z <- list("BASIC.DATA"=BASIC.DATA,"SPECIES.RICHNESS"=table0, 
+    z <- list("datatype"= type,"BASIC.DATA"=BASIC.DATA,"SPECIES.RICHNESS"=table0, 
               "SHANNON.INDEX"=table1,"EXPONENTIAL.OF.SHANNON.INDEX"=table1_exp,
               "SIMPSON.INDEX"=table2,"INVERSE.OF.SIMPSON.INDEX"=table2_recip,
               "HILL.NUMBERS"= Hill)
   }else if(datatype=="incidence"){
     if(!is.vector(X)) X <- as.numeric(unlist(c(X)))
-    
+    type="incidence"
     BASIC.DATA <- basicInci(X, k=10)[[1]]
+    ############################################################
+    SHANNON=Shannon_Inci_index(X)
+    table1=round(SHANNON[c(1:4),],3)
+    colnames(table1) <- c("Estimator", "Est_s.e.", paste("95% Lower Bound"), paste("95% Upper Bound"))
+    rownames(table1) <- c(" MLE"," MLE_bc"," Chao & Shen"," Chao (2013)")
+    
+    table1_exp=round(SHANNON[c(5:8),],3)
+    colnames(table1_exp) <- c("Estimator", "Est_s.e.", paste("95% Lower Bound"), paste("95% Upper Bound"))
+    rownames(table1_exp) <- c(" MLE"," MLE_bc"," Chao & Shen"," Chao (2013)")
+    
+    SIMPSON=Simpson_Inci_index(X)
+    table2=round(SIMPSON[c(1:2),],5)
+    colnames(table2) <- c("Estimator", "Est_s.e.", paste("95% Lower Bound"), paste("95% Upper Bound"))
+    rownames(table2) <- c(" MVUE"," MLE")
+    
+    table2_recip=round(SIMPSON[c(3:4),],5)
+    colnames(table2_recip) <- c("Estimator", "Est_s.e.", paste("95% Lower Bound"), paste("95% Upper Bound"))
+    rownames(table2_recip) <- c(" MVUE"," MLE")
+    
+    
+    ############################################################
     Hill <- reshapeChaoHill(ChaoHill(X, datatype = "incidence", from=0, to=3, interval=0.25, B=50, conf=0.95))
     Hill<-cbind(Hill[1:13,1],Hill[14:26,3],Hill[1:13,3],Hill[14:26,4],Hill[1:13,4])
     Hill<-round(Hill,3)
     Hill <- data.frame(Hill)
     colnames(Hill)<-c("q","Chao","Empirical","Chao(s.e.)","Empirical(s.e.)")
-    z <- list("BASIC.DATA"=BASIC.DATA,"HILL.NUMBERS"= Hill)
+    #z <- list("BASIC.DATA"=BASIC.DATA,"HILL.NUMBERS"= Hill)
+    #"SPECIES.RICHNESS"=table0, 
+    z <- list("datatype"= type,"BASIC.DATA"=BASIC.DATA,
+              "SHANNON.INDEX"=table1,"EXPONENTIAL.OF.SHANNON.INDEX"=table1_exp,
+              "SIMPSON.INDEX"=table2,"INVERSE.OF.SIMPSON.INDEX"=table2_recip,
+              "HILL.NUMBERS"= Hill)
   }
     class(z) <- c("spadeDiv")
   return(z) 

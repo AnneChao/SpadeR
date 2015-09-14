@@ -29,7 +29,7 @@ function(data, k, conf){
     j <- c(1:k)
     b1 <- sum(sapply(j, function(j)j*(j-1)*Q(j, x)))
     b2 <- sum(sapply(j, function(j)j*Q(j, x)))
-    gamma_infreq_square <- max(D_infreq/C_infreq*t/(t - 1)*b1/b2/(b2) - 1, 0)
+    gamma_infreq_square <- max(D_infreq/C_infreq*t/(t - 1)*b1/b2/(b2-1) - 1, 0)
     CV_infreq <- sqrt(gamma_infreq_square)
     D_freq <- length(x[which(x > k)])
     

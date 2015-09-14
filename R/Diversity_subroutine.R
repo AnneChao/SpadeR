@@ -528,6 +528,206 @@ Simpson_index=function(x,boot=200)
    a[4,]=c(1/MLE,MLE_recip_sd,1/MLE-1.96*MLE_recip_sd,1/MLE+1.96*MLE_recip_sd)
    return(a)
 }
+######################################################2015.09.14
+EstiBootComm.Sam <- function(data)
+{
+  data = data[data>0]
+  T1 <- data[1]
+  X = data[-c(1)]
+  U = sum(X)   #observed species
+  Q1 = length(X[X==1])   #singleton 
+  Q2 = length(X[X==2]) 	#doubleton
+  if(Q2>0)
+  {
+    A = 2*Q2/((T1-1)*Q1+2*Q2)
+  }
+  else if(Q1>1)
+  {
+    A=2/((T1-1)*(Q1-1)+2)
+  }else
+  {
+    A=0
+  }  
+  C1 = 1 - Q1/U*(1 - A)
+  W = U/T1*(1 - C1)/sum(X/T1*(1-X/T1)^T1)  			#adjusted factor for rare species in the sample
+  Q0 = ceiling(ifelse(Q2>0, (T1-1)/T1*Q1^2/2/Q2, (T1-1)/T1*Q1*(Q1-1)/2))	#estimation of unseen species via Chao2
+  Prob.hat = X/T1*(1-W*(1-X/T1)^T1)					#estimation of detection probability of observed species in the sample
+  Prob.hat.Unse <- rep(U/T1*(1-C1)/Q0, Q0)		#estimation of detection probability of unseen species in the sample
+  return(c(Prob.hat,  Prob.hat.Unse))									#Output: a vector of estimated detection probability
+}
+entropy_MLE_Inci_equ <- function(X)
+{
+  X <- X[-1]
+  X <- X[X > 0]
+  U <- sum(X)
+  H_MLE <- -sum(X/U*log(X/U))
+  return(H_MLE)
+}
+entropy_MLE_bc_Inci_equ <- function(X)
+{
+  t <- X[1]
+  X <- X[-1]
+  X <- X[X > 0]
+  U <- sum(X)
+  X_freq <- X[X > 10]
+  X_infreq <- X[X <= 10]
+  D_freq <- length(X_freq)
+  D_infreq <- length(X_infreq)
+  Q1 <- sum(X == 1)
+  Q2 <- sum(X == 2)
+  if(Q1 > 0 & Q2 > 0)
+  {
+    A <- 2*Q2/((t-1)*Q1 + 2*Q2)
+  } 
+  else if (Q1 > 0 & Q2 == 0)
+  {
+    A <- 2/((t-1)*(Q1 - 1) + 2)
+  } 
+  else 
+  {
+    A <- 1
+  }
+  C_infreq <- 1 - Q1/sum(X_infreq)*(1-A)
+  
+  j <- c(1:10)
+  b1 <- sum(sapply(j, function(j){j*(j-1)*sum(X == j)}))
+  b2 <- sum(sapply(j, function(j){j*sum(X == j)}))
+  gamma_infreq_square <- max(D_infreq/C_infreq*t/(t-1)*b1/b2/(b2-1) - 1, 0)
+  
+  ICE <- D_freq + D_infreq/C_infreq + Q1/C_infreq*gamma_infreq_square
+  
+  H_MLE <- -sum(X/U*log(X/U))
+  H_MLE_bc <- H_MLE + (ICE/U + 1/t)/1
+  
+  return(H_MLE_bc)
+}
+entropy_HT_Inci_equ <- function(X)
+{
+  t <- X[1]
+  X <- X[-1]
+  X <- X[X > 0]
+  U <- sum(X)
+  Q1 <- sum(X == 1)
+  Q2 <- sum(X == 2)
+  if(Q1 > 0 & Q2 > 0){
+    A <- 2*Q2/((t-1)*Q1 + 2*Q2)
+  } else if (Q1 > 0 & Q2 == 0){
+    A <- 2/((t-1)*(Q1 - 1) + 2)
+  } else {
+    A <- 1
+  }
+  C <- 1 - Q1/U*(1-A)
+  H_HT <- t/U*(-sum(C*X/t*log(C*X/t)/(1-(1-C*X/t)^t))) + log(U/t)
+  return(H_HT)
+}
+entropy_MEE_Inci_equ <- function(X)
+{
+  t <- X[1]
+  X <- X[-1]
+  X <- X[X > 0]
+  U <- sum(X)
+  Q1 <- sum(X == 1)
+  Q2 <- sum(X == 2)
+  if(Q1 > 0 & Q2 > 0){
+    A <- 2*Q2/((t-1)*Q1 + 2*Q2)
+  } else if (Q1 > 0 & Q2 == 0){
+    A <- 2/((t-1)*(Q1 - 1) + 2)
+  } else {
+    A <- 1
+  }
+  
+  UE <- sum(X/t*(digamma(t)-digamma(X)))
+  if(Q1 > 0 & A!=1){
+    B <- Q1/t*(1-A)^(-t+1)*(-log(A)-sum(sapply(1:(t-1), function(k){1/k*(1-A)^k})))
+    H_MEE <- t/U*(UE + B) + log(U/t)
+  }else{
+    H_MEE <- t/U*UE + log(U/t)
+  }
+  return(H_MEE)
+}
+Shannon_Inci_index=function(x,boot=50)
+{
+  x = unlist(x)
+  t = x[1]
+  MLE=entropy_MLE_Inci_equ(x) 
+  MLE_bc=entropy_MLE_bc_Inci_equ(x)
+  HT=entropy_HT_Inci_equ(x)
+  MEE=entropy_MEE_Inci_equ(x)
+  p_hat=EstiBootComm.Sam(x)
+  Boot.X = sapply(1:length(p_hat), function(i){
+    rbinom(boot,t,p_hat[i])})
+  Boot.X = cbind(rep(t,boot), Boot.X)
+  temp1=apply(Boot.X,1,entropy_MLE_Inci_equ)
+  temp2=apply(Boot.X,1,entropy_MLE_bc_Inci_equ)
+  temp4=apply(Boot.X,1,entropy_HT_Inci_equ)
+  temp5=apply(Boot.X,1,entropy_MEE_Inci_equ)
+  MLE_sd=sd(temp1)
+  MLE_bc_sd=sd(temp2)
+  HT_sd=sd(temp4)
+  MEE_sd=sd(temp5)
+  
+  MLE_exp_sd=sd(exp(temp1))
+  MLE_bc_exp_sd=sd(exp(temp2))
+  HT_exp_sd=sd(exp(temp4))  
+  MEE_exp_sd=sd(exp(temp5))
+  
+  a=matrix(0,8,4)
+  a[1,]=c(MLE,MLE_sd,MLE-1.96*MLE_sd,MLE+1.96*MLE_sd)
+  a[2,]=c(MLE_bc,MLE_bc_sd,MLE_bc-1.96*MLE_bc_sd,MLE_bc+1.96*MLE_bc_sd)
+  a[3,]=c(HT,HT_sd,HT-1.96*HT_sd,HT+1.96*HT_sd)
+  a[4,]=c(MEE,MEE_sd,MEE-1.96*MEE_sd,MEE+1.96*MEE_sd)
+  a[5,]=c(exp(MLE),MLE_exp_sd,exp(MLE)-1.96*MLE_exp_sd,exp(MLE)+1.96*MLE_exp_sd)
+  a[6,]=c(exp(MLE_bc),MLE_bc_exp_sd,exp(MLE_bc)-1.96*MLE_bc_exp_sd,exp(MLE_bc)+1.96*MLE_bc_exp_sd)
+  a[7,]=c(exp(HT),HT_exp_sd,exp(HT)-1.96*HT_exp_sd,exp(HT)+1.96*HT_exp_sd)
+  a[8,]=c(exp(MEE),MEE_exp_sd,exp(MEE)-1.96*MEE_exp_sd,exp(MEE)+1.96*MEE_exp_sd)
+  return(a)
+}
+simpson_Inci_MVUE_equ=function(Y)
+{ 
+  t=Y[1] 
+  Y=Y[-1] 
+  Y=Y[Y>0]
+  U=sum(Y)
+  a=(sum(Y*(Y-1))/U^2/(1-1/t)) 
+}
+simpson_Inci_MLE_equ=function(Y)
+{
+  t=Y[1] 
+  Y=Y[-1] 
+  Y=Y[Y>0]
+  a=(sum(Y^2)/sum(Y)^2)
+}
+Simpson_Inci_index=function(x,boot=200)
+{
+  x=x[x>0]
+  t = x[1]
+  MVUE=simpson_Inci_MVUE_equ(x)
+  MLE=simpson_Inci_MLE_equ(x)
+  
+  p_hat=EstiBootComm.Sam(x)
+  #set.seed(1)
+  Boot.X = sapply(1:length(p_hat), function(i){
+    rbinom(boot,t,p_hat[i])})
+  Boot.X = cbind(rep(t,boot), Boot.X)
+  temp1=apply(Boot.X,1,simpson_Inci_MVUE_equ)
+  temp2=apply(Boot.X,1,simpson_Inci_MLE_equ)
+  
+  MVUE_sd=sd(temp1)
+  MLE_sd=sd(temp2)
+  
+  MVUE_recip_sd=MVUE_sd/MVUE
+  MLE_recip_sd=MLE_sd/MLE
+  
+  a=matrix(0,4,4)
+  a[1,]=c(MVUE,MVUE_sd,MVUE-1.96*MVUE_sd,MVUE+1.96*MVUE_sd)
+  a[2,]=c(MLE,MLE_sd,MLE-1.96*MLE_sd,MLE+1.96*MLE_sd)
+  a[3,]=c(1/MVUE,MVUE_recip_sd,1/MVUE-1.96*MVUE_recip_sd,1/MVUE+1.96*MVUE_recip_sd)
+  a[4,]=c(1/MLE,MLE_recip_sd,1/MLE-1.96*MLE_recip_sd,1/MLE+1.96*MLE_recip_sd)
+  return(a)
+}
+######################################################2015.09.14
+
+
 
 #X=read.table("Data4a.txt")
 #Y=read.table("Data4b1_t.txt")
@@ -536,7 +736,7 @@ Simpson_index=function(x,boot=200)
 
 print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
   
-  if(length(x)>2){
+  if(x$datatype=="abundance"){
   
     cat("\n(1)  BASIC DATA INFORMATION:\n")
     print(x$BASIC.DATA)
@@ -600,7 +800,15 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
   }else{
     cat("\n(1)  BASIC DATA INFORMATION:\n")
     print(x$BASIC.DATA)
-    cat("\n(2)  The estimates of Hill's number at order q from 0 to 3\n\n")
+    cat("\n(3a)  SHANNON INDEX:\n\n")
+    print(x$SHANNON.INDEX)
+    cat("\n(3b)  EXPONENTIAL OF SHANNON INDEX (DIVERSITY OF ORDER 1):\n\n")
+    print(x$EXPONENTIAL.OF.SHANNON.INDEX)
+    cat("\n(4a)  SIMPSON INDEX:\n\n")
+    print(x$SIMPSON.INDEX)
+    cat("\n(4b)  INVERSE OF SIMPSON INDEX (DIVERSITY OF ORDER 2):\n\n")
+    print(x$INVERSE.OF.SIMPSON.INDEX)
+    cat("\n(5)  The estimates of Hill's number at order q from 0 to 3\n\n")
     print(x$HILL.NUMBERS)
     
     cat("
