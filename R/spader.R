@@ -239,10 +239,16 @@ Diversity=function(data, datatype=c("abundance","incidence"))
     rownames(table2_recip) <- c(" MVUE"," MLE")
     
     Hill <- reshapeChaoHill(ChaoHill(X, datatype = "abundance", from=0, to=3, interval=0.25, B=50, conf=0.95))
-    Hill<-cbind(Hill[1:13,1],Hill[14:26,3],Hill[1:13,3],Hill[14:26,4],Hill[1:13,4])
+    #Hill<-cbind(Hill[1:13,1],Hill[14:26,3],Hill[1:13,3],Hill[14:26,4],Hill[1:13,4])
+    Chao.LCL <- Hill[14:26,3] - 1.96*Hill[14:26,4]
+    Chao.UCL <- Hill[14:26,3] + 1.96*Hill[14:26,4]
+    Emperical.LCL <- Hill[1:13,3] - 1.96*Hill[1:13,4]
+    Emperical.UCL <- Hill[1:13,3] + 1.96*Hill[1:13,4]
+    Hill<-cbind(Hill[1:13,1],Hill[14:26,3],Hill[1:13,3],Chao.LCL,Chao.UCL,Emperical.LCL,Emperical.UCL)
     Hill<-round(Hill,3)
     Hill <- data.frame(Hill)
-    colnames(Hill)<-c("q","Chao","Empirical","Chao(s.e.)","Empirical(s.e.)")
+    #colnames(Hill)<-c("q","Chao","Empirical","Chao(s.e.)","Empirical(s.e.)")
+    colnames(Hill)<-c("q","Chao","Empirical","Chao(95% Lower)","Chao(95% Upper)","Empirical(95% Lower)","Empirical(95% Upper)")
     
     z <- list("datatype"= type,"BASIC.DATA"=BASIC.DATA,"SPECIES.RICHNESS"=table0, 
               "SHANNON.INDEX"=table1,"EXPONENTIAL.OF.SHANNON.INDEX"=table1_exp,
@@ -255,13 +261,14 @@ Diversity=function(data, datatype=c("abundance","incidence"))
     ############################################################
     table0=SpecInci(X, k=10, conf=0.95)
     SHANNON=Shannon_Inci_index(X)
-    table1=round(SHANNON[c(1:4),],3)
+    table1=round(SHANNON[c(1,4),],3)
     colnames(table1) <- c("Estimator", "Est_s.e.", paste("95% Lower Bound"), paste("95% Upper Bound"))
-    rownames(table1) <- c(" MLE"," MLE_bc"," Chao & Shen"," Chao (2013)")
-    
-    table1_exp=round(SHANNON[c(5:8),],3)
+    #rownames(table1) <- c(" MLE"," MLE_bc"," Chao & Shen"," Chao (2013)")
+    rownames(table1) <- c(" MLE"," Chao (2013)")
+    table1_exp=round(SHANNON[c(5,8),],3)
     colnames(table1_exp) <- c("Estimator", "Est_s.e.", paste("95% Lower Bound"), paste("95% Upper Bound"))
-    rownames(table1_exp) <- c(" MLE"," MLE_bc"," Chao & Shen"," Chao (2013)")
+    #rownames(table1_exp) <- c(" MLE"," MLE_bc"," Chao & Shen"," Chao (2013)")
+    rownames(table1_exp) <- c(" MLE"," Chao (2013)")
     
     SIMPSON=Simpson_Inci_index(X)
     table2=round(SIMPSON[c(1:2),],5)
@@ -275,10 +282,17 @@ Diversity=function(data, datatype=c("abundance","incidence"))
     
     ############################################################
     Hill <- reshapeChaoHill(ChaoHill(X, datatype = "incidence", from=0, to=3, interval=0.25, B=50, conf=0.95))
-    Hill<-cbind(Hill[1:13,1],Hill[14:26,3],Hill[1:13,3],Hill[14:26,4],Hill[1:13,4])
+    #Hill<-cbind(Hill[1:13,1],Hill[14:26,3],Hill[1:13,3],Hill[14:26,4],Hill[1:13,4])
+    Chao.LCL <- Hill[14:26,3] - 1.96*Hill[14:26,4]
+    Chao.UCL <- Hill[14:26,3] + 1.96*Hill[14:26,4]
+    Emperical.LCL <- Hill[1:13,3] - 1.96*Hill[1:13,4]
+    Emperical.UCL <- Hill[1:13,3] + 1.96*Hill[1:13,4]
+    Hill<-cbind(Hill[1:13,1],Hill[14:26,3],Hill[1:13,3],Chao.LCL,Chao.UCL,Emperical.LCL,Emperical.UCL)
     Hill<-round(Hill,3)
     Hill <- data.frame(Hill)
-    colnames(Hill)<-c("q","Chao","Empirical","Chao(s.e.)","Empirical(s.e.)")
+    #colnames(Hill)<-c("q","Chao","Empirical","Chao(s.e.)","Empirical(s.e.)")
+    colnames(Hill)<-c("q","Chao","Empirical","Chao(95% Lower)","Chao(95% Upper)","Empirical(95% Lower)","Empirical(95% Upper)")
+    
     #z <- list("BASIC.DATA"=BASIC.DATA,"HILL.NUMBERS"= Hill)
      
     z <- list("datatype"= type,"BASIC.DATA"=BASIC.DATA,"SPECIES.RICHNESS"=table0,

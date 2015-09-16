@@ -663,35 +663,35 @@ Shannon_Inci_index=function(x,boot=50)
   x = unlist(x)
   t = x[1]
   MLE=entropy_MLE_Inci_equ(x) 
-  MLE_bc=entropy_MLE_bc_Inci_equ(x)
-  HT=entropy_HT_Inci_equ(x)
+  #MLE_bc=entropy_MLE_bc_Inci_equ(x)
+  #HT=entropy_HT_Inci_equ(x)
   MEE=entropy_MEE_Inci_equ(x)
   p_hat=EstiBootComm.Sam(x)
   Boot.X = sapply(1:length(p_hat), function(i){
     rbinom(boot,t,p_hat[i])})
   Boot.X = cbind(rep(t,boot), Boot.X)
   temp1=apply(Boot.X,1,entropy_MLE_Inci_equ)
-  temp2=apply(Boot.X,1,entropy_MLE_bc_Inci_equ)
-  temp4=apply(Boot.X,1,entropy_HT_Inci_equ)
+  #temp2=apply(Boot.X,1,entropy_MLE_bc_Inci_equ)
+  #temp4=apply(Boot.X,1,entropy_HT_Inci_equ)
   temp5=apply(Boot.X,1,entropy_MEE_Inci_equ)
   MLE_sd=sd(temp1)
-  MLE_bc_sd=sd(temp2)
-  HT_sd=sd(temp4)
+  #MLE_bc_sd=sd(temp2)
+  #HT_sd=sd(temp4)
   MEE_sd=sd(temp5)
   
   MLE_exp_sd=sd(exp(temp1))
-  MLE_bc_exp_sd=sd(exp(temp2))
-  HT_exp_sd=sd(exp(temp4))  
+  #MLE_bc_exp_sd=sd(exp(temp2))
+  #HT_exp_sd=sd(exp(temp4))  
   MEE_exp_sd=sd(exp(temp5))
   
   a=matrix(0,8,4)
   a[1,]=c(MLE,MLE_sd,MLE-1.96*MLE_sd,MLE+1.96*MLE_sd)
-  a[2,]=c(MLE_bc,MLE_bc_sd,MLE_bc-1.96*MLE_bc_sd,MLE_bc+1.96*MLE_bc_sd)
-  a[3,]=c(HT,HT_sd,HT-1.96*HT_sd,HT+1.96*HT_sd)
+  #a[2,]=c(MLE_bc,MLE_bc_sd,MLE_bc-1.96*MLE_bc_sd,MLE_bc+1.96*MLE_bc_sd)
+  #a[3,]=c(HT,HT_sd,HT-1.96*HT_sd,HT+1.96*HT_sd)
   a[4,]=c(MEE,MEE_sd,MEE-1.96*MEE_sd,MEE+1.96*MEE_sd)
   a[5,]=c(exp(MLE),MLE_exp_sd,exp(MLE)-1.96*MLE_exp_sd,exp(MLE)+1.96*MLE_exp_sd)
-  a[6,]=c(exp(MLE_bc),MLE_bc_exp_sd,exp(MLE_bc)-1.96*MLE_bc_exp_sd,exp(MLE_bc)+1.96*MLE_bc_exp_sd)
-  a[7,]=c(exp(HT),HT_exp_sd,exp(HT)-1.96*HT_exp_sd,exp(HT)+1.96*HT_exp_sd)
+  #a[6,]=c(exp(MLE_bc),MLE_bc_exp_sd,exp(MLE_bc)-1.96*MLE_bc_exp_sd,exp(MLE_bc)+1.96*MLE_bc_exp_sd)
+  #a[7,]=c(exp(HT),HT_exp_sd,exp(HT)-1.96*HT_exp_sd,exp(HT)+1.96*HT_exp_sd)
   a[8,]=c(exp(MEE),MEE_exp_sd,exp(MEE)-1.96*MEE_exp_sd,exp(MEE)+1.96*MEE_exp_sd)
   return(a)
 }
@@ -739,7 +739,7 @@ Simpson_Inci_index=function(x,boot=200)
   return(a)
 }
 ######################################################2015.09.14
-
+conf.reg=function(x,LCL,UCL,...) polygon(c(x,rev(x)),c(LCL,rev(UCL)), ...)
 
 
 #X=read.table("Data4a.txt")
@@ -815,12 +815,42 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
     print(x$BASIC.DATA)
     cat("\n(2)  ESTIMATION OF SPECIES RICHNESS (DIVERSITY OF ORDER 0):\n\n")
     print(x$SPECIES.RICHNESS)
+    cat("
+        95% Confidence interval: A log-transformation is used so that the lower bound 
+        of the resulting interval is at least the number of observed species. 
+        See Chao (1987).
+        
+        Chao2 (Chao, 1987): This approach uses the frequencies of uniques and duplicates 
+        to estimate the number of missing species; see Chao (1987).
+     
+        Chao2-bc: a bias-corrected form for the Chao2; see Chao (2005).
+        
+        Model(h) (ICE: Incidence-based Coverage Estimator): Model(h) assumes that the 
+        detection probabilities are heterogeneous among species. The estimator given here 
+        is an improved version of Eq.(3.18) in Lee and Chao (1994) by using an improved 
+        estimated sample coverage given in Shen (2003) and the SPADE User Guide; 
+        see Eq.(3.23) in Lee and Chao (1994) for the estimated squared CV.
+
+        Model(h)-1 (or ICE-1):  A modified ICE for highly-heterogeneous cases.
+
+        ")
     cat("\n(3a)  SHANNON INDEX:\n\n")
     print(x$SHANNON.INDEX)
+    cat("
+        MLE: maximum likelihood estimator.
+  
+        Chao (2013): An nearly unbiasd estimator of entropy, see Chao et al. (2013).
+
+  	     Estimated standard error is based on a bootstrap method.
+        \n")
     cat("\n(3b)  EXPONENTIAL OF SHANNON INDEX (DIVERSITY OF ORDER 1):\n\n")
     print(x$EXPONENTIAL.OF.SHANNON.INDEX)
     cat("\n(4a)  SIMPSON INDEX:\n\n")
     print(x$SIMPSON.INDEX)
+    cat("
+       MVUE: minimum variance unbiased estimator; see Chao et al. (2014).
+       MLE: maximum likelihood estimator.
+       ")
     cat("\n(4b)  INVERSE OF SIMPSON INDEX (DIVERSITY OF ORDER 2):\n\n")
     print(x$INVERSE.OF.SIMPSON.INDEX)
     cat("\n(5)  The estimates of Hill's number at order q from 0 to 3\n\n")
@@ -830,8 +860,16 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
       Chao: see Chao and Jost (2015).
       Empirical: maximum likelihood estimator.
       ")
+   
   }
-	 
+  Lower=min(x$HILL.NUMBERS[,4],x$HILL.NUMBERS[,6])
+  Upper=max(x$HILL.NUMBERS[,5],x$HILL.NUMBERS[,7])
+  plot(0,type="n",xlim=c(0,3),ylim=c(Lower,Upper),xlab="Order  q",ylab="Hill  numbers")
+  conf.reg(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,4],x$HILL.NUMBERS[,5], col=adjustcolor(2, 0.2), border=NA)
+  conf.reg(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,6],x$HILL.NUMBERS[,7], col=adjustcolor(4, 0.2), border=NA)
+  lines(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,2],col=2,lwd=3)
+  lines(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,3],col=4,lty=3,lwd=3)
+  legend("topright", c("Chao","Empirical"),col=c(2,4),lwd=c(3,3),lty=c(1,3),bty="n",cex=0.4) 
 }
 
 
