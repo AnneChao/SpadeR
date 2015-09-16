@@ -869,7 +869,7 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
   conf.reg(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,6],x$HILL.NUMBERS[,7], col=adjustcolor(4, 0.2), border=NA)
   lines(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,2],col=2,lwd=3)
   lines(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,3],col=4,lty=3,lwd=3)
-  legend("topright", c("Chao","Empirical"),col=c(2,4),lwd=c(3,3),lty=c(1,3),bty="n",cex=0.4) 
+  legend("topright", c("Chao","Empirical"),col=c(2,4),lwd=c(3,3),lty=c(1,3),bty="n",cex=0.8) 
 }
 
 
