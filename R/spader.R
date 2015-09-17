@@ -503,7 +503,7 @@ SimilarityMult=function(X,q=2,nboot=200)
             Cqn_se_equ(X,q=2,nboot)[1:4])
   if(N==3){Cqn <- rbind(Cqn, C33_se_equ(X,nboot)[1:4])}
   colnames(Cqn) <- c("Estimate", "Est_s.e.", "95%.LCL", "95%.UCL")
-  rownames(Cqn) <- c(paste("C0",N,sep=""),paste("C1",N,sep=""),paste("C1",N,"*",sep=""),paste("C2",N,sep=""),if(N==3) "C33")
+  rownames(Cqn) <- c(paste("C0",N," (Sorensen)",sep=""),paste("C1",N,"(Horn)",sep=""),paste("C1",N,"*","(Horn)",sep=""),paste("C2",N," (Morisita)",sep=""),if(N==3) "C33")
   Cqn <- Cqn[-2,]
   
   if(q==0 || q==1){Cqn_PC=matrix(0,choose(no.community,2),4)}

@@ -401,8 +401,9 @@ print.spadeMult <- function(x, ...){
    cat('    Estimator','     Estimate','     Est_s.e.','     95% Confidence Interval\n\n')
    temp0n=x$overlap[1,]
    cat('    C0')
-   cat(N,'          ',sprintf("%.3f",temp0n[1]),'       ',sprintf("%.3f",temp0n[2]),'        (',
+   cat(N,'(Sorensen)',sprintf("%.3f",temp0n[1]),'       ',sprintf("%.3f",temp0n[2]),'        (',
        sprintf("%.3f",temp0n[3]),',',sprintf("%.3f",temp0n[4]),')\n')
+   
    #temp1n=x$overlap[2,]
    #cat('    C1')
    #cat(N,'          ',sprintf("%.3f",temp1n[1]),'       ',sprintf("%.3f",temp1n[2]),'        (',
@@ -410,13 +411,13 @@ print.spadeMult <- function(x, ...){
    temp1n=x$overlap[2,]
    cat('    C1')
    cat(N)
-   cat('*          ',sprintf("%.3f",temp1n[1]),'       ',sprintf("%.3f",temp1n[2]),'        (',
+   cat('*(Horn)    ',sprintf("%.3f",temp1n[1]),'       ',sprintf("%.3f",temp1n[2]),'        (',
       sprintf("%.3f",temp1n[3]),',',sprintf("%.3f",temp1n[4]),')\n')
 	 #cat('*          ',sprintf("%.3f",1-temp1n[1]),'       ',sprintf("%.3f",temp1n[2]),'        (',
 	 #     sprintf("%.3f",max(1-temp1n[1]-1.96*temp1n[2],0)),',',sprintf("%.3f",min(1-temp1n[1]+1.96*temp1n[2],1)),')\n')
    temp2n=x$overlap[3,]
    cat('    C2')
-   cat(N,'          ',sprintf("%.3f",temp2n[1]),'       ',sprintf("%.3f",temp2n[2]),'        (',
+   cat(N,'(Morisita)',sprintf("%.3f",temp2n[1]),'       ',sprintf("%.3f",temp2n[2]),'        (',
        sprintf("%.3f",temp2n[3]),',',sprintf("%.3f",temp2n[4]),')\n')
    if(N==3)
    {
