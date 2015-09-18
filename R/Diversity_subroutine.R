@@ -777,16 +777,16 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
         ")
     cat("\n(3a)  SHANNON INDEX:\n\n")
     print(x$SHANNON.INDEX)
-    cat("\n")
-    cat(" For a review of the four estimators, see Chao and Shen (2003).\n")
+    #cat("\n")
+    #cat(" For a review of the four estimators, see Chao and Shen (2003).\n")
     cat("
         MLE: maximum likelihood estimator.
         MLE_bc: bias-corrected maximum likelihood estimator.
         Jackknife: see Zahl (1977).
         Chao & Shen: based on Horvitz-Thompson estimator and sample coverage method;
         see Chao and Shen (2003). 
-  	  Chao (2013): An nearly unbiasd estimator of entropy, see Chao et al. (2013).
-  	  Estimated standard error is based on a bootstrap method.
+  	    Chao (2013): An nearly unbiasd estimator of entropy, see Chao et al. (2013).
+  	    Estimated standard error is based on a bootstrap method.
         \n")
     
     cat("(3b)  EXPONENTIAL OF SHANNON INDEX (DIVERSITY OF ORDER 1):\n\n")
@@ -796,8 +796,8 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
     print(x$SIMPSON.INDEX)
     
     cat("
-       MVUE: minimum variance unbiased estimator; see Eq. (2.27) of Magurran (1988).
-       MLE: maximum likelihood estimator; see Eq. (2.26) of Magurran (1988).
+        MVUE: minimum variance unbiased estimator; see Eq. (2.27) of Magurran (1988).
+        MLE: maximum likelihood estimator; see Eq. (2.26) of Magurran (1988).
        ")
     
     cat("\n(4b)  INVERSE OF SIMPSON INDEX (DIVERSITY OF ORDER 2):\n\n")
@@ -807,8 +807,8 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
     print(x$HILL.NUMBERS)
     
     cat("
-       Chao: see Chao and Jost (2015).
-  	 Empirical: maximum likelihood estimator.
+        Chao: see Chao and Jost (2015).
+  	    Empirical: maximum likelihood estimator.
        ")
   }else{
     cat("\n(1)  BASIC DATA INFORMATION:\n")
@@ -841,15 +841,15 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
   
         Chao (2013): An nearly unbiasd estimator of entropy, see Chao et al. (2013).
 
-  	     Estimated standard error is based on a bootstrap method.
+  	    Estimated standard error is based on a bootstrap method.
         \n")
     cat("\n(3b)  EXPONENTIAL OF SHANNON INDEX (DIVERSITY OF ORDER 1):\n\n")
     print(x$EXPONENTIAL.OF.SHANNON.INDEX)
     cat("\n(4a)  SIMPSON INDEX:\n\n")
     print(x$SIMPSON.INDEX)
     cat("
-       MVUE: minimum variance unbiased estimator; see Chao et al. (2014).
-       MLE: maximum likelihood estimator.
+        MVUE: minimum variance unbiased estimator; see Chao et al. (2014).
+        MLE: maximum likelihood estimator.
        ")
     cat("\n(4b)  INVERSE OF SIMPSON INDEX (DIVERSITY OF ORDER 2):\n\n")
     print(x$INVERSE.OF.SIMPSON.INDEX)
@@ -857,8 +857,8 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
     print(x$HILL.NUMBERS)
     
     cat("
-      Chao: see Chao and Jost (2015).
-      Empirical: maximum likelihood estimator.
+        Chao: see Chao and Jost (2015).
+        Empirical: maximum likelihood estimator.
       ")
    
   }

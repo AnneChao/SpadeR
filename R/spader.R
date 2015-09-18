@@ -163,13 +163,11 @@ ChaoShared <-
 #' followed by species incidence frequencies. (See example \code{data(ChaoSpeciesDemoInci)}).
 #' @param datatype data type of input data: individual-based abundance data (\code{datatype = "abundance"}) or 
 #' sampling-unit-based incidence data (\code{datatype = "incidence"}).
-#' @return if \code{datatype = "abundance"}, a list of seven objects: 
+#' @return a list of seven objects: 
 #' \code{$BASIC.DATA} for summarizing data information; \code{$SPECIES.RICHNESS} for showing various species richness estimates along with related statistics; 
 #' \code{$SHANNON.INDEX} and \code{$EXPONENTIAL.OF.SHANNON.INDEX} for showing various Shannon index/diversity estimates; 
 #' \code{$SIMPSON.INDEX} and \code{$INVERSE.OF.SIMPSON.INDEX} for showing various Simpson index/diversity estimates; 
 #' \code{$HILL.NUMBERS} for showing Hill number (diversity of order from 0 to 3) estimates. \cr\cr
-#' if \code{datatype = "incidence"}, a list of two objects: 
-#' \code{$BASIC.DATA} for summarizing data information; \code{$HILL.NUMBERS} for showing incidence-based Hill number (diversity of order from 0 to 3) estimates along with related statistics.
 #' @examples
 #' \dontrun{
 #' data(DiversityDemoAbu)
