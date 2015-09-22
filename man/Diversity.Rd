@@ -4,7 +4,7 @@
 \alias{Diversity}
 \title{Estimation of species diversity}
 \usage{
-Diversity(data, datatype = c("abundance", "incidence"))
+Diversity(data, datatype = c("abundance", "incidence"), q = NULL)
 }
 \arguments{
 \item{data}{a column vector of species abundances or incidence frequencies.\cr
@@ -13,6 +13,8 @@ followed by species incidence frequencies. (See example \code{data(ChaoSpeciesDe
 
 \item{datatype}{data type of input data: individual-based abundance data (\code{datatype = "abundance"}) or
 sampling-unit-based incidence data (\code{datatype = "incidence"}).}
+
+\item{q}{a numeric value specifying the diversity order of Hill numbers.}
 }
 \value{
 a list of seven objects:

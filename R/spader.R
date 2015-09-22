@@ -163,6 +163,7 @@ ChaoShared <-
 #' followed by species incidence frequencies. (See example \code{data(ChaoSpeciesDemoInci)}).
 #' @param datatype data type of input data: individual-based abundance data (\code{datatype = "abundance"}) or 
 #' sampling-unit-based incidence data (\code{datatype = "incidence"}).
+#' @param q a numeric value specifying the diversity order of Hill numbers.
 #' @return a list of seven objects: 
 #' \code{$BASIC.DATA} for summarizing data information; \code{$SPECIES.RICHNESS} for showing various species richness estimates along with related statistics; 
 #' \code{$SHANNON.INDEX} and \code{$EXPONENTIAL.OF.SHANNON.INDEX} for showing various Shannon index/diversity estimates; 
@@ -191,7 +192,7 @@ ChaoShared <-
 #' Zahl, S. (1977). Jackknifing an index of diversity. Ecology 58, 907-913. 
 #' @export
 
-Diversity=function(data, datatype=c("abundance","incidence"))
+Diversity=function(data, datatype=c("abundance","incidence"), q=NULL)
 {
   X <- data
   if(datatype=="abundance"){
@@ -236,13 +237,23 @@ Diversity=function(data, datatype=c("abundance","incidence"))
     colnames(table2_recip) <- c("Estimator", "Est_s.e.", paste("95% Lower Bound"), paste("95% Upper Bound"))
     rownames(table2_recip) <- c(" MVUE"," MLE")
     
-    Hill <- reshapeChaoHill(ChaoHill(X, datatype = "abundance", from=0, to=3, interval=0.25, B=50, conf=0.95))
+    if(is.null(q)){Hill <- reshapeChaoHill(ChaoHill(X, datatype = "abundance", q=NULL, from=0, to=3, interval=0.25, B=50, conf=0.95))}
+    if(!is.null(q)){Hill <- reshapeChaoHill(ChaoHill(X, datatype = "abundance", q=q, from=0, to=3, interval=0.25, B=50, conf=0.95))}
     #Hill<-cbind(Hill[1:13,1],Hill[14:26,3],Hill[1:13,3],Hill[14:26,4],Hill[1:13,4])
-    Chao.LCL <- Hill[14:26,3] - 1.96*Hill[14:26,4]
-    Chao.UCL <- Hill[14:26,3] + 1.96*Hill[14:26,4]
-    Emperical.LCL <- Hill[1:13,3] - 1.96*Hill[1:13,4]
-    Emperical.UCL <- Hill[1:13,3] + 1.96*Hill[1:13,4]
-    Hill<-cbind(Hill[1:13,1],Hill[14:26,3],Hill[1:13,3],Chao.LCL,Chao.UCL,Emperical.LCL,Emperical.UCL)
+    #Chao.LCL <- Hill[14:26,3] - 1.96*Hill[14:26,4]
+    #Chao.UCL <- Hill[14:26,3] + 1.96*Hill[14:26,4]
+    #Emperical.LCL <- Hill[1:13,3] - 1.96*Hill[1:13,4]
+    #Emperical.UCL <- Hill[1:13,3] + 1.96*Hill[1:13,4]
+    #Hill<-cbind(Hill[1:13,1],Hill[14:26,3],Hill[1:13,3],Chao.LCL,Chao.UCL,Emperical.LCL,Emperical.UCL)
+    #Hill<-round(Hill,3)
+    #Hill <- data.frame(Hill)
+    q_length<-length(Hill[,1])/2
+    
+    Chao.LCL <- Hill[(q_length+1):(2*q_length),3] - 1.96*Hill[(q_length+1):(2*q_length),4]
+    Chao.UCL <- Hill[(q_length+1):(2*q_length),3] + 1.96*Hill[(q_length+1):(2*q_length),4]
+    Emperical.LCL <- Hill[1:q_length,3] - 1.96*Hill[1:q_length,4]
+    Emperical.UCL <- Hill[1:q_length,3] + 1.96*Hill[1:q_length,4]
+    Hill<-cbind(Hill[1:q_length,1],Hill[(q_length+1):(2*q_length),3],Hill[1:q_length,3],Chao.LCL,Chao.UCL,Emperical.LCL,Emperical.UCL)
     Hill<-round(Hill,3)
     Hill <- data.frame(Hill)
     #colnames(Hill)<-c("q","Chao","Empirical","Chao(s.e.)","Empirical(s.e.)")
@@ -279,13 +290,25 @@ Diversity=function(data, datatype=c("abundance","incidence"))
     
     
     ############################################################
-    Hill <- reshapeChaoHill(ChaoHill(X, datatype = "incidence", from=0, to=3, interval=0.25, B=50, conf=0.95))
+    #Hill <- reshapeChaoHill(ChaoHill(X, datatype = "incidence", from=0, to=3, interval=0.25, B=50, conf=0.95))
+    if(is.null(q)){Hill <- reshapeChaoHill(ChaoHill(X, datatype = "incidence", q=NULL, from=0, to=3, interval=0.25, B=50, conf=0.95))}
+    if(!is.null(q)){Hill <- reshapeChaoHill(ChaoHill(X, datatype = "incidence", q=q, from=0, to=3, interval=0.25, B=50, conf=0.95))}
+    
     #Hill<-cbind(Hill[1:13,1],Hill[14:26,3],Hill[1:13,3],Hill[14:26,4],Hill[1:13,4])
-    Chao.LCL <- Hill[14:26,3] - 1.96*Hill[14:26,4]
-    Chao.UCL <- Hill[14:26,3] + 1.96*Hill[14:26,4]
-    Emperical.LCL <- Hill[1:13,3] - 1.96*Hill[1:13,4]
-    Emperical.UCL <- Hill[1:13,3] + 1.96*Hill[1:13,4]
-    Hill<-cbind(Hill[1:13,1],Hill[14:26,3],Hill[1:13,3],Chao.LCL,Chao.UCL,Emperical.LCL,Emperical.UCL)
+    #Chao.LCL <- Hill[14:26,3] - 1.96*Hill[14:26,4]
+    #Chao.UCL <- Hill[14:26,3] + 1.96*Hill[14:26,4]
+    #Emperical.LCL <- Hill[1:13,3] - 1.96*Hill[1:13,4]
+    #Emperical.UCL <- Hill[1:13,3] + 1.96*Hill[1:13,4]
+    #Hill<-cbind(Hill[1:13,1],Hill[14:26,3],Hill[1:13,3],Chao.LCL,Chao.UCL,Emperical.LCL,Emperical.UCL)
+    #Hill<-round(Hill,3)
+    #Hill <- data.frame(Hill)
+    q_length<-length(Hill[,1])/2
+    
+    Chao.LCL <- Hill[(q_length+1):(2*q_length),3] - 1.96*Hill[(q_length+1):(2*q_length),4]
+    Chao.UCL <- Hill[(q_length+1):(2*q_length),3] + 1.96*Hill[(q_length+1):(2*q_length),4]
+    Emperical.LCL <- Hill[1:q_length,3] - 1.96*Hill[1:q_length,4]
+    Emperical.UCL <- Hill[1:q_length,3] + 1.96*Hill[1:q_length,4]
+    Hill<-cbind(Hill[1:q_length,1],Hill[(q_length+1):(2*q_length),3],Hill[1:q_length,3],Chao.LCL,Chao.UCL,Emperical.LCL,Emperical.UCL)
     Hill<-round(Hill,3)
     Hill <- data.frame(Hill)
     #colnames(Hill)<-c("q","Chao","Empirical","Chao(s.e.)","Empirical(s.e.)")
