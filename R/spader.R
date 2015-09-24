@@ -7,7 +7,7 @@
 #' 
 #' @param data a column vector of species abundances or incidence frequencies.\cr 
 #' If \code{datatype = "incidence"}, then the first entry of the input data must be total number of sampling units, 
-#' followed by species incidence frequencies. (See example \code{data(ChaoSpeciesDemoInci)}).
+#' followed by species incidence frequencies. (See example \code{data(ChaoSpeciesDataInci)}).
 #' @param datatype data type of input data: individual-based abundance data (\code{datatype = "abundance"}) or 
 #' sampling-unit-based incidence data (\code{datatype = "incidence"}).
 #' @param k cut-off point; it is a value that separates frequency counts into abundant and rare groups.
@@ -17,10 +17,10 @@
 #' for summarizing data information; \code{$Species.Table} for showing a table of various species richness estimates, standard errors, 
 #' and the associated confidence intervals.
 #' @examples
-#' data(ChaoSpeciesDemoAbu)
-#' ChaoSpecies(ChaoSpeciesDemoAbu, datatype="abundance", k = 10, conf = 0.95)
-#' data(ChaoSpeciesDemoInci)
-#' ChaoSpecies(ChaoSpeciesDemoInci, datatype="incidence", k = 10, conf = 0.95)
+#' data(ChaoSpeciesDataAbu)
+#' ChaoSpecies(ChaoSpeciesDataAbu, datatype="abundance", k = 10, conf = 0.95)
+#' data(ChaoSpeciesDataInci)
+#' ChaoSpecies(ChaoSpeciesDataInci, datatype="incidence", k = 10, conf = 0.95)
 #' @references 
 #' Burnham, K. P. and Overton, W. S. (1978). Estimation of the size of a closed population when capture probabilities vary among animals. Biometrika 65, 625-633.\cr\cr
 #' Chao, A. (1984). Nonparametric estimation of the number of classes in a population. Scandinavian Journal of Statistics 11, 265-270.\cr\cr
@@ -86,7 +86,7 @@ ChaoSpecies <- function(data, datatype = c("abundance", "incidence"), k = 10, co
 #' }
 #' @param data a matrix, data.frame (species by sites) of species abundances or incidence frequencies with two columns. 
 #' If \code{datatype = "incidence"}, then the first entry of the input data must be the total number of sampling units, 
-#' followed by species incidence frequencies in each column (See example \code{data(ChaoSharedDemoInci)}).
+#' followed by species incidence frequencies in each column (See example \code{data(ChaoSharedDataInci)}).
 #' @param datatype data type of input data: individual-based abundance data (\code{datatype = "abundance"}) or 
 #' sampling-unit-based incidence data (\code{datatype = "incidence"}).
 #' @param se a logical variable to calculate the bootstrap standard error and the associated confidence interval.
@@ -95,10 +95,10 @@ ChaoSpecies <- function(data, datatype = c("abundance", "incidence"), k = 10, co
 #' @return a list of two objects: \code{$BASIC_DATA_INFORMATION} for summarizing data information;\cr
 #' \code{$ESTIMATION_RESULTS_OF_THE_NUMBER_OF_SHARED_SPECIES} for showing a table of various shared richess estimates, standard errors, and the associated confidence intervals.
 #' @examples
-#' data(ChaoSharedDemoAbu)
-#' ChaoShared(ChaoSharedDemoAbu, datatype="abundance", se=TRUE, nboot=200, conf=0.95)
-#' data(ChaoSharedDemoInci)
-#' ChaoShared(ChaoSharedDemoInci, datatype="incidence", se=TRUE, nboot=200, conf=0.95)
+#' data(ChaoSharedDataAbu)
+#' ChaoShared(ChaoSharedDataAbu, datatype="abundance", se=TRUE, nboot=200, conf=0.95)
+#' data(ChaoSharedDataInci)
+#' ChaoShared(ChaoSharedDataInci, datatype="incidence", se=TRUE, nboot=200, conf=0.95)
 #' @references 
 #' Chao, A., Hwang, W.-H., Chen, Y.-C. and Kuo. C.-Y. (2000). Estimating the  number of shared species in two communities. Statistica Sinica 10, 227-246.\cr\cr
 #' Chao, A., Shen, T.-J. and Hwang, W.-H. (2006). Application of Laplace boundary-mode approximations to estimate species and shared species richness.  Australian and New Zealand Journal of Statistics 48, 117-128.\cr\cr
@@ -160,7 +160,7 @@ ChaoShared <-
 #' and Hill number (diversity of order from 0 to 3) .
 #' @param data a column vector of species abundances or incidence frequencies.\cr 
 #' If \code{datatype = "incidence"}, then the first entry of the input data must be total number of sampling units, 
-#' followed by species incidence frequencies. (See example \code{data(ChaoSpeciesDemoInci)}).
+#' followed by species incidence frequencies. (See example \code{data(ChaoSpeciesDataInci)}).
 #' @param datatype data type of input data: individual-based abundance data (\code{datatype = "abundance"}) or 
 #' sampling-unit-based incidence data (\code{datatype = "incidence"}).
 #' @param q a numeric value specifying the diversity order of Hill numbers.
@@ -171,10 +171,10 @@ ChaoShared <-
 #' \code{$HILL.NUMBERS} for showing Hill number (diversity of order from 0 to 3) estimates. \cr\cr
 #' @examples
 #' \dontrun{
-#' data(DiversityDemoAbu)
-#' Diversity(DiversityDemoAbu,datatype="abundance")
-#' data(ChaoSpeciesDemoInci)
-#' Diversity(ChaoSpeciesDemoInci,datatype="incidence")
+#' data(DiversityDataAbu)
+#' Diversity(DiversityDataAbu,datatype="abundance")
+#' data(ChaoSpeciesDataInci)
+#' Diversity(ChaoSpeciesDataInci,datatype="incidence")
 #' }
 #' @references
 #' Chao, A. (1984). Nonparametric estimation of the number of classes in a population. Scandinavian Journal of Statistics 11, 265-270.\cr\cr
@@ -343,7 +343,7 @@ Diversity=function(data, datatype=c("abundance","incidence"), q=NULL)
 #' 
 #' @param X a matrix (species by sites) of species abundances, or incidence frequencies with two columns.
 #' If \code{datatype = "incidence"}, then the first entry of the input data must be total number of sampling units in each column.
-#' (See example \code{data(SimilarityPairDemoInci)}).
+#' (See example \code{data(SimilarityPairDataInci)}).
 #' @param datatype data type of input data: individual-based abundance data (\code{datatype = "abundance"}) or 
 #' sampling-unit-based incidence data (\code{datatype = "incidence"}).
 #' @param nboot an integer specifying the number of replications.
@@ -352,10 +352,10 @@ Diversity=function(data, datatype=c("abundance","incidence"), q=NULL)
 #' \code{$similarity} for showing the various similarity index estimates along with related statistics;
 #' \code{$assemblage1} and {$assemblage2} for showing species richness estimates with related statistics of each assemblage.
 #' @examples
-#' data(SimilarityPairDemoAbu)
-#' SimilarityPair(SimilarityPairDemoAbu, datatype="abundance")
-#' data(SimilarityPairDemoInci)
-#' SimilarityPair(SimilarityPairDemoInci,datatype="incidence")
+#' data(SimilarityPairDataAbu)
+#' SimilarityPair(SimilarityPairDataAbu, datatype="abundance")
+#' data(SimilarityPairDataInci)
+#' SimilarityPair(SimilarityPairDataInci,datatype="incidence")
 #' @references
 #' Chao, A. (1984). Nonparametric estimation of the number of classes in a population. Scandinavian Journal of Statistics 11, 265-270.\cr\cr
 #' Chao, A. (1987). Estimating the population size for capture-recapture data with unequal catchability. Biometrics 43, 783-791.\cr\cr
@@ -481,8 +481,8 @@ SimilarityPair=function(X, datatype = c("abundance","incidence"),nboot=200)
 #' \code{$pairwise} and {$similarity.matrix} for showing pairwise similarity estimates (with related statistics) depended on which diversity order \code{q} you choose;
 #' \code{$method}: fixed \code{method="absolute"}; \code{$q} for showing which diversity order \code{q} you choose.
 #' @examples
-#' data(SimilarityMultDemoAbu)
-#' SimilarityMult(SimilarityMultDemoAbu,q=2,nboot=200)
+#' data(SimilarityMultDataAbu)
+#' SimilarityMult(SimilarityMultDataAbu,q=2,nboot=200)
 #' @references
 #' Chao, A., Jost, L., Chiang, S. C., Jiang, Y.-H. and Chazdon, R. (2008). A Two- stage probabilistic approach to multiple-community similarity indices. Biometrics, 64, 1178-1186.\cr\cr
 #' Jost, L. (2008). GST and its relatives do not measure differentiation. Molecular Ecology, 17, 4015-4026.

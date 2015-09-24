@@ -1,5 +1,5 @@
-\name{ChaoSharedDemoInci}
-\alias{ChaoSharedDemoInci}
+\name{ChaoSharedDataInci}
+\alias{ChaoSharedDataInci}
 \docType{data}
 \title{
  Birds data for ChaoShared
@@ -7,7 +7,7 @@
 \description{
  The data is bird incidence frequencies of two assemblages (Chao, Shen and Hwang 2006). The first row denotes the number of sampling units 19 and 20, respectively. Beginning with the second row, each row denotes the total number of presences of each species in all the samples. In this data, the first and second species in the bird list were not observed, and the species in the bottom row was observed by 19 and 20, respectively. 
  }
-\usage{data(ChaoSharedDemoInci)}
+\usage{data(ChaoSharedDataInci)}
 \format{
  The data input format (a matrix/data.frame with 359 rows and 2 columns) is:\cr\cr
  19 20\cr

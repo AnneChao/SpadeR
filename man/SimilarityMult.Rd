@@ -25,8 +25,8 @@ a list of six objects: \code{$info} for summarizing data information; \code{$ove
 \code{SimilarityMult}: estimation of the generalized Sorensen, Horn, and Morisita similarity/dissimilarity indices for comparing frequency or abundance data taken from more than two assemblages.
 }
 \examples{
-data(SimilarityMultDemoAbu)
-SimilarityMult(SimilarityMultDemoAbu,q=2,nboot=200)
+data(SimilarityMultDataAbu)
+SimilarityMult(SimilarityMultDataAbu,q=2,nboot=200)
 }
 \references{
 Chao, A., Jost, L., Chiang, S. C., Jiang, Y.-H. and Chazdon, R. (2008). A Two- stage probabilistic approach to multiple-community similarity indices. Biometrics, 64, 1178-1186.\cr\cr

@@ -1,5 +1,5 @@
-\name{ChaoSharedDemoAbu}
-\alias{ChaoSharedDemoAbu}
+\name{ChaoSharedDataAbu}
+\alias{ChaoSharedDataAbu}
 \docType{data}
 \title{
  Birds data for ChaoShared
@@ -7,7 +7,7 @@
 \description{
   The data is bird abundances/frequencies records of two estuaries (Chao et al. 2000). Total of 85867 and 59646 individuals were separately observed from two estuaries. In these two estuaries, there were 155 and 140 species observed respectively, where 111 species are shared. For each species (row), the entry of the first column is the observed species frequency (or abundance) from estuary I, and the second column is the observed species frequency (or abundance) from estuary II.
 }
-\usage{data(ChaoSharedDemoAbu)}
+\usage{data(ChaoSharedDataAbu)}
 \format{
  The data input format (a matrix/data.frame with 201 rows and 2 columns) is:\cr\cr
  39 42\cr

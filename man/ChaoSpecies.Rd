@@ -10,7 +10,7 @@ ChaoSpecies(data, datatype = c("abundance", "incidence"), k = 10,
 \arguments{
 \item{data}{a column vector of species abundances or incidence frequencies.\cr
 If \code{datatype = "incidence"}, then the first entry of the input data must be total number of sampling units,
-followed by species incidence frequencies. (See example \code{data(ChaoSpeciesDemoInci)}).}
+followed by species incidence frequencies. (See example \code{data(ChaoSpeciesDataInci)}).}
 
 \item{datatype}{data type of input data: individual-based abundance data (\code{datatype = "abundance"}) or
 sampling-unit-based incidence data (\code{datatype = "incidence"}).}
@@ -29,10 +29,10 @@ and the associated confidence intervals.
 \code{ChaoSpecies}: estimation of species richness in one assemblage
 }
 \examples{
-data(ChaoSpeciesDemoAbu)
-ChaoSpecies(ChaoSpeciesDemoAbu, datatype="abundance", k = 10, conf = 0.95)
-data(ChaoSpeciesDemoInci)
-ChaoSpecies(ChaoSpeciesDemoInci, datatype="incidence", k = 10, conf = 0.95)
+data(ChaoSpeciesDataAbu)
+ChaoSpecies(ChaoSpeciesDataAbu, datatype="abundance", k = 10, conf = 0.95)
+data(ChaoSpeciesDataInci)
+ChaoSpecies(ChaoSpeciesDataInci, datatype="incidence", k = 10, conf = 0.95)
 }
 \references{
 Burnham, K. P. and Overton, W. S. (1978). Estimation of the size of a closed population when capture probabilities vary among animals. Biometrika 65, 625-633.\cr\cr

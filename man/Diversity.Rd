@@ -9,7 +9,7 @@ Diversity(data, datatype = c("abundance", "incidence"), q = NULL)
 \arguments{
 \item{data}{a column vector of species abundances or incidence frequencies.\cr
 If \code{datatype = "incidence"}, then the first entry of the input data must be total number of sampling units,
-followed by species incidence frequencies. (See example \code{data(ChaoSpeciesDemoInci)}).}
+followed by species incidence frequencies. (See example \code{data(ChaoSpeciesDataInci)}).}
 
 \item{datatype}{data type of input data: individual-based abundance data (\code{datatype = "abundance"}) or
 sampling-unit-based incidence data (\code{datatype = "incidence"}).}
@@ -30,10 +30,10 @@ and Hill number (diversity of order from 0 to 3) .
 }
 \examples{
 \dontrun{
-data(DiversityDemoAbu)
-Diversity(DiversityDemoAbu,datatype="abundance")
-data(ChaoSpeciesDemoInci)
-Diversity(ChaoSpeciesDemoInci,datatype="incidence")
+data(DiversityDataAbu)
+Diversity(DiversityDataAbu,datatype="abundance")
+data(ChaoSpeciesDataInci)
+Diversity(ChaoSpeciesDataInci,datatype="incidence")
 }
 }
 \references{

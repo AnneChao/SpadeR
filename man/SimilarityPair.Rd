@@ -9,7 +9,7 @@ SimilarityPair(X, datatype = c("abundance", "incidence"), nboot = 200)
 \arguments{
 \item{X}{a matrix (species by sites) of species abundances, or incidence frequencies with two columns.
 If \code{datatype = "incidence"}, then the first entry of the input data must be total number of sampling units in each column.
-(See example \code{data(SimilarityPairDemoInci)}).}
+(See example \code{data(SimilarityPairDataInci)}).}
 
 \item{datatype}{data type of input data: individual-based abundance data (\code{datatype = "abundance"}) or
 sampling-unit-based incidence data (\code{datatype = "incidence"}).}
@@ -29,10 +29,10 @@ and the abundance-based indices include the Bray-Curtis, Morisita-Horn, Horn and
 and Sorensen indices developed in Chao et al. (2005).
 }
 \examples{
-data(SimilarityPairDemoAbu)
-SimilarityPair(SimilarityPairDemoAbu, datatype="abundance")
-data(SimilarityPairDemoInci)
-SimilarityPair(SimilarityPairDemoInci,datatype="incidence")
+data(SimilarityPairDataAbu)
+SimilarityPair(SimilarityPairDataAbu, datatype="abundance")
+data(SimilarityPairDataInci)
+SimilarityPair(SimilarityPairDataInci,datatype="incidence")
 }
 \references{
 Chao, A. (1984). Nonparametric estimation of the number of classes in a population. Scandinavian Journal of Statistics 11, 265-270.\cr\cr

@@ -1,5 +1,5 @@
-\name{ChaoSpeciesDemoInci}
-\alias{ChaoSpeciesDemoInci}
+\name{ChaoSpeciesDataInci}
+\alias{ChaoSpeciesDataInci}
 \docType{data}
 \title{
   Soil samples for ChaoSpecies
@@ -7,7 +7,7 @@
 \description{
   The data is a set of soil samples of seedlings data (Colwell and Coddington 1994). It contains 34 observed species. The  first entry denotes the number of sampling units 121. Beginning with the second row, each row denotes the total number of presences of each species in the sample. In this data, the first species in 121 sampling units was observed 61, the second species in 121 sampling units was observed 47, and so on. 
 }
-\usage{data(ChaoSpeciesDemoInci)}
+\usage{data(ChaoSpeciesDataInci)}
 \format{
  The data input format (a column vector with 35 entries)is:\cr\cr
   121 \cr

@@ -44,12 +44,12 @@ should install the `httr` package.
 
 ```r
 # Example1: (abundance data)
-data(ChaoSpeciesDemoAbu)
-ChaoSpecies(ChaoSpeciesDemoAbu, datatype="abundance", k=10, conf=0.95)
+data(ChaoSpeciesDataAbu)
+ChaoSpecies(ChaoSpeciesDataAbu, datatype="abundance", k=10, conf=0.95)
 
 # Example2: (incidence data)
-data(ChaoSpeciesDemoInci)
-ChaoSpecies(ChaoSpeciesDemoInci, datatype="incidence", k=10, conf=0.95) 
+data(ChaoSpeciesDataInci)
+ChaoSpecies(ChaoSpeciesDataInci, datatype="incidence", k=10, conf=0.95) 
 
 ```
 
@@ -57,12 +57,12 @@ ChaoSpecies(ChaoSpeciesDemoInci, datatype="incidence", k=10, conf=0.95)
 
 ```r
 # Example1: (abundance data)
-data(ChaoSharedDemoAbu)
-ChaoShared(ChaoSharedDemoAbu, datatype="abundance", se=TRUE, nboot=200, conf=0.95) 
+data(ChaoSharedDataAbu)
+ChaoShared(ChaoSharedDataAbu, datatype="abundance", se=TRUE, nboot=200, conf=0.95) 
 
 # Example2: (incidence data)
-data(ChaoSharedDemoInci)
-ChaoShared(ChaoSharedDemoInci, datatype="incidence", se=TRUE, nboot=200, conf=0.95) 
+data(ChaoSharedDataInci)
+ChaoShared(ChaoSharedDataInci, datatype="incidence", se=TRUE, nboot=200, conf=0.95) 
 
 ```
 
@@ -70,12 +70,12 @@ ChaoShared(ChaoSharedDemoInci, datatype="incidence", se=TRUE, nboot=200, conf=0.
 
 ```r
 # Example: (abundance data)
-data(DiversityDemoAbu)
-Diversity(DiversityDemoAbu, datatype= "abundance")
+data(DiversityDataAbu)
+Diversity(DiversityDataAbu, datatype= "abundance")
 
 # Example2: (incidence data)
-data(ChaoSpeciesDemoInci)
-Diversity(ChaoSpeciesDemoInci, datatype= "incidence")
+data(ChaoSpeciesDataInci)
+Diversity(ChaoSpeciesDataInci, datatype= "incidence")
 
 ```
 
@@ -84,12 +84,12 @@ Diversity(ChaoSpeciesDemoInci, datatype= "incidence")
 
 ```r
 # Example1: (abundance data)
-data(SimilarityPairDemoAbu)
-SimilarityPair(SimilarityPairDemoAbu, datatype="abundance")
+data(SimilarityPairDataAbu)
+SimilarityPair(SimilarityPairDataAbu, datatype="abundance")
 
 # Example2: (incidence data)
-data(SimilarityPairDemoInci)
-SimilarityPair(SimilarityPairDemoInci, datatype="incidence")
+data(SimilarityPairDataInci)
+SimilarityPair(SimilarityPairDataInci, datatype="incidence")
 ```
 
 - Part V: Multiple-Community Diversity Measure (estimating N-community Sorensen, Horn, and Morisita similarity /dissimilarity indices for more than two communities.)
@@ -97,8 +97,8 @@ SimilarityPair(SimilarityPairDemoInci, datatype="incidence")
 
 ```r
 # Example: (abundance data)
-data(SimilarityMultDemoAbu)
-SimilarityMult(SimilarityMultDemoAbu, q=2, nboot=200)
+data(SimilarityMultDataAbu)
+SimilarityMult(SimilarityMultDataAbu, q=2, nboot=200)
 ```
 
 

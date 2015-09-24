@@ -1,5 +1,5 @@
-\name{SimilarityPairDemoAbu}
-\alias{SimilarityPairDemoAbu}
+\name{SimilarityPairDataAbu}
+\alias{SimilarityPairDataAbu}
 \docType{data}
 \title{
  Rain forest data for SimilarityPair
@@ -7,7 +7,7 @@
 \description{
  The data was discussed in Chao et al. (2005, 2008). It includes the frequencies from three assemblages: seedlings, saplings and  trees. In this data, we choose seedlings and trees for demo. For each species (row), the entry of the first column denotes the species frequency (or abundance) of the sample taken from the seedlings assemblage, and the second column denotes the species frequency (or abundance) of the sample taken from the trees assemblage. 
 }
-\usage{data(SimilarityPairDemoAbu)}
+\usage{data(SimilarityPairDataAbu)}
 \format{
  The data input format (a matrix with 120 rows and 2 columns) is:\cr\cr
   17  7\cr

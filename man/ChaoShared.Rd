@@ -10,7 +10,7 @@ ChaoShared(data, datatype = c("abundance", "incidence"), se = TRUE,
 \arguments{
 \item{data}{a matrix, data.frame (species by sites) of species abundances or incidence frequencies with two columns.
 If \code{datatype = "incidence"}, then the first entry of the input data must be the total number of sampling units,
-followed by species incidence frequencies in each column (See example \code{data(ChaoSharedDemoInci)}).}
+followed by species incidence frequencies in each column (See example \code{data(ChaoSharedDataInci)}).}
 
 \item{datatype}{data type of input data: individual-based abundance data (\code{datatype = "abundance"}) or
 sampling-unit-based incidence data (\code{datatype = "incidence"}).}
@@ -33,10 +33,10 @@ a list of two objects: \code{$BASIC_DATA_INFORMATION} for summarizing data infor
 }
 }
 \examples{
-data(ChaoSharedDemoAbu)
-ChaoShared(ChaoSharedDemoAbu, datatype="abundance", se=TRUE, nboot=200, conf=0.95)
-data(ChaoSharedDemoInci)
-ChaoShared(ChaoSharedDemoInci, datatype="incidence", se=TRUE, nboot=200, conf=0.95)
+data(ChaoSharedDataAbu)
+ChaoShared(ChaoSharedDataAbu, datatype="abundance", se=TRUE, nboot=200, conf=0.95)
+data(ChaoSharedDataInci)
+ChaoShared(ChaoSharedDataInci, datatype="incidence", se=TRUE, nboot=200, conf=0.95)
 }
 \references{
 Chao, A., Hwang, W.-H., Chen, Y.-C. and Kuo. C.-Y. (2000). Estimating the  number of shared species in two communities. Statistica Sinica 10, 227-246.\cr\cr
