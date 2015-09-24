@@ -864,7 +864,7 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
   }
   Lower=min(x$HILL.NUMBERS[,4],x$HILL.NUMBERS[,6])
   Upper=max(x$HILL.NUMBERS[,5],x$HILL.NUMBERS[,7])
-  plot(0,type="n",xlim=c(0,max(x$HILL.NUMBERS[,1])),ylim=c(Lower,Upper),xlab="Order  q",ylab="Hill  numbers")
+  plot(0,type="n",xlim=c(min(x$HILL.NUMBERS[,1]),max(x$HILL.NUMBERS[,1])),ylim=c(Lower,Upper),xlab="Order  q",ylab="Hill  numbers")
   conf.reg(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,4],x$HILL.NUMBERS[,5], col=adjustcolor(2, 0.2), border=NA)
   conf.reg(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,6],x$HILL.NUMBERS[,7], col=adjustcolor(4, 0.2), border=NA)
   lines(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,2],col=2,lwd=3)
