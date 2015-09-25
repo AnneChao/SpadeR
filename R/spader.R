@@ -163,7 +163,8 @@ ChaoShared <-
 #' followed by species incidence frequencies. (See example \code{data(ChaoSpeciesDataInci)}).
 #' @param datatype data type of input data: individual-based abundance data (\code{datatype = "abundance"}) or 
 #' sampling-unit-based incidence data (\code{datatype = "incidence"}).
-#' @param q a numeric value specifying the diversity order of Hill numbers.
+#' @param q a vector of nonnegative numbers for which the diversity order of Hill numbers will be estimated. If \code{NULL}, then
+#' Hill numbers will be estimated at order q from 0 to 3 with equally-spaced 0.25. 
 #' @return a list of seven objects: 
 #' \code{$BASIC.DATA} for summarizing data information; \code{$SPECIES.RICHNESS} for showing various species richness estimates along with related statistics; 
 #' \code{$SHANNON.INDEX} and \code{$EXPONENTIAL.OF.SHANNON.INDEX} for showing various Shannon index/diversity estimates; 
