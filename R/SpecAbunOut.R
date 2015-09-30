@@ -34,6 +34,6 @@ function(data,
     out <- rbind(SpecAbunAce(data, k, conf), SpecAbunAce1(data, k, conf))
   if (method == "Jackknife")
     out <- rbind(SpecAbunJack1(data, k, conf), SpecAbunJack2(data, k, conf))
-  colnames(out) <- c("Estimate", "Est_s.e.", paste(conf*100,"% Lower Bound",sep=""), paste(conf*100,"% Upper Bound",sep=""))
+  colnames(out) <- c("Estimate", "s.e.", paste(conf*100,"%Lower",sep=""), paste(conf*100,"%Upper",sep=""))
   return(out)
 }

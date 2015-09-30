@@ -22,7 +22,7 @@ function(data, method = c("all", "Homogeneous", "Chao", "CE", "Jackknife"), k, c
 						"ICE-1 (Lee & Chao, 1994)", 
 						"1st order jackknife",
 						"2nd order jackknife")
-	colnames(out) <- c("Estimator", "Est_s.e.", "95% Lower Bound", "95% Upper Bound")
+	colnames(out) <- c("Estimate", "s.e.", "95%Lower", "95%Upper")
   }
   
   if (method == "Homogeneous")
@@ -38,6 +38,6 @@ function(data, method = c("all", "Homogeneous", "Chao", "CE", "Jackknife"), k, c
   }
   if (method == "Jackknife")
     out <- rbind(g, h)
-  colnames(out) <- c("Estimator", "Est_s.e.", paste(conf*100,"% Lower Bound",sep=""), paste(conf*100,"% Upper Bound",sep=""))
+  colnames(out) <- c("Estimate", "s.e.", paste(conf*100,"%Lower",sep=""), paste(conf*100,"%Upper",sep=""))
   return(out)
 }

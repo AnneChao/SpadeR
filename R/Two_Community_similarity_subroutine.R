@@ -2,6 +2,10 @@ Jaccard_Sorensen_Abundance_equ=function(datatype = c("abundance", "incidence"),X
 {
      if(datatype == "incidence")
      {
+        shared.species.hat=PanEstFun.Sam(X1,X2)
+        alpha.species.hat=SpecInciChao2(X1, k=10, conf=0.95)[1,1]+SpecInciChao2(X2, k=10, conf=0.95)[1,1]
+        Esti.Jaccard=shared.species.hat/(alpha.species.hat-shared.species.hat)
+        Esti.Sorensen=2*shared.species.hat/alpha.species.hat
         w=X1[1];z=X2[1]
         X1=X1[-1];X2=X2[-1]
      }
@@ -9,8 +13,17 @@ Jaccard_Sorensen_Abundance_equ=function(datatype = c("abundance", "incidence"),X
      if(datatype == "abundance"){w=n1;z=n2}
      I=which(X1>0 & X2>0)
 
-      MLE.Jaccard=length(I)/sum(X1+X2>0)
+     MLE.Jaccard=length(I)/sum(X1+X2>0)
      MLE.Sorensen=2*length(I)/(sum(X1>0)+sum(X2>0))
+     #############################################
+     if(datatype == "abundance")
+     {
+        shared.species.hat=PanEstFun(X1,X2)
+        alpha.species.hat=SpecAbunChao1(X1, k=10, conf=0.95)[1,1]+SpecAbunChao1(X2, k=10, conf=0.95)[1,1]
+        Esti.Jaccard=shared.species.hat/(alpha.species.hat-shared.species.hat)
+        Esti.Sorensen=2*shared.species.hat/alpha.species.hat
+     }
+     #############################################
      MLE.Lennon=length(I)/(min(sum(X1>0),sum(X2>0)))
      MLE.Bray_Curtis=sum(sapply(I,function(I) 2*min(X1[I],X2[I])))/(n1+n2) 
      Morisita_Horn=2*sum(X1[I]/n1*X2[I]/n2)/sum((X1/n1)^2+(X2/n2)^2)
@@ -32,7 +45,9 @@ Jaccard_Sorensen_Abundance_equ=function(datatype = c("abundance", "incidence"),X
     
      p1=X1/w;p2=X2/z
      boot.Jaccard=rep(0,boot)
+     boot.Esti.Jaccard=rep(0,boot)
      boot.Sorensen=rep(0,boot)
+     boot.Esti.Sorensen=rep(0,boot)
      boot.Lennon=rep(0,boot)
      boot.Bray_Curtis=rep(0,boot)
      boot.Morisita_Horn=rep(0,boot)
@@ -51,11 +66,19 @@ Jaccard_Sorensen_Abundance_equ=function(datatype = c("abundance", "incidence"),X
            boot.X1=rmultinom(1,w,p1)
            boot.X2=rmultinom(1,z,p2)
            boot.n1=sum( boot.X1);boot.n2=sum(boot.X2)
+           boot.shared.species.hat=PanEstFun(boot.X1,boot.X2)
+           boot.alpha.species.hat=SpecAbunChao1(boot.X1, k=10, conf=0.95)[1,1]+SpecAbunChao1(boot.X2, k=10, conf=0.95)[1,1]
+           boot.Esti.Jaccard[h]=boot.shared.species.hat/(boot.alpha.species.hat-boot.shared.species.hat)
+           boot.Esti.Sorensen[h]=2*boot.shared.species.hat/boot.alpha.species.hat
         }
         if(datatype == "incidence")
         {
            boot.X1=sapply(1:length(p1), function(i)  rbinom(1, w, p1[i]))
            boot.X2=sapply(1:length(p2), function(i)  rbinom(1, z, p2[i]))
+           boot.shared.species.hat=PanEstFun.Sam(c(w,boot.X1), c(z,boot.X2) )
+           boot.alpha.species.hat=SpecInciChao2(c(w,boot.X1), k=10, conf=0.95)[1,1]+SpecInciChao2(c(z,boot.X2), k=10, conf=0.95)[1,1]
+           boot.Esti.Jaccard[h]=boot.shared.species.hat/(boot.alpha.species.hat-boot.shared.species.hat)
+           boot.Esti.Sorensen[h]=2*boot.shared.species.hat/boot.alpha.species.hat
            n1=sum(boot.X1)
            n2=sum(boot.X2)
         }
@@ -83,17 +106,19 @@ Jaccard_Sorensen_Abundance_equ=function(datatype = c("abundance", "incidence"),X
         boot.SAu[h]=2*boot.U_tilde*boot.V_tilde/(boot.U_tilde+boot.V_tilde)
         boot.SAa[h]=2*boot.U_hat[h]*boot.V_hat[h]/(boot.U_hat[h]+boot.V_hat[h])
      }
-     a=matrix(0,10,6)
+     a=matrix(0,12,6)
      a[1,]=c(MLE.Jaccard,sd(boot.Jaccard),rep(0,4))
-     a[2,]=c(MLE.Sorensen,sd(boot.Sorensen),rep(0,4))
-     a[3,]=c(MLE.Lennon,sd(boot.Lennon),rep(0,4))
-     a[4,]=c(MLE.Bray_Curtis,sd(boot.Bray_Curtis),rep(0,4))
-     a[5,]=c(Morisita_Horn,sd(boot.Morisita_Horn),rep(0,4))
-     a[6,]=c(Morisita_Original,sd(boot.Morisita_Original),rep(0,4))
-     a[7,]=c(JAu,sd(boot.JAu),U_tilde,V_tilde,rep(0,2))
-     a[8,]=c(JAa,sd(boot.JAa),U_hat,sd(boot.U_hat),V_hat,sd(boot.V_hat))
-     a[9,]=c(SAu,sd(boot.SAu),U_tilde,V_tilde,rep(0,2))
-     a[10,]=c(SAa,sd(boot.SAa),U_hat,sd(boot.U_hat),V_hat,sd(boot.V_hat))
+     a[2,]=c(Esti.Jaccard,sd(boot.Esti.Jaccard),rep(0,4))
+     a[3,]=c(MLE.Sorensen,sd(boot.Sorensen),rep(0,4))
+     a[4,]=c(Esti.Sorensen,sd(boot.Esti.Sorensen),rep(0,4))
+     a[5,]=c(MLE.Lennon,sd(boot.Lennon),rep(0,4))
+     a[6,]=c(MLE.Bray_Curtis,sd(boot.Bray_Curtis),rep(0,4))
+     a[7,]=c(Morisita_Horn,sd(boot.Morisita_Horn),rep(0,4))
+     a[8,]=c(Morisita_Original,sd(boot.Morisita_Original),rep(0,4))
+     a[9,]=c(JAu,sd(boot.JAu),U_tilde,V_tilde,rep(0,2))
+     a[10,]=c(JAa,sd(boot.JAa),U_hat,sd(boot.U_hat),V_hat,sd(boot.V_hat))
+     a[11,]=c(SAu,sd(boot.SAu),U_tilde,V_tilde,rep(0,2))
+     a[12,]=c(SAa,sd(boot.SAa),U_hat,sd(boot.U_hat),V_hat,sd(boot.V_hat))
      round(a,4)
 }
 
@@ -1187,27 +1212,29 @@ print.spadeTwo <- function(x, ...){
          '; f[+2]=',x$info2[5],'\n\n')
 	
     cat('(4) Estimation Results of Some Similarity Indices: \n\n')
-    cat('                                      Estimate   Bootstrap se.     U_hat* (se.)     V_hat** (se.)\n')
+    cat('                                      Estimate       s.e.        U_hat* (s.e.)     V_hat** (s.e.)\n')
     cat('    Incidence-based:\n')
     cat('    ===============\n')
 	temp <- apply(as.matrix(x$similarity), 2, as.numeric)
-    cat('      Jaccard incidence               ',sprintf("%.4f",temp[1,1]),'     ',sprintf("%.4f",temp[1,2]),'\n')
-    cat('      Sorensen incidence              ',sprintf("%.4f",temp[2,1]),'     ',sprintf("%.4f",temp[2,2]),'\n')
-    cat('      Lennon et al (2001)             ',sprintf("%.4f",temp[3,1]),'     ',sprintf("%.4f",temp[3,2]),'\n\n')
+    cat('      Jaccard incidence  (observed)   ',sprintf("%.4f",temp[1,1]),'     ',sprintf("%.4f",temp[1,2]),'\n')
+	  cat('      Jaccard incidence  (estimated)  ',sprintf("%.4f",temp[2,1]),'     ',sprintf("%.4f",temp[2,2]),'\n')
+    cat('      Sorensen incidence (observed)   ',sprintf("%.4f",temp[3,1]),'     ',sprintf("%.4f",temp[3,2]),'\n')
+	  cat('      Sorensen incidence (estimated)  ',sprintf("%.4f",temp[4,1]),'     ',sprintf("%.4f",temp[4,2]),'\n')
+    cat('      Lennon et al (2001)             ',sprintf("%.4f",temp[5,1]),'     ',sprintf("%.4f",temp[5,2]),'\n\n')
     cat('    Abundance-based:\n')
     cat('    ===============\n')
-    cat('      Bray-Curtis                     ',sprintf("%.4f",temp[4,1]),'     ',sprintf("%.4f",temp[4,2]),'\n')
-    cat('      Morisita-Horn                   ',sprintf("%.4f",temp[5,1]),'     ',sprintf("%.4f",temp[5,2]),'\n')
-    cat('      Morisita Original               ',sprintf("%.4f",temp[6,1]),'     ',sprintf("%.4f",temp[6,2]),'\n') 
+    cat('      Bray-Curtis                     ',sprintf("%.4f",temp[6,1]),'     ',sprintf("%.4f",temp[6,2]),'\n')
+    cat('      Morisita-Horn                   ',sprintf("%.4f",temp[7,1]),'     ',sprintf("%.4f",temp[7,2]),'\n')
+    cat('      Morisita Original               ',sprintf("%.4f",temp[8,1]),'     ',sprintf("%.4f",temp[8,2]),'\n') 
    # cat('      Horn (relative)                 ',sprintf("%.4f",1-temp[6,1]),'     ',sprintf("%.4f",temp[6,2]),'\n')
-    cat('      Horn (absolute)                 ',sprintf("%.4f",temp[7,1]),'     ',sprintf("%.4f",temp[7,2]),'\n')
-    cat('      Jaccard Abundance  (unadjusted) ',sprintf("%.4f",temp[9-1,1]),'     ',sprintf("%.4f",temp[9-1,2]),'     ',sprintf("%.4f",temp[9-1,3]),'          ',sprintf("%.4f",temp[9-1,4]),'\n')
-    cat('      Jaccard Abundance  (  adjusted) ',sprintf("%.4f",temp[10-1,1]),'     ',sprintf("%.4f",temp[10-1,2]),'     ',sprintf("%.4f",temp[10-1,3]),
-               '(',sprintf("%.4f",temp[10-1,4]),')', sprintf("%.4f",temp[10-1,5]),'(',sprintf("%.4f",temp[10-1,6]),')','\n')
-    cat('      Sorensen Abundance (unadjusted) ',sprintf("%.4f",temp[11-1,1]),'     ',sprintf("%.4f",temp[11-1,2]),'     ',sprintf("%.4f",temp[11-1,3]),
-               '          ',sprintf("%.4f",temp[11-1,4]),'\n')
-    cat('      Sorensen Abundance (  adjusted) ',sprintf("%.4f",temp[12-1,1]),'     ',sprintf("%.4f",temp[12-1,2]),
-        '     ',sprintf("%.4f",temp[12-1,3]),'(',sprintf("%.4f",temp[12-1,4]),')', sprintf("%.4f",temp[12-1,5]),'(',sprintf("%.4f",temp[12-1,6]),')','\n')
+    cat('      Horn (absolute)                 ',sprintf("%.4f",temp[9,1]),'     ',sprintf("%.4f",temp[9,2]),'\n')
+    cat('      Jaccard Abundance  (unadjusted) ',sprintf("%.4f",temp[10,1]),'     ',sprintf("%.4f",temp[10,2]),'     ',sprintf("%.4f",temp[10,3]),'          ',sprintf("%.4f",temp[10,4]),'\n')
+    cat('      Jaccard Abundance  (  adjusted) ',sprintf("%.4f",temp[11,1]),'     ',sprintf("%.4f",temp[11,2]),'     ',sprintf("%.4f",temp[11,3]),
+               '(',sprintf("%.4f",temp[11,4]),')', sprintf("%.4f",temp[11,5]),'(',sprintf("%.4f",temp[11,6]),')','\n')
+    cat('      Sorensen Abundance (unadjusted) ',sprintf("%.4f",temp[12,1]),'     ',sprintf("%.4f",temp[12,2]),'     ',sprintf("%.4f",temp[12,3]),
+               '          ',sprintf("%.4f",temp[12,4]),'\n')
+    cat('      Sorensen Abundance (  adjusted) ',sprintf("%.4f",temp[13,1]),'     ',sprintf("%.4f",temp[13,2]),
+        '     ',sprintf("%.4f",temp[13,3]),'(',sprintf("%.4f",temp[13,4]),')', sprintf("%.4f",temp[13,5]),'(',sprintf("%.4f",temp[13,6]),')','\n')
     cat('     
       *  U denotes the total relative abundances of the shared species in the first assemblage;
            U_hat is an estimate of U.
@@ -1221,7 +1248,7 @@ print.spadeTwo <- function(x, ...){
     Chao, A., Chazdon, R. L., Colwell, R. K. and Shen, T.-J. (2006). Abundance-based similarity indices and 
     their estimation when there are unseen species in samples. Biometrics, 62, 361-371.\n\n')
     cat('(6) ESTIMATION RESULTS OF THE NUMBER OF SPECIES FOR EACH ASSEMBLAGE:\n\n')
-    cat('     Model           Estimate    Est_s.e.            95% CI\n\n')
+    cat('     Model           Estimate      s.e.            95% CI\n\n')
     cat('     Assemblage 1:\n')
 
     temp=x$assemblage1
@@ -1269,26 +1296,28 @@ print.spadeTwo <- function(x, ...){
 	            '; Q[1+]=',x$info2[2], '; Q[+1]=',x$info2[3],
 				'; Q[2+]=',x$info2[4], '; Q[+2]=',x$info2[5],'\n\n')
     cat('(4) Estimation Results of Some Similarity Indices: \n\n')
-    cat('                                            Estimate   Bootstrap se.     U_hat* (se.)     V_hat** (se.)\n')
+    cat('                                            Estimate       s.e.        U_hat* (s.e.)     V_hat** (s.e.)\n')
     cat('    Incidence-based:\n')
     cat('    ===============\n')
     
 	temp <- apply(as.matrix(x$similarity), 2, as.numeric)
-    cat('      Jaccard incidence                     ',sprintf("%.4f",temp[1,1]),'     ',sprintf("%.4f",temp[1,2]),'\n')
-    cat('      Sorensen incidence                    ',sprintf("%.4f",temp[2,1]),'     ',sprintf("%.4f",temp[2,2]),'\n')
-    cat('      Lennon et al (2001)                   ',sprintf("%.4f",temp[3,1]),'     ',sprintf("%.4f",temp[3,2]),'\n\n')
+    cat('      Jaccard incidence  (observed)         ',sprintf("%.4f",temp[1,1]),'     ',sprintf("%.4f",temp[1,2]),'\n')
+	  cat('      Jaccard incidence  (estimated)        ',sprintf("%.4f",temp[2,1]),'     ',sprintf("%.4f",temp[2,2]),'\n')
+    cat('      Sorensen incidence (observed)         ',sprintf("%.4f",temp[3,1]),'     ',sprintf("%.4f",temp[3,2]),'\n')
+	  cat('      Sorensen incidence (estimated)        ',sprintf("%.4f",temp[4,1]),'     ',sprintf("%.4f",temp[4,2]),'\n')
+    cat('      Lennon et al (2001)                   ',sprintf("%.4f",temp[5,1]),'     ',sprintf("%.4f",temp[5,2]),'\n\n')
     cat('    Multiple incidence-based:\n')
     cat('    ===============\n')
-    cat('      Bray-Curtis                           ',sprintf("%.4f",temp[4,1]),'     ',sprintf("%.4f",temp[4,2]),'\n')
-    cat('      Morisita-Horn                         ',sprintf("%.4f",temp[5,1]),'     ',sprintf("%.4f",temp[5,2]),'\n')
-    cat('      Morisita Original                     ',sprintf("%.4f",temp[6,1]),'     ',sprintf("%.4f",temp[6,2]),'\n')
-    cat('      Incidence-based Jaccard  (unadjusted) ',sprintf("%.4f",temp[7,1]),'     ',sprintf("%.4f",temp[7,2]),'     ',sprintf("%.4f",temp[7,3]),'          ',sprintf("%.4f",temp[7,4]),'\n')
-    cat('      Incidence-based Jaccard  (  adjusted) ',sprintf("%.4f",temp[8,1]),'     ',sprintf("%.4f",temp[8,2]),'     ',sprintf("%.4f",temp[8,3]),
-               '(',sprintf("%.4f",temp[8,4]),')', sprintf("%.4f",temp[8,5]),'(',sprintf("%.4f",temp[8,6]),')','\n')
-    cat('      Incidence-based Sorensen (unadjusted) ',sprintf("%.4f",temp[9,1]),'     ',sprintf("%.4f",temp[9,2]),'     ',sprintf("%.4f",temp[9,3]),
-               '          ',sprintf("%.4f",temp[9,4]),'\n')
-    cat('      Incidence-based Sorensen (  adjusted) ',sprintf("%.4f",temp[10,1]),'     ',sprintf("%.4f",temp[10,2]),
-        '     ',sprintf("%.4f",temp[10,3]),'(',sprintf("%.4f",temp[10,4]),')', sprintf("%.4f",temp[10,5]),'(',sprintf("%.4f",temp[10,6]),')','\n')
+    cat('      Bray-Curtis                           ',sprintf("%.4f",temp[6,1]),'     ',sprintf("%.4f",temp[6,2]),'\n')
+    cat('      Morisita-Horn                         ',sprintf("%.4f",temp[7,1]),'     ',sprintf("%.4f",temp[7,2]),'\n')
+    cat('      Morisita Original                     ',sprintf("%.4f",temp[8,1]),'     ',sprintf("%.4f",temp[8,2]),'\n')
+    cat('      Incidence-based Jaccard  (unadjusted) ',sprintf("%.4f",temp[9,1]),'     ',sprintf("%.4f",temp[9,2]),'     ',sprintf("%.4f",temp[9,3]),'          ',sprintf("%.4f",temp[9,4]),'\n')
+    cat('      Incidence-based Jaccard  (  adjusted) ',sprintf("%.4f",temp[10,1]),'     ',sprintf("%.4f",temp[10,2]),'     ',sprintf("%.4f",temp[10,3]),
+               '(',sprintf("%.4f",temp[10,4]),')', sprintf("%.4f",temp[10,5]),'(',sprintf("%.4f",temp[10,6]),')','\n')
+    cat('      Incidence-based Sorensen (unadjusted) ',sprintf("%.4f",temp[11,1]),'     ',sprintf("%.4f",temp[11,2]),'     ',sprintf("%.4f",temp[11,3]),
+               '          ',sprintf("%.4f",temp[11,4]),'\n')
+    cat('      Incidence-based Sorensen (  adjusted) ',sprintf("%.4f",temp[12,1]),'     ',sprintf("%.4f",temp[12,2]),
+        '     ',sprintf("%.4f",temp[12,3]),'(',sprintf("%.4f",temp[12,4]),')', sprintf("%.4f",temp[12,5]),'(',sprintf("%.4f",temp[12,6]),')','\n')
     cat('     
       *  U denotes the total relative incidences of the shared species in the first assemblage;
            U_hat is an estimate of U.
@@ -1302,7 +1331,7 @@ print.spadeTwo <- function(x, ...){
     Chao, A., Chazdon, R. L., Colwell, R. K. and Shen, T.-J. (2006). Abundance-based similarity indices and 
     their estimation when there are unseen species in samples. Biometrics, 62, 361-371.\n\n')
     cat('(6) ESTIMATION RESULTS OF THE NUMBER OF SPECIES FOR EACH ASSEMBLAGE:\n\n')
-    cat('     Model           Estimate    Est_s.e.            95% CI\n\n')
+    cat('     Model           Estimate       s.e.            95% CI\n\n')
     cat('     Assemblage 1:\n')
     temp=x$assemblage1
     cat('       Chao2          ',sprintf("%.1f",temp[1,1]),'      ',sprintf("%.1f",temp[1,2]),'        (',sprintf("%.1f",temp[1,3]),',',sprintf("%.1f",temp[1,4]),')\n')

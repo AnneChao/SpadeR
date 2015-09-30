@@ -1,3 +1,26 @@
+Chat.Sam <- function(x, t)
+{
+  nT <- x[1]
+  y <- x[-1]
+  y <- y[y>0]
+  U <- sum(y)
+  Q1 <- sum(y == 1)
+  Q2 <- sum(y == 2)
+  Q0.hat <- ifelse(Q2 == 0, (nT - 1) / nT * Q1 * (Q1 - 1) / 2, (nT - 1) / nT * Q1 ^ 2/ 2 / Q2)  #estimation of unseen species via Chao2
+  A <- ifelse(Q1>0, nT*Q0.hat/(nT*Q0.hat+Q1), 1)
+  Sub <- function(t){
+    if(t < nT) {
+      yy <- y[(nT-y)>=t]
+      out <- 1 - sum(yy / U * exp(lgamma(nT-yy+1)-lgamma(nT-yy-t+1)-lgamma(nT)+lgamma(nT-t)))     
+    }
+    #if(t < nT) out <- 1 - sum(y / U * exp(lchoose(nT - y, t) - lchoose(nT - 1, t)))
+    if(t == nT) out <- 1 - Q1 / U * A
+    if(t > nT) out <- 1 - Q1 / U * A^(t - nT + 1)
+    out
+  }
+  sapply(t, Sub)  	
+}
+
 basicInci <-
 function(data, k){
   data <- as.numeric(data)
@@ -26,15 +49,20 @@ function(data, k){
   CV_infreq <- sqrt(gamma_infreq_square)
   D_freq <- length(x[which(x > k)])
 
- 
+  U<-sum(x)
+  C<-Chat.Sam(data, t)
+  CV_squre<-max( D/C*t/(t-1)*sum(x*(x-1))/U^2-1, 0)
+  CV<-CV_squre^0.5
+  U_infreq<-sum(x[x<=k])
 #   BASIC.DATA <- matrix(paste(c("D", "t", "k", "D_infreq", "C_infreq", "CV_infreq", "D_freq"),
 #                              round(c(D,t,k,D_infreq,C_infreq,CV_infreq,D_freq), 3),
 #                              sep = "="), ncol = 1)
-  BASIC.DATA <- matrix(round(c(D,t,k,D_infreq,C_infreq,CV_infreq,D_freq), 3), ncol = 1)
-  nickname <- c("D", "t", "k", "D_infreq", "C_infreq", "CV_infreq", "D_freq")
+  BASIC.DATA <- matrix(round(c(D,t,U,C,CV,k,U_infreq,D_infreq,C_infreq,CV_infreq,D_freq), 3), ncol = 1)
+  nickname <- c("D", "T", "U", "C", "CV", "k", "U_infreq", "D_infreq", "C_infreq", "CV_infreq", "D_freq")
   BASIC.DATA <- cbind(nickname, BASIC.DATA)
   colnames(BASIC.DATA)=c("Variable", "Value")
-  rownames(BASIC.DATA)=c("Number of observed species","Number of sample/quadrats","Cut-off point",
+  rownames(BASIC.DATA)=c("Number of observed species","Number of sampling units", "Total number of incidences",
+                         "Coverage estimate for whole data", "CV for whole data", "Cut-off point","Total number of incidences in infrequent group",
                          "Number of observed species for infrequent species","Estimated sample coverage for infrequent species",
                          "Estimated CV for infrequent species",
                          "Number of observed species for frequent species")

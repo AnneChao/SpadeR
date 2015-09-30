@@ -398,7 +398,7 @@ print.spadeMult <- function(x, ...){
    }
    cat('   (Bootstrap replications for s.e. estimate)              ',rev(x$info)[1],'\n\n')
    cat('(2) ESTIMATION OF OVERLAP MEASURE IN',N,'COMMUNITIES:\n\n')
-   cat('    Estimator','     Estimate','     Est_s.e.','     95% Confidence Interval\n\n')
+   cat('    Estimator','     Estimate','     s.e.','     95% Confidence Interval\n\n')
    temp0n=x$overlap[1,]
    cat('    C0')
    cat(N,'(Sorensen)',sprintf("%.3f",temp0n[1]),'       ',sprintf("%.3f",temp0n[2]),'        (',
@@ -447,7 +447,7 @@ print.spadeMult <- function(x, ...){
     Confidence Interval: Based on an improved bootstrap percentile method. (recommend for use in the case when 
                          similarity is close to 0 or 1 ) \n\n')
    cat('    Pairwise Comparison:\n\n')
-   cat('    Estimator','     Estimate','     Est_s.e.','     95% Confidence Interval\n\n')
+   cat('    Estimator','     Estimate','     s.e.','       95% Confidence Interval\n\n')
    Cqn_PC <- x$pairwise
    no.temp=1
    for(i in 1:(N-1))
@@ -510,7 +510,7 @@ print.spadeMult <- function(x, ...){
    {
    cat('\n')
    cat('(3) ESTIMATION OF MORISITA DISSIMILARITY IN',N,'COMMUNITIES\n\n')
-   cat('    Estimator','     Estimate','     Est_s.e.','     95% Confidence Interval\n\n')
+   cat('    Estimator','     Estimate','     s.e.','    95% Confidence Interval\n\n')
    cat('    1 - C2')
    cat(N,'      ',sprintf("%.3f",1-temp2n[1]),'       ',sprintf("%.3f",temp2n[2]),'        (',
        sprintf("%.3f",max(0,1-temp2n[1]-1.96*temp2n[2])),',',sprintf("%.3f",min(1,1-temp2n[1]+1.96*temp2n[2])),')\n')
@@ -530,7 +530,7 @@ print.spadeMult <- function(x, ...){
    }
    cat('\n')
    cat('    Pairwise Comparison:\n\n')
-   cat('    Estimator','          Estimate','     Est_s.e.','     95% Confidence Interval\n\n')
+   cat('    Estimator','          Estimate','     s.e.','       95% Confidence Interval\n\n')
    no.temp=1
    for(i in 1:(N-1))
    {

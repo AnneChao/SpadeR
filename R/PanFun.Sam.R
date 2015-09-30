@@ -14,7 +14,7 @@ function(y1, y2, conf=0.95) {
   CI <- logCI(y1, y2, est, se, conf)
   out <- matrix(c(est, se, CI), nrow = 1)
   rownames(out) <- c("Lower-bound")
-  colnames(out) <- c("Estimator", "Est_s.e.",
+  colnames(out) <- c("Estimate", "Est_s.e.",
                      paste(conf*100, "% Lower"), paste(conf*100, "% Upper"))
   return(out)
 }

@@ -1,22 +1,30 @@
 ChaoShared.Ind <-
 function(x1, x2, method = c("all", "Homogeneous", 
-                                              "Heterogeneous(ACE-shared)",
-                                              "Chao1(shared)", 
-                                              "Chao1-shared-bc", 
-                                              "Lower-bound",
-                                              "Lower-bound-bc"), 
-                           B = 200, conf = 0.95, se = TRUE) {
+                              "Heterogeneous(ACE-shared)",
+                              "Chao1-shared", 
+                              "Chao1-shared-bc"),
+                              B = 200, conf = 0.95, se = TRUE) {  
+#function(x1, x2, method = c("all", "Homogeneous", 
+#                                              "Heterogeneous(ACE-shared)",
+#                                              "Chao1(shared)", 
+#                                              "Chao1-shared-bc", 
+#                                              "Lower-bound",
+#                                              "Lower-bound-bc"), 
+#                           B = 200, conf = 0.95, se = TRUE) {
+
   method <- match.arg(method)
   if (se == FALSE)
     B <- 1
   if (method == "all") {
     a <- HomoFun(x1, x2, B, conf)
     b <- HeteroFun(x1, x2, B, conf)
-    c <- Chao1_sharedFun(x1, x2, conf)
-    d <- Chao1_bcFun(x1, x2, conf)
+    #c <- Chao1_sharedFun(x1, x2, conf)
+    #d <- Chao1_bcFun(x1, x2, conf)
     e <- PanFun(x1, x2, conf)
     f <- PanbcFun(x1, x2, conf)
-    out <- rbind(a, b, c, d, e, f)
+    #out <- rbind(a, b, c, d, e, f)
+    out <- rbind(a, b, e, f)
+    rownames(out)<-c("Homogeneous","Heterogeneous(ACE-shared)","Chao1-shared","Chao1-shared-bc")
   }
   if (method == "Homogeneous")
     out <- HomoFun(x1, x2, B, conf)
@@ -26,7 +34,7 @@ function(x1, x2, method = c("all", "Homogeneous",
     out <- Chao1_sharedFun(x1, x2, conf)
   if (method == "Chao1-shared-bc")
     out <- Chao1_bcFun(x1, x2, conf)
-  if (method == "Lower-bound)")
+  if (method == "Lower-bound")
     out <- PanFun(x1, x2, conf)
   if (method == "Lower-bound-bc")
     out <- PanbcFun(x1, x2, conf)

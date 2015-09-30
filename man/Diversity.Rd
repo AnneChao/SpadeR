@@ -14,7 +14,8 @@ followed by species incidence frequencies. (See example \code{data(ChaoSpeciesDa
 \item{datatype}{data type of input data: individual-based abundance data (\code{datatype = "abundance"}) or
 sampling-unit-based incidence data (\code{datatype = "incidence"}).}
 
-\item{q}{a numeric value specifying the diversity order of Hill numbers.}
+\item{q}{a vector of nonnegative numbers for which the diversity order of Hill numbers will be estimated. If \code{NULL}, then
+Hill numbers will be estimated at order q from 0 to 3 with equally-spaced 0.25.}
 }
 \value{
 a list of seven objects:
@@ -32,8 +33,8 @@ and Hill number (diversity of order from 0 to 3) .
 \dontrun{
 data(DiversityDataAbu)
 Diversity(DiversityDataAbu,datatype="abundance")
-data(ChaoSpeciesDataInci)
-Diversity(ChaoSpeciesDataInci,datatype="incidence")
+data(SimilarityPairDataInci)
+Diversity(SimilarityPairDataInci[,1],datatype="incidence")
 }
 }
 \references{

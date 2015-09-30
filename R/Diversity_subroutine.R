@@ -533,12 +533,13 @@ SpecInci <- function(data, k=10, conf=0.95)
 {
   Chao2   <- SpecInciChao2(data, k = k, conf = conf)
   Chao2bc <- SpecInciChao2bc(data, k = k, conf = conf)
+  iChao2  <- SpecInciiChao2(data, k=k, conf=conf)[1,]
   Modelh  <- SpecInciModelh(data, k = k, conf = conf)[-c(5)]
   Modelh1 <- SpecInciModelh1(data, k = k, conf = conf)[-c(5)]
-  table   <- rbind(Chao2, Chao2bc, Modelh, Modelh1)
+  table   <- rbind(Chao2, Chao2bc, iChao2, Modelh, Modelh1)
   table   <- round(table,1)
-  colnames(table) <- c("Estimator", "Est_s.e.", "95% Lower Bound", "95% Upper Bound")
-  rownames(table) <- c("Chao2 (Chao, 1987)", "Chao2-bc", "ICE (Lee & Chao, 1994)", "ICE-1 (Lee & Chao, 1994)")
+  colnames(table) <- c("Estimate", "s.e.", "95%Lower", "95%Upper")
+  rownames(table) <- c("Chao2 (Chao, 1987)", "Chao2-bc","iChao2", "ICE (Lee & Chao, 1994)", "ICE-1 (Lee & Chao, 1994)")
   return(table)
 }
 
@@ -756,36 +757,38 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
     cat("\n(2)  ESTIMATION OF SPECIES RICHNESS (DIVERSITY OF ORDER 0):\n\n")
     print(x$SPECIES.RICHNESS)
     cat("
-        95% Confidence interval: A log-transformation is used so that the lower bound 
-        of the resulting interval is at least the number of observed species. 
-        See Chao (1987).
+        Desriptions (See Species Part)
         
         Chao1 (Chao, 1984): This approach uses the numbers of singletons and doubletons to
-        estimate the number of missing species because missing species information is
-        mostly concentrated on those low frequency counts; see Chao (1984), Shen, Chao and Lin (2003)
-        and Chao, Shen and Hwang (2006).
+        estimate the number of undetected species because undetected species information is
+        mostly concentrated on those low frequency counts; see Chao (1984), and Chao and Chiu (2012).
         
-        Chao1-bc: a bias-corrected form for the Chao1; see Chao (2005).
-        
+        Chao1-bc: A bias-corrected form for the Chao1 estimator; see Chao (2005).
+      
+        iChao1: An improved Chao1 estimator; See Chiu et al. (2014).   
+
         ACE (Abundance-based Coverage Estimator): A non-parametric estimator proposed by Chao and Lee (1992)
-        and Chao, Ma and Yang (1993).  The observed species are separated as rare and abundant groups;
-        only the rare group is used to estimate the number of missing species.
+        and Chao, Ma and Yang (1993). The observed species are separated as rare and abundant groups;
+        only the rare group is used to estimate the number of undetected species.
         The estimated CV is used to characterize the degree of heterogeneity among species
-        discovery probabilities.  See Eq.(2.14) in Chao and Lee (1992) or Eq.(2.2) of Chao et al. (2000).
+        discovery probabilities. See Eq. (2.14) in Chao and Lee (1992) or Eq. (2.2) of Chao et al. (2000).
         
-        ACE-1: A modified ACE for highly heterogeneous communities; See Eq.(2.15) of Chao and Lee (1992).
+        ACE-1: A modified ACE for highly heterogeneous communities. See Eq. (2.15) of Chao and Lee (1992).
+
+        95% Confidence interval: A log-transformation is used for all estimators so that the lower bound 
+        of the resulting interval is at least the number of observed species. See Chao (1987).
         ")
     cat("\n(3a)  SHANNON INDEX:\n\n")
     print(x$SHANNON.INDEX)
     #cat("\n")
     #cat(" For a review of the four estimators, see Chao and Shen (2003).\n")
     cat("
-        MLE: maximum likelihood estimator.
-        MLE_bc: bias-corrected maximum likelihood estimator.
+        MLE: empirical or observed entropy.
+        MLE_bc: bias-corrected empirical estimator.
         Jackknife: see Zahl (1977).
         Chao & Shen: based on Horvitz-Thompson estimator and sample coverage method;
         see Chao and Shen (2003). 
-  	    Chao (2013): An nearly unbiasd estimator of entropy, see Chao et al. (2013).
+  	    Chao et al. (2013): A low-bias estimator of entropy; see Chao et al. (2013).
   	    Estimated standard error is based on a bootstrap method.
         \n")
     
@@ -797,18 +800,18 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
     
     cat("
         MVUE: minimum variance unbiased estimator; see Eq. (2.27) of Magurran (1988).
-        MLE: maximum likelihood estimator; see Eq. (2.26) of Magurran (1988).
+        MLE: maximum likelihood estimator or empirical index; see Eq. (2.26) of Magurran (1988).
        ")
     
     cat("\n(4b)  INVERSE OF SIMPSON INDEX (DIVERSITY OF ORDER 2):\n\n")
     print(x$INVERSE.OF.SIMPSON.INDEX)
     
-    cat("\n(5)  The estimates of Hill's number at order q from 0 to 3\n\n")
+    cat("\n(5)  Chao and Jost (2015) estimates of Hill numbers of order q from 0 to 3\n\n")
     print(x$HILL.NUMBERS)
     
     cat("
-        Chao: see Chao and Jost (2015).
-  	    Empirical: maximum likelihood estimator.
+        ChaoJost: see Chao and Jost (2015).
+  	    Empirical: maximum likelihood estimator (observed index).
        ")
   }else{
     cat("\n(1)  BASIC DATA INFORMATION:\n")
@@ -816,60 +819,34 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
     cat("\n(2)  ESTIMATION OF SPECIES RICHNESS (DIVERSITY OF ORDER 0):\n\n")
     print(x$SPECIES.RICHNESS)
     cat("
-        95% Confidence interval: A log-transformation is used so that the lower bound 
-        of the resulting interval is at least the number of observed species. 
-        See Chao (1987).
-        
-        Chao2 (Chao, 1987): This approach uses the frequencies of uniques and duplicates 
-        to estimate the number of missing species; see Chao (1987).
-     
-        Chao2-bc: a bias-corrected form for the Chao2; see Chao (2005).
-        
-        Model(h) (ICE: Incidence-based Coverage Estimator): Model(h) assumes that the 
-        detection probabilities are heterogeneous among species. The estimator given here 
-        is an improved version of Eq.(3.18) in Lee and Chao (1994) by using an improved 
-        estimated sample coverage given in Shen (2003) and the SPADE User Guide; 
-        see Eq.(3.23) in Lee and Chao (1994) for the estimated squared CV.
-
-        Model(h)-1 (or ICE-1):  A modified ICE for highly-heterogeneous cases.
-
+         Decriptions (see Species Part)
         ")
     cat("\n(3a)  SHANNON INDEX:\n\n")
     print(x$SHANNON.INDEX)
-    cat("
-        MLE: maximum likelihood estimator.
   
-        Chao (2013): An nearly unbiasd estimator of entropy, see Chao et al. (2013).
-
-  	    Estimated standard error is based on a bootstrap method.
-        \n")
     cat("\n(3b)  EXPONENTIAL OF SHANNON INDEX (DIVERSITY OF ORDER 1):\n\n")
     print(x$EXPONENTIAL.OF.SHANNON.INDEX)
     cat("\n(4a)  SIMPSON INDEX:\n\n")
     print(x$SIMPSON.INDEX)
-    cat("
-        MVUE: minimum variance unbiased estimator; see Chao et al. (2014).
-        MLE: maximum likelihood estimator.
-       ")
     cat("\n(4b)  INVERSE OF SIMPSON INDEX (DIVERSITY OF ORDER 2):\n\n")
     print(x$INVERSE.OF.SIMPSON.INDEX)
-    cat("\n(5)  The estimates of Hill's number at order q from 0 to 3\n\n")
+    cat("\n(5)  Chao and Jost (2015) estimates of Hill numbers of order q from 0 to 3\n\n")
     print(x$HILL.NUMBERS)
     
     cat("
-        Chao: see Chao and Jost (2015).
-        Empirical: maximum likelihood estimator.
+        ChaoJost: see Chao and Jost (2015).
+        Empirical: maximum likelihood estimator (observed index).
       ")
    
   }
-  Lower=min(x$HILL.NUMBERS[,4],x$HILL.NUMBERS[,6])
-  Upper=max(x$HILL.NUMBERS[,5],x$HILL.NUMBERS[,7])
+  Lower=min(x$HILL.NUMBERS[,3],x$HILL.NUMBERS[,6])
+  Upper=max(x$HILL.NUMBERS[,4],x$HILL.NUMBERS[,7])
   plot(0,type="n",xlim=c(min(x$HILL.NUMBERS[,1]),max(x$HILL.NUMBERS[,1])),ylim=c(Lower,Upper),xlab="Order  q",ylab="Hill  numbers")
-  conf.reg(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,4],x$HILL.NUMBERS[,5], col=adjustcolor(2, 0.2), border=NA)
+  conf.reg(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,3],x$HILL.NUMBERS[,4], col=adjustcolor(2, 0.2), border=NA)
   conf.reg(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,6],x$HILL.NUMBERS[,7], col=adjustcolor(4, 0.2), border=NA)
   lines(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,2],col=2,lwd=3)
-  lines(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,3],col=4,lty=3,lwd=3)
-  legend("topright", c("Chao","Empirical"),col=c(2,4),lwd=c(3,3),lty=c(1,3),bty="n",cex=0.8) 
+  lines(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,5],col=4,lty=3,lwd=3)
+  legend("topright", c("ChaoJost","Empirical"),col=c(2,4),lwd=c(3,3),lty=c(1,3),bty="n",cex=0.8) 
 }
 
 

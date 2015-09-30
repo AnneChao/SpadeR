@@ -133,7 +133,7 @@ ChaoShared <-
       Basic <- BasicFun(x1, x2, nboot, datatype)
       #     cat("(2)  ESTIMATION RESULTS OF THE NUMBER OF SHARED SPECIES: ", "\n")
       output <- ChaoShared.Ind(x1, x2, method, nboot, conf, se)
-      colnames(output) <- c("Estimator", "Est_s.e.", paste(conf*100,"% Lower Bound",sep=""), paste(conf*100,"% Upper Bound",sep=""))
+      colnames(output) <- c("Estimate", "s.e.", paste(conf*100,"%Lower",sep=""), paste(conf*100,"%Upper",sep=""))
     }
     if (datatype == "incidence") {
       y1 <- data[, 1]
@@ -141,7 +141,7 @@ ChaoShared <-
       Basic <- BasicFun(y1, y2, B=nboot, datatype)
       #     cat("(2)  ESTIMATION RESULTS OF THE NUMBER OF SHARED SPECIES: ", "\n")
       output <- ChaoShared.Sam(y1, y2, method, conf, se)
-      colnames(output) <- c("Estimator", "Est_s.e.", paste(conf*100,"% Lower Bound",sep=""), paste(conf*100,"% Upper Bound",sep=""))
+      colnames(output) <- c("Estimate", "s.e.", paste(conf*100,"%Lower",sep=""), paste(conf*100,"%Upper",sep=""))
     }
     out <- list(BASIC_DATA_INFORMATION=Basic, 
                 ESTIMATION_RESULTS_OF_THE_NUMBER_OF_SHARED_SPECIES=output)
@@ -174,8 +174,8 @@ ChaoShared <-
 #' \dontrun{
 #' data(DiversityDataAbu)
 #' Diversity(DiversityDataAbu,datatype="abundance")
-#' data(ChaoSpeciesDataInci)
-#' Diversity(ChaoSpeciesDataInci,datatype="incidence")
+#' data(SimilarityPairDataInci)
+#' Diversity(SimilarityPairDataInci[,1],datatype="incidence")
 #' }
 #' @references
 #' Chao, A. (1984). Nonparametric estimation of the number of classes in a population. Scandinavian Journal of Statistics 11, 265-270.\cr\cr
@@ -210,32 +210,33 @@ Diversity=function(data, datatype=c("abundance","incidence"), q=NULL)
                               "Estimated CV")
     BASIC.DATA <- data.frame(BASIC.DATA)
     
-    table0 <- matrix(0,4,4)
+    table0 <- matrix(0,5,4)
     table0[1,]=c(Chao1(X)[-5])
     table0[2,]=c(Chao1_bc(X))
-    table0[3,]=round(c(SpecAbunAce(X)),1)
-    table0[4,]=round(c(SpecAbunAce1(X)),1)
-    colnames(table0) <- c("Estimator", "Est_s.e.", paste(Chao1(X)[5]*100,"% Lower Bound", sep=""), paste(Chao1(X)[5]*100,"% Upper Bound", sep=""))
-    rownames(table0) <- c(" Chao1 (Chao, 1984)"," Chao1-bc "," ACE (Chao & Lee, 1992)",
+    table0[3,]=round(SpecAbuniChao1(X, k=10, conf=0.95)[1,],1)
+    table0[4,]=round(c(SpecAbunAce(X)),1)
+    table0[5,]=round(c(SpecAbunAce1(X)),1)
+    colnames(table0) <- c("Estimate", "s.e.", paste(Chao1(X)[5]*100,"%Lower", sep=""), paste(Chao1(X)[5]*100,"%Upper", sep=""))
+    rownames(table0) <- c(" Chao1 (Chao, 1984)"," Chao1-bc ", " iChao1"," ACE (Chao & Lee, 1992)",
                           " ACE-1 (Chao & Lee, 1992)")
     
     SHANNON=Shannon_index(X)
     table1=round(SHANNON[c(1:5),],3)
-    colnames(table1) <- c("Estimator", "Est_s.e.", paste("95% Lower Bound"), paste("95% Upper Bound"))
+    colnames(table1) <- c("Estimate", "s.e.", paste("95%Lower"), paste("95%Upper"))
     rownames(table1) <- c(" MLE"," MLE_bc"," Jackknife",
-                          " Chao & Shen"," Chao (2013)")
+                          " Chao & Shen"," Chao et al. (2013)")
     
     table1_exp=round(SHANNON[c(6:10),],3)
-    colnames(table1_exp) <- c("Estimator", "Est_s.e.", paste("95% Lower Bound"), paste("95% Upper Bound"))
+    colnames(table1_exp) <- c("Estimate", "s.e.", paste("95%Lower"), paste("95%Upper"))
     rownames(table1_exp) <- c(" MLE"," MLE_bc"," Jackknife",
-                              " Chao & Shen"," Chao (2013)")
+                              " Chao & Shen"," Chao et al. (2013)")
     
     table2=round(Simpson_index(X)[c(1:2),],5)
-    colnames(table2) <- c("Estimator", "Est_s.e.", paste("95% Lower Bound"), paste("95% Upper Bound"))
+    colnames(table2) <- c("Estimate", "s.e.", paste("95%Lower"), paste("95%Upper"))
     rownames(table2) <- c(" MVUE"," MLE")
     
     table2_recip=round(Simpson_index(X)[c(3:4),],5)
-    colnames(table2_recip) <- c("Estimator", "Est_s.e.", paste("95% Lower Bound"), paste("95% Upper Bound"))
+    colnames(table2_recip) <- c("Estimate", "s.e.", paste("95%Lower"), paste("95%Upper"))
     rownames(table2_recip) <- c(" MVUE"," MLE")
     
     if(is.null(q)){Hill <- reshapeChaoHill(ChaoHill(X, datatype = "abundance", q=NULL, from=0, to=3, interval=0.25, B=50, conf=0.95))}
@@ -254,11 +255,11 @@ Diversity=function(data, datatype=c("abundance","incidence"), q=NULL)
     Chao.UCL <- Hill[(q_length+1):(2*q_length),3] + 1.96*Hill[(q_length+1):(2*q_length),4]
     Emperical.LCL <- Hill[1:q_length,3] - 1.96*Hill[1:q_length,4]
     Emperical.UCL <- Hill[1:q_length,3] + 1.96*Hill[1:q_length,4]
-    Hill<-cbind(Hill[1:q_length,1],Hill[(q_length+1):(2*q_length),3],Hill[1:q_length,3],Chao.LCL,Chao.UCL,Emperical.LCL,Emperical.UCL)
+    Hill<-cbind(Hill[1:q_length,1],Hill[(q_length+1):(2*q_length),3],Chao.LCL,Chao.UCL,Hill[1:q_length,3],Emperical.LCL,Emperical.UCL)
     Hill<-round(Hill,3)
     Hill <- data.frame(Hill)
     #colnames(Hill)<-c("q","Chao","Empirical","Chao(s.e.)","Empirical(s.e.)")
-    colnames(Hill)<-c("q","Chao","Empirical","Chao(95% Lower)","Chao(95% Upper)","Empirical(95% Lower)","Empirical(95% Upper)")
+    colnames(Hill)<-c("q","ChaoJost","95%Lower","95%Upper","Empirical","95%Lower","95%Upper")
     
     z <- list("datatype"= type,"BASIC.DATA"=BASIC.DATA,"SPECIES.RICHNESS"=table0, 
               "SHANNON.INDEX"=table1,"EXPONENTIAL.OF.SHANNON.INDEX"=table1_exp,
@@ -267,26 +268,41 @@ Diversity=function(data, datatype=c("abundance","incidence"), q=NULL)
   }else if(datatype=="incidence"){
     if(!is.vector(X)) X <- as.numeric(unlist(c(X)))
     type="incidence"
-    BASIC.DATA <- basicInci(X, k=10)[[1]]
+    U<-sum(X[-1])
+    D<-sum(X[-1]>0)
+    T<-X[1]
+    C<-Chat.Sam(X,T)
+    CV_squre<-max( D/C*T/(T-1)*sum(X[-1]*(X[-1]-1))/U^2-1, 0)
+    CV<-CV_squre^0.5
+    BASIC.DATA <- matrix(round(c(D,T, C, CV),3), ncol = 1)
+    nickname <- matrix(c("D", "T", "C", "CV"), ncol = 1)
+    BASIC.DATA <- cbind(nickname, BASIC.DATA)
+    
+    colnames(BASIC.DATA) <- c("Variable", "Value")
+    rownames(BASIC.DATA) <- c("Number of observed species", "Number of Sampling units",
+                              "Estimated sample coverage",
+                              "Estimated CV")
+    BASIC.DATA <- data.frame(BASIC.DATA)
+    #BASIC.DATA <- basicInci(X, k=10)[[1]]
     ############################################################
     table0=SpecInci(X, k=10, conf=0.95)
     SHANNON=Shannon_Inci_index(X)
     table1=round(SHANNON[c(1,4),],3)
-    colnames(table1) <- c("Estimator", "Est_s.e.", paste("95% Lower Bound"), paste("95% Upper Bound"))
-    #rownames(table1) <- c(" MLE"," MLE_bc"," Chao & Shen"," Chao (2013)")
-    rownames(table1) <- c(" MLE"," Chao (2013)")
+    colnames(table1) <- c("Estimate", "s.e.", paste("95%Lower"), paste("95%Upper"))
+    #rownames(table1) <- c(" MLE"," MLE_bc"," Chao & Shen"," Chao et al. (2013)")
+    rownames(table1) <- c(" MLE"," Chao et al. (2013)")
     table1_exp=round(SHANNON[c(5,8),],3)
-    colnames(table1_exp) <- c("Estimator", "Est_s.e.", paste("95% Lower Bound"), paste("95% Upper Bound"))
-    #rownames(table1_exp) <- c(" MLE"," MLE_bc"," Chao & Shen"," Chao (2013)")
-    rownames(table1_exp) <- c(" MLE"," Chao (2013)")
+    colnames(table1_exp) <- c("Estimate", "s.e.", paste("95%Lower"), paste("95%Upper"))
+    #rownames(table1_exp) <- c(" MLE"," MLE_bc"," Chao & Shen"," Chao et al. (2013)")
+    rownames(table1_exp) <- c(" MLE"," Chao et al. (2013)")
     
     SIMPSON=Simpson_Inci_index(X)
     table2=round(SIMPSON[c(1:2),],5)
-    colnames(table2) <- c("Estimator", "Est_s.e.", paste("95% Lower Bound"), paste("95% Upper Bound"))
+    colnames(table2) <- c("Estimate", "s.e.", paste("95%Lower"), paste("95%Upper"))
     rownames(table2) <- c(" MVUE"," MLE")
     
     table2_recip=round(SIMPSON[c(3:4),],5)
-    colnames(table2_recip) <- c("Estimator", "Est_s.e.", paste("95% Lower Bound"), paste("95% Upper Bound"))
+    colnames(table2_recip) <- c("Estimate", "s.e.", paste("95%Lower"), paste("95%Upper"))
     rownames(table2_recip) <- c(" MVUE"," MLE")
     
     
@@ -309,11 +325,11 @@ Diversity=function(data, datatype=c("abundance","incidence"), q=NULL)
     Chao.UCL <- Hill[(q_length+1):(2*q_length),3] + 1.96*Hill[(q_length+1):(2*q_length),4]
     Emperical.LCL <- Hill[1:q_length,3] - 1.96*Hill[1:q_length,4]
     Emperical.UCL <- Hill[1:q_length,3] + 1.96*Hill[1:q_length,4]
-    Hill<-cbind(Hill[1:q_length,1],Hill[(q_length+1):(2*q_length),3],Hill[1:q_length,3],Chao.LCL,Chao.UCL,Emperical.LCL,Emperical.UCL)
+    Hill<-cbind(Hill[1:q_length,1],Hill[(q_length+1):(2*q_length),3],Chao.LCL,Chao.UCL,Hill[1:q_length,3],Emperical.LCL,Emperical.UCL)
     Hill<-round(Hill,3)
     Hill <- data.frame(Hill)
     #colnames(Hill)<-c("q","Chao","Empirical","Chao(s.e.)","Empirical(s.e.)")
-    colnames(Hill)<-c("q","Chao","Empirical","Chao(95% Lower)","Chao(95% Upper)","Empirical(95% Lower)","Empirical(95% Upper)")
+    colnames(Hill)<-c("q","ChaoJost","95%Lower","95%Upper","Empirical","95%Lower","95%Upper")
     
     #z <- list("BASIC.DATA"=BASIC.DATA,"HILL.NUMBERS"= Hill)
      
@@ -388,38 +404,38 @@ SimilarityPair=function(X, datatype = c("abundance","incidence"),nboot=200)
     
     temp <- list()
     temp[[1]] <- Jaccard_Sorensen_Abundance_equ(datatype,X[,1],X[,2],nboot)
-    temp[[1]] <- matrix(sapply(c(temp[[1]]), function(x) ifelse(x==0,"",x)),10)
+    temp[[1]] <- matrix(sapply(c(temp[[1]]), function(x) ifelse(x==0,"",x)),12)
     subset=round(C1n_equ(method="absolute",X[,c(1,2)],nboot),4)[1:2]
     subset[1]=1- subset[1]
-    temp[[1]] <- rbind(temp[[1]][1:6,],
+    temp[[1]] <- rbind(temp[[1]][1:8,],
                        #c(round(C1n_equ(method="relative",X[,c(1,2)],nboot),4)[1:2],"","","",""),
                        NA,
                        c(subset,"","","",""),
-                       temp[[1]][7:10,])
+                       temp[[1]][9:12,])
     
-    colnames(temp[[1]]) <- c("Estimate", "Bootstrap se.", "U_hat*", "U_hat* se.", "V_hat**", "V_hat** se.")
+    colnames(temp[[1]]) <- c("Estimate", "s.e.", "U_hat*", "U_hat* se.", "V_hat**", "V_hat** se.")
     #rownames(temp[[1]]) <- c("Jaccard incidence", "Sorensen incidence", "Lennon et al. (2001)",
     #                         "Bray-Curtis", "Morisita-Horn", "Morisita Original",
     #                         "Horn (relative)", "Horn (absolute)","Jaccard Abundance (unadjusted)",
      #                        "Jaccard Abundance (adjusted)", "Sorensen Abundance(unadjusted)", "Sorensen Abundance(adjusted)")
-    rownames(temp[[1]]) <- c("Jaccard incidence", "Sorensen incidence", "Lennon et al. (2001)",
+    rownames(temp[[1]]) <- c("Jaccard incidence (observed)","Jaccard incidence (estimated)", "Sorensen incidence (observed)","Sorensen incidence (estimated)", "Lennon et al. (2001)",
                              "Bray-Curtis", "Morisita-Horn", "Morisita Original","Horn (relative)", "Horn (absolute)",
                              "Jaccard Abundance (unadjusted)",
                            "Jaccard Abundance (adjusted)", "Sorensen Abundance(unadjusted)", "Sorensen Abundance(adjusted)")
     
     
-    temp[[1]] <- temp[[1]][-7,]
+    temp[[1]] <- temp[[1]][-9,]
     temp[[1]] <- as.data.frame(temp[[1]])
     
     temp[[2]] <- rbind(Chao1_equ(X[,1],conf=0.95)[-5],Chao1_bc_equ(X[,1],conf=0.95),
                        SpecAbunAce_equ(X[,1], k=10, conf=0.95), SpecAbunAce1_equ(X[,1] ,k=10, conf=0.95))
-    colnames(temp[[2]]) <- c("Estimate", "Est_s.e.", "95%.LCL", "95%.UCL")
+    colnames(temp[[2]]) <- c("Estimate", "s.e.", "95%.LCL", "95%.UCL")
     rownames(temp[[2]]) <- c("Chao1", "Chao1-bc", "ACE", "ACE-1")
     temp[[2]] <- as.data.frame(temp[[2]])
     
     temp[[3]] <- rbind(Chao1_equ(X[,2],conf=0.95)[-5],Chao1_bc_equ(X[,2],conf=0.95),
                        SpecAbunAce_equ(X[,2], k=10, conf=0.95), SpecAbunAce1_equ(X[,2] ,k=10, conf=0.95))
-    colnames(temp[[3]]) <- c("Estimate", "Est_s.e.", "95%.LCL", "95%.UCL")
+    colnames(temp[[3]]) <- c("Estimate", "s.e.", "95%.LCL", "95%.UCL")
     rownames(temp[[3]]) <- c("Chao1", "Chao1-bc", "ACE", "ACE-1")
     temp[[3]] <- as.data.frame(temp[[3]])
     z <- list("datatype"=type,"info1"=info1, "info2"=info2, "similarity"=temp[[1]], "assemblage1"=temp[[2]], "assemblage2"=temp[[3]])
@@ -440,9 +456,9 @@ SimilarityPair=function(X, datatype = c("abundance","incidence"),nboot=200)
     
     temp <- list()
     temp[[1]] <- Jaccard_Sorensen_Abundance_equ(datatype,X[,1],X[,2],nboot)
-    temp[[1]] <- matrix(sapply(c(temp[[1]]), function(x) ifelse(x==0,"",x)),10)
-    colnames(temp[[1]]) <- c("Estimate", "Bootstrap se.", "U_hat*", "U_hat* se.", "V_hat**", "V_hat** se.")
-    rownames(temp[[1]]) <- c("Jaccard incidence", "Sorensen incidence", "Lennon et al. (2001)",
+    temp[[1]] <- matrix(sapply(c(temp[[1]]), function(x) ifelse(x==0,"",x)),12)
+    colnames(temp[[1]]) <- c("Estimate", "s.e.", "U_hat*", "U_hat* se.", "V_hat**", "V_hat** se.")
+    rownames(temp[[1]]) <- c("Jaccard incidence (observed)","Jaccard incidence (estimated)", "Sorensen incidence (observed)","Sorensen incidence (estimated)","Lennon et al. (2001)",
                              "Bray-Curtis", "Morisita-Horn", "Morisita Original",
                              "Incidence-based Jaccard (unadjusted)", "Incidence-based Jaccard (adjusted)", 
                              "Incidence-based Sorensen(unadjusted)", "Incidence-based Sorensen(adjusted)")
@@ -450,13 +466,13 @@ SimilarityPair=function(X, datatype = c("abundance","incidence"),nboot=200)
     
     temp[[2]] <- rbind(SpecInciChao2(X[,1],conf=0.95)[-5],SpecInciChao2bc(X[,1],conf=0.95),
                        SpecInciModelh(X[,1], k=10, conf=0.95), SpecInciModelh1(X[,1] ,k=10, conf=0.95))
-    colnames(temp[[2]]) <- c("Estimate", "Est_s.e.", "95%.LCL", "95%.UCL")
+    colnames(temp[[2]]) <- c("Estimate", "s.e.", "95%.LCL", "95%.UCL")
     rownames(temp[[2]]) <- c("Chao2", "Chao2-bc", "ICE", "ICE-1")
     temp[[2]] <- as.data.frame(temp[[2]])
     
     temp[[3]] <- rbind(SpecInciChao2(X[,2],conf=0.95)[-5],SpecInciChao2bc(X[,2],conf=0.95),
                        SpecInciModelh(X[,2], k=10, conf=0.95), SpecInciModelh1(X[,2] ,k=10, conf=0.95))
-    colnames(temp[[3]]) <- c("Estimate", "Est_s.e.", "95%.LCL", "95%.UCL")
+    colnames(temp[[3]]) <- c("Estimate", "s.e.", "95%.LCL", "95%.UCL")
     rownames(temp[[3]]) <- c("Chao2", "Chao2-bc", "ICE", "ICE-1")
     temp[[3]] <- as.data.frame(temp[[3]])
     z <- list("datatype"=type, "info1"=info1, "info2"=info2, "similarity"=as.data.frame(temp[[1]]), "assemblage1"=temp[[2]], "assemblage2"=temp[[3]])
@@ -524,7 +540,7 @@ SimilarityMult=function(X,q=2,nboot=200)
             C1n_equ(method="absolute",X,nboot), 
             Cqn_se_equ(X,q=2,nboot)[1:4])
   if(N==3){Cqn <- rbind(Cqn, C33_se_equ(X,nboot)[1:4])}
-  colnames(Cqn) <- c("Estimate", "Est_s.e.", "95%.LCL", "95%.UCL")
+  colnames(Cqn) <- c("Estimate", "s.e.", "95%.LCL", "95%.UCL")
   rownames(Cqn) <- c(paste("C0",N," (Sorensen)",sep=""),paste("C1",N,"(Horn)",sep=""),paste("C1",N,"*","(Horn)",sep=""),paste("C2",N," (Morisita)",sep=""),if(N==3) "C33")
   Cqn <- Cqn[-2,]
   
@@ -541,11 +557,11 @@ SimilarityMult=function(X,q=2,nboot=200)
     }
   }
   if(q==0 || q==1){
-    colnames(Cqn_PC) <- c("Estimate", "Est_s.e.", "95%.LCL", "95%.UCL")
+    colnames(Cqn_PC) <- c("Estimate", "s.e.", "95%.LCL", "95%.UCL")
     rownames(Cqn_PC) <- temp_PC
   }
   if(q==2){
-    colnames(Cqn_PC) <- c("Estimate", "Est_s.e.", "95%.LCL", "95%.UCL", "D.95%.LCL", "D.95%.UCL")
+    colnames(Cqn_PC) <- c("Estimate", "s.e.", "95%.LCL", "95%.UCL", "D.95%.LCL", "D.95%.UCL")
     rownames(Cqn_PC) <- temp_PC
   }
   
