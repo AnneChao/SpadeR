@@ -80,7 +80,8 @@ SpecAbuniChao1 <-
     }
     
     diff <- function(q, x){ # fq
-      f1 <- f(1, x); f2 <- f(2, x); f3 <- f(3, x); f4 <- f(4, x) 
+      f1 <- f(1, x); f2 <- f(2, x); f3 <- f(3, x); f4 <- f(4, x)
+      f4 <- ifelse(f4>0,f4,1)	  
       if (f1 > 0 & f2 != 0){
         if (q == 1){
           d <- (n - 1)/n*f1/f2 - f3/4/f4
