@@ -407,11 +407,20 @@ SimilarityPair=function(X, datatype = c("abundance","incidence"),nboot=200)
     temp[[1]] <- matrix(sapply(c(temp[[1]]), function(x) ifelse(x==0,"",x)),12)
     subset=round(C1n_equ(method="absolute",X[,c(1,2)],nboot),4)[1:2]
     subset[1]=1- subset[1]
+    #X1=as.numeric(X[,1])
+    #X2=as.numeric(X[,2])
+    #subset=New_C12(X1, X2)
+    #subset=temp[[1]][13,c(1,2)]
+    Horn_MLE=Two_horn_MLE_equ(X[,1],X[,2])
+    BC_estimated=KH_Braycurtis_equ(X[,1],X[,2],w1=sum(X[,1])/(sum(X[,1])+sum(X[,2])))
+    MLE_ew_Braycurtis=MLE_Braycurtis_equ(X[,1],X[,2],w1=0.5)
+    BC_ew_estimated=KH_Braycurtis_equ(X[,1],X[,2],w1=0.5)
     temp[[1]] <- rbind(temp[[1]][1:8,],
                        #c(round(C1n_equ(method="relative",X[,c(1,2)],nboot),4)[1:2],"","","",""),
                        NA,
                        c(subset,"","","",""),
-                       temp[[1]][9:12,])
+                       temp[[1]][9:12,],c(Horn_MLE,"","","",""),c(BC_estimated,"","","",""),
+                       c(MLE_ew_Braycurtis,"","","",""),c(BC_ew_estimated,"","","",""))
     
     colnames(temp[[1]]) <- c("Estimate", "s.e.", "U_hat*", "U_hat* se.", "V_hat**", "V_hat** se.")
     #rownames(temp[[1]]) <- c("Jaccard incidence", "Sorensen incidence", "Lennon et al. (2001)",
@@ -419,9 +428,9 @@ SimilarityPair=function(X, datatype = c("abundance","incidence"),nboot=200)
     #                         "Horn (relative)", "Horn (absolute)","Jaccard Abundance (unadjusted)",
      #                        "Jaccard Abundance (adjusted)", "Sorensen Abundance(unadjusted)", "Sorensen Abundance(adjusted)")
     rownames(temp[[1]]) <- c("Jaccard incidence (observed)","Jaccard incidence (estimated)", "Sorensen incidence (observed)","Sorensen incidence (estimated)", "Lennon et al. (2001)",
-                             "Bray-Curtis", "Morisita-Horn", "Morisita Original","Horn (relative)", "Horn (absolute)",
+                             "Bray-Curtis (observed)", "Morisita-Horn", "Morisita Original","Horn (relative)", "Horn (estimated)",
                              "Jaccard Abundance (unadjusted)",
-                           "Jaccard Abundance (adjusted)", "Sorensen Abundance(unadjusted)", "Sorensen Abundance(adjusted)")
+                           "Jaccard Abundance (adjusted)", "Sorensen Abundance(unadjusted)", "Sorensen Abundance(adjusted)","Horn (observed)","Bray-Curtis (estimated)","Bray-curtis (observed-ew)","Bray-Curtis (estimated-ew)")
     
     
     temp[[1]] <- temp[[1]][-9,]
@@ -579,3 +588,6 @@ SimilarityMult=function(X,q=2,nboot=200)
   class(z) <- c("spadeMult")
   z
 }
+
+
+

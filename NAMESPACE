@@ -1,4 +1,5 @@
 import(stats)
+import(Rcpp)
 S3method(print,ChaoShared)
 S3method(print,ChaoSpecies)
 S3method(print,spadeDiv)

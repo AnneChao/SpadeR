@@ -13,7 +13,7 @@ SpadeR computes various biodiversity indices based on individual-based (abundanc
 Package: \tab SpadeR\cr
 Type: \tab Package\cr
 Version: \tab 0.1.0\cr
-Date: \tab 2015-07-13\cr
+Date: \tab 2016-03-23\cr
 License: \tab GPL (>= 3)\cr
 }
 functions:  ChaoShared, ChaoSpecies, Diversity, SimilarityMult, SimilarityPair

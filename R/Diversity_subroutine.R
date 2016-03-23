@@ -414,6 +414,7 @@ entropy_MEE_equ=function(X)
      B=sum(x==1)/n*(1-A)^(-n+1)*(-log(A)-sum(sapply(1:(n-1),function(k){1/k*(1-A)^k})))
   }
   if(f1==0){B=0}
+  if(f1==1 & f2==0){B=0}
   UE+B
 }
 entropy_HT_equ<-function(X)
@@ -500,27 +501,32 @@ simpson_MVUE_equ=function(X)
    a 
 }
 
-Simpson_index=function(x,boot=200)
+Simpson_index=function(x,boot=50)
 {
    x=x[x>0]
    n=sum(x)
    MVUE=simpson_MVUE_equ(x)
    MLE=simpson_MLE_equ(x)
    
-   ACE=SpecAbunAce(x)[1]
- 
-   AA=sum(  ( x*(x-1)/n/(n-1)-x*(2*n-1)/n/(n-1)*MVUE  )^2  )
-   BB=sum( x*(x-1)/n/(n-1)-x*(2*n-1)/n/(n-1)*MVUE   )
-   MVUE_sd=(AA-BB^2/ACE)^0.5
+   #ACE=SpecAbunAce(x)[1]
+   #AA=sum(  ( x*(x-1)/n/(n-1)-x*(2*n-1)/n/(n-1)*MVUE  )^2  )
+   #BB=sum( x*(x-1)/n/(n-1)-x*(2*n-1)/n/(n-1)*MVUE   )
+   #MVUE_sd=(AA-BB^2/ACE)^0.5
 
-   AA=sum(  ( (x/n)^2-2*x/n*MLE  )^2  )
-   BB=sum( (x/n)^2-2*x/n*MLE   )
-   MLE_sd=(AA-BB^2/ACE)^0.5
-
-  
-   MVUE_recip_sd=MVUE_sd/MVUE
-    MLE_recip_sd=MLE_sd/MLE
-  
+   #AA=sum(  ( (x/n)^2-2*x/n*MLE  )^2  )
+   #BB=sum( (x/n)^2-2*x/n*MLE   )
+   #MLE_sd=(AA-BB^2/ACE)^0.5  
+   #MVUE_recip_sd=MVUE_sd/MVUE
+    #MLE_recip_sd=MLE_sd/MLE
+   p_hat=EstiBootComm.Ind(x)
+   Boot.X=rmultinom(boot,n,p_hat)
+   temp1=apply(Boot.X,2,simpson_MVUE_equ)
+   temp2=apply(Boot.X,2,simpson_MLE_equ)
+   MVUE_sd=sd(temp1)
+   MVUE_recip_sd=sd(1/temp1)
+   MLE_sd=sd(temp2)
+   MLE_recip_sd=sd(1/temp2)
+   
    a=matrix(0,4,4)
    a[1,]=c(MVUE,MVUE_sd,MVUE-1.96*MVUE_sd,MVUE+1.96*MVUE_sd)
    a[2,]=c(MLE,MLE_sd,MLE-1.96*MLE_sd,MLE+1.96*MLE_sd)

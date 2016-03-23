@@ -43,6 +43,7 @@ Jaccard_Sorensen_Abundance_equ=function(datatype = c("abundance", "incidence"),X
      SAu=2*U_tilde*V_tilde/(U_tilde+V_tilde)
      SAa=2*U_hat*V_hat/(U_hat+V_hat)
     
+     
      p1=X1/w;p2=X2/z
      boot.Jaccard=rep(0,boot)
      boot.Esti.Jaccard=rep(0,boot)
@@ -53,6 +54,7 @@ Jaccard_Sorensen_Abundance_equ=function(datatype = c("abundance", "incidence"),X
      boot.Morisita_Horn=rep(0,boot)
      boot.Morisita_Original=rep(0,boot)
  
+     
      boot.U_hat=rep(0,boot)
      boot.V_hat=rep(0,boot)
        boot.JAu=rep(0,boot)
@@ -121,6 +123,42 @@ Jaccard_Sorensen_Abundance_equ=function(datatype = c("abundance", "incidence"),X
      a[12,]=c(SAa,sd(boot.SAa),U_hat,sd(boot.U_hat),V_hat,sd(boot.V_hat))
      round(a,4)
 }
+
+Two_horn_MLE_equ=function(X1,X2)
+{
+  
+   horn_MLE_equ=function(X1,X2)
+   {
+       n1=sum(X1)
+       n2=sum(X2)
+       w1=n1/(n1+n2);w2=1-w1
+       pool.X= X1+X2
+       pool.n= n1+n2
+       pool.phat=pool.X/pool.n;pool.phat=pool.phat[pool.phat>0]
+       p1hat=X1/n1;p1hat=p1hat[p1hat>0]
+       p2hat=X2/n2;p2hat=p2hat[p2hat>0]
+       Hr=-sum(pool.phat*log(pool.phat))
+       Ha=-w1*sum(p1hat*log(p1hat))-w2*sum(p2hat*log(p2hat))
+       horn=(Hr-Ha)/(-w1*log(w1)-w2*log(w2))
+       horn
+   }
+   n1=sum(X1)
+   n2=sum(X2)
+   horn=horn_MLE_equ(X1,X2)
+   boot.horn=rep(0,50)
+   boot.p1=X1/n1
+   boot.p2=X2/n2
+   for(h in 1:50)
+   {
+     boot.X1=rmultinom(1,n1,boot.p1)
+     boot.X2=rmultinom(1,n2,boot.p2)
+     boot.horn[h]=horn_MLE_equ(boot.X1,boot.X2)  
+   }
+   out=c(horn,sd(boot.horn));out=round(out,4)
+   return(out)
+}
+
+
 
 Chao1_equ=function(x,conf=0.95)
 {
@@ -974,16 +1012,176 @@ SpecInciModelh1 <-function(data, k=10, conf=0.95)
 
 correct_obspi<- function(X)
 {
-   Sobs <- sum(X > 0) 	
-   n <- sum(X)		  	
-   f1 <- sum(X == 1) 	
-   f2 <- sum(X == 2) 	
-   a <- ifelse(f1 == 0, 0, (n - 1) * f1 / ((n - 1) * f1 + 2 * f2) * f1 / n)
-   b <- sum(X / n * (1 - X / n) ^ n)
-   w <- a / b  			
-   Prob.hat <- X / n * (1 - w * (1 - X / n) ^ n)	
-   Prob.hat
+  Sobs <- sum(X > 0)   
+  n <- sum(X)		  	
+  f1 <- sum(X == 1) 	
+  f2 <- sum(X == 2)
+  if(f1>0 & f2>0)
+  {
+    a=(n - 1) * f1 / ((n - 1) * f1 + 2 * f2) * f1 / n
+  }
+  if(f1>1 & f2==0)
+  {
+    a=(n-1)*(f1-1) / ( (n-1)*(f1-1) + 2 )*f1/n
+  } 
+  if(f1==1 & f2==0) {a=0}
+  if(f1==0 & f2==0) {a=0} 	
+  b <- sum(X / n * (1 - X / n) ^ n)
+  w <- a / b  			
+  Prob.hat <- X / n * (1 - w * (1 - X / n) ^ n)	
+  Prob.hat
 }
+
+p1bar_equ=function(X)
+{
+  n=sum(X)
+  f1=sum(X==1)
+  f2=sum(X==2)
+  if(f1>0 & f2>0)
+  {
+    a=2*f2/( (n-1)*f1+2*f2  )
+  }
+  if(f1>1 & f2==0)
+  {
+    a=2/( (n-1)*(f1-1)+2      )
+  }
+  if(f1==1 &  f2==0){a=0}
+  if(f1==0){a=0}
+  return(a)
+}
+
+KH_Bray_curtis_equ=function(X1,X2,w1)
+{
+  w2=1-w1
+  p1bar_1=p1bar_equ(X1)
+  p1bar_2=p1bar_equ(X2)
+  I=which(X1*X2>0)
+  Y1=X1[I];Y2=X2[I]
+  n1=sum(X1);n2=sum(X2)
+  f.1=sum(X1>0 & X2==1)
+  f.2=sum(X1>0 & X2==2);f.2=ifelse(f.2>0,f.2,1)
+  f1.=sum(X1==1 & X2>0)
+  f2.=sum(X1==2 & X2>0);f2.=ifelse(f2.>0,f2.,1)
+  
+  temp=0
+  for(i in 1:length(I) )
+  {
+    a1=w1^2*ifelse(Y1[i]>1,Y1[i]*(Y1[i]-1)/n1/(n1-1),p1bar_1^2)-
+      2*w1*w2*ifelse(Y1[i]>1,Y1[i]/n1,p1bar_1)*ifelse(Y2[i]>1,Y2[i]/n2,p1bar_2)+
+      w2^2*ifelse(Y2[i]>1,Y2[i]*(Y2[i]-1)/n2/(n2-1),p1bar_2^2)
+    a1=max(0,a1)
+    if(a1==0)
+    {
+      a1=(abs(w1*ifelse(Y1[i]>1,Y1[i]/n1,p1bar_1)-w2*ifelse(Y2[i]>1,Y2[i]/n2,p1bar_2)))^2
+    }
+    temp=temp+a1^0.5
+  }
+  I=which(X1>0 & X2==1)
+  Y1=X1[I];Y2=X2[I]
+  if(length(I)>0)
+  {
+    for(i in 1:length(I) )
+    {
+      a1=w1^2*ifelse(Y1[i]>1,Y1[i]*(Y1[i]-1)/n1/(n1-1),p1bar_1^2)-
+        2*w1*w2*ifelse(Y1[i]>1,Y1[i]/n1,p1bar_1)*p1bar_2+
+        w2^2*p1bar_2^2
+      a1=max(0,a1)
+      if(a1==0)
+      {
+        a1=(abs(w1*ifelse(Y1[i]>1,Y1[i]/n1,p1bar_1)-w2*ifelse(Y2[i]>1,Y2[i]/n2,p1bar_2)))^2
+        
+      }
+      temp=temp+a1^0.5*f.1/2/f.2 #(1-p1bar_2)/(n2*p1bar_2)
+    }
+  }
+  I=which(X1==1 & X2>0)
+  Y1=X1[I];Y2=X2[I]
+  if(length(I)>0)
+  {
+    for(i in 1:length(I) )
+    {
+      a1=w2^2*ifelse(Y2[i]>1,Y2[i]*(Y2[i]-1)/n2/(n2-1),p1bar_2^2)-
+        2*w1*w2*ifelse(Y2[i]>1,Y2[i]/n2,p1bar_2)*p1bar_1+
+        w1^2*p1bar_1^2
+      a1=max(0,a1)
+      if(a1==0)
+      {
+        a1=(abs(w1*ifelse(Y1[i]>1,Y1[i]/n1,p1bar_1)-w2*ifelse(Y2[i]>1,Y2[i]/n2,p1bar_2)))^2
+        
+      }
+      temp=temp+a1^0.5*f1./2/f2.#(1-p1bar_1)/(n1*p1bar_1)
+    }
+  }
+  f11=sum(X1==1 & X2==1)
+  sumtemp=f11*abs(w1*p1bar_1-w2*p1bar_2)*(1-p1bar_1)/(n1*p1bar_1)*(1-p1bar_2)/(n2*p1bar_2)
+  if(p1bar_1==0 | p1bar_2==0)
+  {
+    sumtemp=0
+  }
+  temp=temp+sumtemp
+  
+  ##########################
+  da1=X1  
+  da2=X2
+  I=which(da1*da2>0); sda1=da1[I];sda2=da2[I]
+  
+  
+  U1=sum(sda1)/n1; V1=sum(sda2)/n2;
+  ff1=sum(sda2==1);#ff1=ifelse(ff1==0, 1,ff1);
+  ff2=sum(sda2==2);ff2=ifelse(ff2==0, 1,ff2);
+  
+  f1=sum(sda1==1);#f1=ifelse(f1==0, 1,f1);
+  f2=sum(sda1==2);f2=ifelse(f2==0, 1,f2);  
+  
+  U2=(ff1/(2*ff2))*sum(sda1[sda2==1])/n1;uC1=f1/sum(sda1);
+  V2=(f1/(2*f2))*sum(sda2[sda1==1])/n2;uC2=ff1/sum(sda2);
+  U=U2+U1;U=min(U,1)
+  V=V1+V2;V=min(V,1)
+  ##########################
+  mle=sum(abs(w1*X1/n1-w2*X2/n2))
+  out=w1*(1-U)+w2*(1-V)+temp
+  if(out<0 | out>1)
+  {
+    out=mle
+  } 
+  return(out)
+}
+
+MLE_Braycurtis_equ=function(X1,X2,w1)
+{
+   w2=1-w1
+   n1=sum(X1)
+   n2=sum(X2)
+   mle=1-sum(abs(w1*X1/n1-w2*X2/n2))
+   p1hat=X1/n1
+   p2hat=X2/n2
+   boot.BC=rep(0,50)
+   for(h in 1:50)
+   {
+     boot.X1=rmultinom(1,n1,p1hat)
+     boot.X2=rmultinom(1,n2,p2hat)
+     boot.BC[h]=sum(abs(w1*boot.X1/n1-w2*boot.X2/n2))
+   }
+   out=c(mle,sd(boot.BC));out=round(out,4)
+   return(out)
+}
+
+KH_Braycurtis_equ=function(X1,X2,w1)
+{
+   BC=1-KH_Bray_curtis_equ(X1,X2,w1)
+   n1=sum(X1);p1hat=X1/n1
+   n2=sum(X2);p2hat=X2/n2
+   boot.BC=rep(0,50)
+   for(h in 1:50)
+   {
+       boot.X1=rmultinom(1,n1,p1hat)
+       boot.X2=rmultinom(1,n2,p2hat)
+       boot.BC[h]=KH_Bray_curtis_equ(boot.X1,boot.X2,w1)  
+   }
+   out=c(BC,sd(boot.BC));out=round(out,4)
+   return(out)
+}
+
 entropy_MEE_equ=function(X)
 {
   x=X
@@ -1071,6 +1269,9 @@ Two_com_correct_obspi=function(X1,X2)
    a=cbind(P1,P2)
    return(a)
 }
+
+
+  
 C1n_equ=function(method=c("relative","absolute"),X,boot=200)
 {
   X=as.matrix(X)
@@ -1219,15 +1420,15 @@ print.spadeTwo <- function(x, ...){
     cat('      Jaccard incidence  (observed)   ',sprintf("%.4f",temp[1,1]),'     ',sprintf("%.4f",temp[1,2]),'\n')
 	  cat('      Jaccard incidence  (estimated)  ',sprintf("%.4f",temp[2,1]),'     ',sprintf("%.4f",temp[2,2]),'\n')
     cat('      Sorensen incidence (observed)   ',sprintf("%.4f",temp[3,1]),'     ',sprintf("%.4f",temp[3,2]),'\n')
-	  cat('      Sorensen incidence (estimated)  ',sprintf("%.4f",temp[4,1]),'     ',sprintf("%.4f",temp[4,2]),'\n')
-    cat('      Lennon et al (2001)             ',sprintf("%.4f",temp[5,1]),'     ',sprintf("%.4f",temp[5,2]),'\n\n')
+	  cat('      Sorensen incidence (estimated)  ',sprintf("%.4f",temp[4,1]),'     ',sprintf("%.4f",temp[4,2]),'\n\n')
+    #cat('      Lennon et al (2001)             ',sprintf("%.4f",temp[5,1]),'     ',sprintf("%.4f",temp[5,2]),'\n\n')
     cat('    Abundance-based:\n')
     cat('    ===============\n')
-    cat('      Bray-Curtis                     ',sprintf("%.4f",temp[6,1]),'     ',sprintf("%.4f",temp[6,2]),'\n')
+    #cat('      Bray-Curtis (observed)          ',sprintf("%.4f",temp[6,1]),'     ',sprintf("%.4f",temp[6,2]),'\n')
     cat('      Morisita-Horn                   ',sprintf("%.4f",temp[7,1]),'     ',sprintf("%.4f",temp[7,2]),'\n')
     cat('      Morisita Original               ',sprintf("%.4f",temp[8,1]),'     ',sprintf("%.4f",temp[8,2]),'\n') 
    # cat('      Horn (relative)                 ',sprintf("%.4f",1-temp[6,1]),'     ',sprintf("%.4f",temp[6,2]),'\n')
-    cat('      Horn (absolute)                 ',sprintf("%.4f",temp[9,1]),'     ',sprintf("%.4f",temp[9,2]),'\n')
+    #cat('      Horn (estimated)                 ',sprintf("%.4f",temp[9,1]),'     ',sprintf("%.4f",temp[9,2]),'\n')
     cat('      Jaccard Abundance  (unadjusted) ',sprintf("%.4f",temp[10,1]),'     ',sprintf("%.4f",temp[10,2]),'     ',sprintf("%.4f",temp[10,3]),'          ',sprintf("%.4f",temp[10,4]),'\n')
     cat('      Jaccard Abundance  (  adjusted) ',sprintf("%.4f",temp[11,1]),'     ',sprintf("%.4f",temp[11,2]),'     ',sprintf("%.4f",temp[11,3]),
                '(',sprintf("%.4f",temp[11,4]),')', sprintf("%.4f",temp[11,5]),'(',sprintf("%.4f",temp[11,6]),')','\n')
@@ -1240,6 +1441,20 @@ print.spadeTwo <- function(x, ...){
            U_hat is an estimate of U.
       ** V denotes the total relative abundances of the shared species in the second assemblage;
            V_hat is an estimate of V.\n\n')
+	  cat('    Equal-effort:\n')
+   	cat('    ===============\n')
+	  cat('      Bray-Curtis (observed)          ',sprintf("%.4f",temp[6,1]),'     ',sprintf("%.4f",temp[6,2]),'\n')
+  	cat('      Bray-Curtis (estimated)         ',sprintf("%.4f",temp[15,1]),'     ',sprintf("%.4f",temp[15,2]),'\n')
+	  cat('      Horn (observed)                 ',sprintf("%.4f",1-temp[14,1]),'     ',sprintf("%.4f",temp[14,2]),'\n')
+	  cat('      Horn (estimated)                ',sprintf("%.4f",1-temp[9,1]),'     ',sprintf("%.4f",temp[9,2]),'\n')
+	  cat('\n')
+    cat('      In this part, we assume that the sample size ratio is equal to the population size ratio.')
+	  cat('\n\n')
+	  cat('    Equal-weight:\n')
+	  cat('    ===============\n')
+	  cat('      Bray-Curtis (observed)          ',sprintf("%.4f",temp[16,1]),'     ',sprintf("%.4f",temp[16,2]),'\n')
+	  cat('      Bray-Curtis (estimated)         ',sprintf("%.4f",temp[17,1]),'     ',sprintf("%.4f",temp[17,2]),'\n')
+  	cat('\n\n')
     cat('(5) References:\n')
     cat('
     Chao, A., Chazdon, R. L., Colwell, R. K. and Shen, T.-J. (2005). A new statistical approach for assessing
@@ -1247,39 +1462,39 @@ print.spadeTwo <- function(x, ...){
 
     Chao, A., Chazdon, R. L., Colwell, R. K. and Shen, T.-J. (2006). Abundance-based similarity indices and 
     their estimation when there are unseen species in samples. Biometrics, 62, 361-371.\n\n')
-    cat('(6) ESTIMATION RESULTS OF THE NUMBER OF SPECIES FOR EACH ASSEMBLAGE:\n\n')
-    cat('     Model           Estimate      s.e.            95% CI\n\n')
-    cat('     Assemblage 1:\n')
+    #cat('(6) ESTIMATION RESULTS OF THE NUMBER OF SPECIES FOR EACH ASSEMBLAGE:\n\n')
+    #cat('     Model           Estimate      s.e.            95% CI\n\n')
+    #cat('     Assemblage 1:\n')
 
-    temp=x$assemblage1
-    cat('       Chao1          ',sprintf("%.1f",temp[1,1]),'      ',sprintf("%.1f",temp[1,2]),'        (',sprintf("%.1f",temp[1,3]),',',sprintf("%.1f",temp[1,4]),')\n')
-    cat('       Chao1-bc       ',sprintf("%.1f",temp[2,1]),'      ',sprintf("%.1f",temp[2,2]),'        (',sprintf("%.1f",temp[2,3]),',',sprintf("%.1f",temp[2,4]),')\n')
-    cat('       ACE            ',sprintf("%.1f",temp[3,1]),'      ',sprintf("%.1f",temp[3,2]),'        (',sprintf("%.1f",temp[3,3]),',',sprintf("%.1f",temp[3,4]),')\n')
-    cat('       ACE-1          ',sprintf("%.1f",temp[4,1]),'      ',sprintf("%.1f",temp[4,2]),'        (',sprintf("%.1f",temp[4,3]),',',sprintf("%.1f",temp[4,4]),')\n')
+    #temp=x$assemblage1
+    #cat('       Chao1          ',sprintf("%.1f",temp[1,1]),'      ',sprintf("%.1f",temp[1,2]),'        (',sprintf("%.1f",temp[1,3]),',',sprintf("%.1f",temp[1,4]),')\n')
+    #cat('       Chao1-bc       ',sprintf("%.1f",temp[2,1]),'      ',sprintf("%.1f",temp[2,2]),'        (',sprintf("%.1f",temp[2,3]),',',sprintf("%.1f",temp[2,4]),')\n')
+    #cat('       ACE            ',sprintf("%.1f",temp[3,1]),'      ',sprintf("%.1f",temp[3,2]),'        (',sprintf("%.1f",temp[3,3]),',',sprintf("%.1f",temp[3,4]),')\n')
+    #cat('       ACE-1          ',sprintf("%.1f",temp[4,1]),'      ',sprintf("%.1f",temp[4,2]),'        (',sprintf("%.1f",temp[4,3]),',',sprintf("%.1f",temp[4,4]),')\n')
     
-	cat('     Assemblage 2:\n')
-    temp=x$assemblage2
-    cat('       Chao1          ',sprintf("%.1f",temp[1,1]),'      ',sprintf("%.1f",temp[1,2]),'        (',sprintf("%.1f",temp[1,3]),',',sprintf("%.1f",temp[1,4]),')\n')
-    cat('       Chao1-bc       ',sprintf("%.1f",temp[2,1]),'      ',sprintf("%.1f",temp[2,2]),'        (',sprintf("%.1f",temp[2,3]),',',sprintf("%.1f",temp[2,4]),')\n')
-    cat('       ACE            ',sprintf("%.1f",temp[3,1]),'      ',sprintf("%.1f",temp[3,2]),'        (',sprintf("%.1f",temp[3,3]),',',sprintf("%.1f",temp[3,4]),')\n')
-    cat('       ACE-1          ',sprintf("%.1f",temp[4,1]),'      ',sprintf("%.1f",temp[4,2]),'        (',sprintf("%.1f",temp[4,3]),',',sprintf("%.1f",temp[4,4]),')\n\n\n')
-    cat('(7) DESCRIPTIONS OF MODELS FOR SINGLE ASSEMBLAGE ANALYSIS:\n')
-    cat('
-     Chao1 (Chao, 1984): This approach uses the numbers of singletons and doubletons to
-     estimate the number of missing species because missing species information is
-     mostly concentrated on those low frequency counts; see Chao (1984), Shen, Chao and Lin (2003)
-     and Chao, Shen and Hwang (2006).
+	  #cat('     Assemblage 2:\n')
+    #temp=x$assemblage2
+    #cat('       Chao1          ',sprintf("%.1f",temp[1,1]),'      ',sprintf("%.1f",temp[1,2]),'        (',sprintf("%.1f",temp[1,3]),',',sprintf("%.1f",temp[1,4]),')\n')
+    #cat('       Chao1-bc       ',sprintf("%.1f",temp[2,1]),'      ',sprintf("%.1f",temp[2,2]),'        (',sprintf("%.1f",temp[2,3]),',',sprintf("%.1f",temp[2,4]),')\n')
+    #cat('       ACE            ',sprintf("%.1f",temp[3,1]),'      ',sprintf("%.1f",temp[3,2]),'        (',sprintf("%.1f",temp[3,3]),',',sprintf("%.1f",temp[3,4]),')\n')
+    #cat('       ACE-1          ',sprintf("%.1f",temp[4,1]),'      ',sprintf("%.1f",temp[4,2]),'        (',sprintf("%.1f",temp[4,3]),',',sprintf("%.1f",temp[4,4]),')\n\n\n')
+   # cat('(7) DESCRIPTIONS OF MODELS FOR SINGLE ASSEMBLAGE ANALYSIS:\n')
+    #cat('
+    # Chao1 (Chao, 1984): This approach uses the numbers of singletons and doubletons to
+    # estimate the number of missing species because missing species information is
+    # mostly concentrated on those low frequency counts; see Chao (1984), Shen, Chao and Lin (2003)
+    # and Chao, Shen and Hwang (2006).
 
-     Chao1-bc: a bias-corrected form for the Chao1; see Chao (2005).
+    # Chao1-bc: a bias-corrected form for the Chao1; see Chao (2005).
 
-     ACE (Abundance-based Coverage Estimator): A non-parametric estimator proposed by Chao and Lee (1992)
-     and Chao, Ma and Yang (1993).  The observed species are separated as rare and abundant groups;
-     only the rare group is used to estimate the number of missing species.
-     The estimated CV is used to characterize the degree of heterogeneity among species
-     discovery probabilities.  See Eq.(2.14) in Chao and Lee (1992) or Eq.(2.2) of Chao et al. (2000).
+    # ACE (Abundance-based Coverage Estimator): A non-parametric estimator proposed by Chao and Lee (1992)
+    # and Chao, Ma and Yang (1993).  The observed species are separated as rare and abundant groups;
+    # only the rare group is used to estimate the number of missing species.
+    # The estimated CV is used to characterize the degree of heterogeneity among species
+    # discovery probabilities.  See Eq.(2.14) in Chao and Lee (1992) or Eq.(2.2) of Chao et al. (2000).
 
-     ACE-1: A modified ACE for highly heterogeneous communities; See Eq.(2.15) of Chao and Lee (1992).
-     \n')
+   #  ACE-1: A modified ACE for highly heterogeneous communities; See Eq.(2.15) of Chao and Lee (1992).
+    # \n')
 	}else if(x$datatype=="incidence"){
 	cat('(1) The loaded set includes multiple-sample incidence data from 2 assemblages\n')
     #cat('    (indexed by 1, 2 according to data entry order) and a total of',x$info1[1],'distinct species.\n\n')
