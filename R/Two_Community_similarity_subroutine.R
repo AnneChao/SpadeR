@@ -109,18 +109,18 @@ Jaccard_Sorensen_Abundance_equ=function(datatype = c("abundance", "incidence"),X
         boot.SAa[h]=2*boot.U_hat[h]*boot.V_hat[h]/(boot.U_hat[h]+boot.V_hat[h])
      }
      a=matrix(0,12,6)
-     a[1,]=c(MLE.Jaccard,sd(boot.Jaccard),rep(0,4))
-     a[2,]=c(Esti.Jaccard,sd(boot.Esti.Jaccard),rep(0,4))
-     a[3,]=c(MLE.Sorensen,sd(boot.Sorensen),rep(0,4))
-     a[4,]=c(Esti.Sorensen,sd(boot.Esti.Sorensen),rep(0,4))
+     a[1,]=c(min(MLE.Jaccard,1),sd(boot.Jaccard),rep(0,4))
+     a[2,]=c(min(Esti.Jaccard,1),sd(boot.Esti.Jaccard),rep(0,4))
+     a[3,]=c(min(MLE.Sorensen,1),sd(boot.Sorensen),rep(0,4))
+     a[4,]=c(min(Esti.Sorensen,1),sd(boot.Esti.Sorensen),rep(0,4))
      a[5,]=c(MLE.Lennon,sd(boot.Lennon),rep(0,4))
-     a[6,]=c(MLE.Bray_Curtis,sd(boot.Bray_Curtis),rep(0,4))
-     a[7,]=c(Morisita_Horn,sd(boot.Morisita_Horn),rep(0,4))
-     a[8,]=c(Morisita_Original,sd(boot.Morisita_Original),rep(0,4))
-     a[9,]=c(JAu,sd(boot.JAu),U_tilde,V_tilde,rep(0,2))
-     a[10,]=c(JAa,sd(boot.JAa),U_hat,sd(boot.U_hat),V_hat,sd(boot.V_hat))
-     a[11,]=c(SAu,sd(boot.SAu),U_tilde,V_tilde,rep(0,2))
-     a[12,]=c(SAa,sd(boot.SAa),U_hat,sd(boot.U_hat),V_hat,sd(boot.V_hat))
+     a[6,]=c(min(MLE.Bray_Curtis,1),sd(boot.Bray_Curtis),rep(0,4))
+     a[7,]=c(min(Morisita_Horn,1),sd(boot.Morisita_Horn),rep(0,4))
+     a[8,]=c(min(Morisita_Original,1),sd(boot.Morisita_Original),rep(0,4))
+     a[9,]=c(min(JAu,1),sd(boot.JAu),U_tilde,V_tilde,rep(0,2))
+     a[10,]=c(min(JAa,1),sd(boot.JAa),U_hat,sd(boot.U_hat),V_hat,sd(boot.V_hat))
+     a[11,]=c(min(SAu,1),sd(boot.SAu),U_tilde,V_tilde,rep(0,2))
+     a[12,]=c(min(SAa,1),sd(boot.SAa),U_hat,sd(boot.U_hat),V_hat,sd(boot.V_hat))
      round(a,4)
 }
 
@@ -154,7 +154,7 @@ Two_horn_MLE_equ=function(X1,X2)
      boot.X2=rmultinom(1,n2,boot.p2)
      boot.horn[h]=horn_MLE_equ(boot.X1,boot.X2)  
    }
-   out=c(horn,sd(boot.horn));out=round(out,4)
+   out=c(min(horn,1),sd(boot.horn));out=round(out,4)
    return(out)
 }
 
@@ -1025,7 +1025,7 @@ correct_obspi<- function(X)
     a=(n-1)*(f1-1) / ( (n-1)*(f1-1) + 2 )*f1/n
   } 
   if(f1==1 & f2==0) {a=0}
-  if(f1==0 & f2==0) {a=0} 	
+  if(f1==0 ) {a=0} 	
   b <- sum(X / n * (1 - X / n) ^ n)
   w <- a / b  			
   Prob.hat <- X / n * (1 - w * (1 - X / n) ^ n)	
@@ -1162,7 +1162,7 @@ MLE_Braycurtis_equ=function(X1,X2,w1)
      boot.X2=rmultinom(1,n2,p2hat)
      boot.BC[h]=sum(abs(w1*boot.X1/n1-w2*boot.X2/n2))
    }
-   out=c(mle,sd(boot.BC));out=round(out,4)
+   out=c(min(mle,1),sd(boot.BC));out=round(out,4)
    return(out)
 }
 
@@ -1178,7 +1178,7 @@ KH_Braycurtis_equ=function(X1,X2,w1)
        boot.X2=rmultinom(1,n2,p2hat)
        boot.BC[h]=KH_Bray_curtis_equ(boot.X1,boot.X2,w1)  
    }
-   out=c(BC,sd(boot.BC));out=round(out,4)
+   out=c(min(BC,1),sd(boot.BC));out=round(out,4)
    return(out)
 }
 
@@ -1196,6 +1196,7 @@ entropy_MEE_equ=function(X)
      B=sum(x==1)/n*(1-A)^(-n+1)*(-log(A)-sum(sapply(1:(n-1),function(k){1/k*(1-A)^k})))
   }
   if(f1==0){B=0}
+  if(f1==1 & f2==0){B=0}
   UE+B
 }
 Two_com_correct_obspi=function(X1,X2)

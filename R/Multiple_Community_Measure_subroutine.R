@@ -7,15 +7,18 @@ C0n_equ=function(X)
   C0n_num=sum(rowSums(X)>0)
   C0n_dem=sum(X)
   C0n=no.community/(1-no.community)*( C0n_num-C0n_dem)/C0n_dem
-  C0n
+  return( min(C0n,1))
 }
 correct_obspi<- function(X)
 {
    Sobs <- sum(X > 0) 	
    n <- sum(X)		  	
    f1 <- sum(X == 1) 	
-   f2 <- sum(X == 2) 	
-   a <- ifelse(f1 == 0, 0, (n - 1) * f1 / ((n - 1) * f1 + 2 * f2) * f1 / n)
+   f2 <- sum(X == 2)
+   if(f1>0 & f2>0){a= (n - 1) * f1 / ((n - 1) * f1 + 2 * f2) * f1 / n}
+   if(f1>0 & f2==0){a= f1 / n*(n-1)*(f1-1)/((n-1)*(f1-1)+2)}
+   if(f1==1 & f2==0){a=0}
+   if(f1==0){a=0}
    b <- sum(X / n * (1 - X / n) ^ n)
    w <- a / b  			
    Prob.hat <- X / n * (1 - w * (1 - X / n) ^ n)	
@@ -35,6 +38,7 @@ entropy_MEE_equ=function(X)
      B=sum(x==1)/n*(1-A)^(-n+1)*(-log(A)-sum(sapply(1:(n-1),function(k){1/k*(1-A)^k})))
   }
   if(f1==0){B=0}
+  if(f1==1 & f2==0){B=0}
   UE+B
 }
 Two_com_correct_obspi=function(X1,X2)
@@ -206,7 +210,7 @@ C1n_equ=function(method=c("absolute"),X,boot=200)
          }
          C1n=1-Horn
          C1n_se=sd(boot.Horn)
-         a=c( C1n, C1n_se, max(0,C1n-1.96*C1n_se), min(1,C1n+1.96*C1n_se))
+         a=c( min(C1n,1), C1n_se, max(0,C1n-1.96*C1n_se), min(1,C1n+1.96*C1n_se))
          return(a)
       }
       if(no.community>2)
@@ -220,7 +224,7 @@ C1n_equ=function(method=c("absolute"),X,boot=200)
          }
          C1n=1-Horn
          C1n_se=sd(boot.Horn)
-         a=c( C1n, C1n_se, max(0,C1n-1.96*C1n_se), min(1,C1n+1.96*C1n_se))
+         a=c( min(C1n,1), C1n_se, max(0,C1n-1.96*C1n_se), min(1,C1n+1.96*C1n_se))
          return(a)
       }
    }
@@ -243,7 +247,7 @@ C2n_equ=function(method=c("MVUE","MLE"),X)
    }
    c2n_num=(sum(temp1^2)-temp2)/(no.community-1)
    c2n=c2n_num/c2n_dem
-   c2n
+   return(min(c2n,1))
 }
 Cqn_se_equ=function(X,q=2,boot=200,method=c("relative","absolute"))
 {
@@ -262,7 +266,7 @@ Cqn_se_equ=function(X,q=2,boot=200,method=c("relative","absolute"))
           boot.C0n[h]=C0n_equ(boot.X)
       }
       C0n_se=sd(boot.C0n)
-      a=c(C0n,C0n_se,max(0,C0n-1.96*C0n_se),min(1,C0n+1.96*C0n_se) )
+      a=c(min(C0n,1),C0n_se,max(0,C0n-1.96*C0n_se),min(1,C0n+1.96*C0n_se) )
       return(a)
    }
    if(q==1)
@@ -293,7 +297,7 @@ Cqn_se_equ=function(X,q=2,boot=200,method=c("relative","absolute"))
       }
       C2n_se=sd(boot.C2n)
       Bootmean=mean(boot.C2n)
-      a=c(C2n,C2n_se,max(0,C2n-Bootmean+quantile(boot.C2n, probs = 0.025)),min(1,C2n-Bootmean+quantile(boot.C2n, probs = 0.975)),
+      a=c(min(C2n,1),C2n_se,max(0,C2n-Bootmean+quantile(boot.C2n, probs = 0.025)),min(1,C2n-Bootmean+quantile(boot.C2n, probs = 0.975)),
           max(0,1-C2n-(1-Bootmean)+(1-quantile(boot.C2n, probs = 0.975))),min(1,1-C2n-(1-Bootmean)+(1-quantile(boot.C2n, probs = 0.025)))
          )
       return(a)
@@ -320,7 +324,7 @@ C33_equ=function(method=c("MVUE","MLE"),X)
                     6*X[,1]/n[1]*X[,2]/n[2]*X[,3]/n[3])/8
       C33_dem=sum(sapply(1:3,function(k)  sum( X[,k]*(X[,k])*(X[,k])/n[k]/(n[k])/(n[k]))))
    }
-   C33_num/C33_dem                      
+   return(min(C33_num/C33_dem,1))                      
 }
 C33_se_equ=function(X,boot=200)
 {
