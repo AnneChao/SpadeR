@@ -138,6 +138,7 @@ function(data ,k=10, conf=0.95){
   j <- rep(sort(unique(x)),length(unique(x)))       # all combination
   
   var_ace1 <- sum(mapply(function(i, j)diff(i)*diff(j)*COV.f(i, j), i, j))
+  if(var_ace1=="NaN"){var_ace1=0}
   if (var_ace1 > 0){
     var_ace1 <- var_ace1
   } else {

@@ -436,18 +436,19 @@ SimilarityPair=function(X, datatype = c("abundance","incidence"),nboot=200)
     temp[[1]] <- temp[[1]][-9,]
     temp[[1]] <- as.data.frame(temp[[1]])
     
-    temp[[2]] <- rbind(Chao1_equ(X[,1],conf=0.95)[-5],Chao1_bc_equ(X[,1],conf=0.95),
-                       SpecAbunAce_equ(X[,1], k=10, conf=0.95), SpecAbunAce1_equ(X[,1] ,k=10, conf=0.95))
-    colnames(temp[[2]]) <- c("Estimate", "s.e.", "95%.LCL", "95%.UCL")
-    rownames(temp[[2]]) <- c("Chao1", "Chao1-bc", "ACE", "ACE-1")
-    temp[[2]] <- as.data.frame(temp[[2]])
+    #temp[[2]] <- rbind(Chao1_equ(X[,1],conf=0.95)[-5],Chao1_bc_equ(X[,1],conf=0.95),
+     #                  SpecAbunAce_equ(X[,1], k=10, conf=0.95), SpecAbunAce1_equ(X[,1] ,k=10, conf=0.95))
+    #colnames(temp[[2]]) <- c("Estimate", "s.e.", "95%.LCL", "95%.UCL")
+    #rownames(temp[[2]]) <- c("Chao1", "Chao1-bc", "ACE", "ACE-1")
+    #temp[[2]] <- as.data.frame(temp[[2]])
     
-    temp[[3]] <- rbind(Chao1_equ(X[,2],conf=0.95)[-5],Chao1_bc_equ(X[,2],conf=0.95),
-                       SpecAbunAce_equ(X[,2], k=10, conf=0.95), SpecAbunAce1_equ(X[,2] ,k=10, conf=0.95))
-    colnames(temp[[3]]) <- c("Estimate", "s.e.", "95%.LCL", "95%.UCL")
-    rownames(temp[[3]]) <- c("Chao1", "Chao1-bc", "ACE", "ACE-1")
-    temp[[3]] <- as.data.frame(temp[[3]])
-    z <- list("datatype"=type,"info1"=info1, "info2"=info2, "similarity"=temp[[1]], "assemblage1"=temp[[2]], "assemblage2"=temp[[3]])
+    #temp[[3]] <- rbind(Chao1_equ(X[,2],conf=0.95)[-5],Chao1_bc_equ(X[,2],conf=0.95),
+     #                  SpecAbunAce_equ(X[,2], k=10, conf=0.95), SpecAbunAce1_equ(X[,2] ,k=10, conf=0.95))
+    #colnames(temp[[3]]) <- c("Estimate", "s.e.", "95%.LCL", "95%.UCL")
+    #rownames(temp[[3]]) <- c("Chao1", "Chao1-bc", "ACE", "ACE-1")
+    #temp[[3]] <- as.data.frame(temp[[3]])
+    #z <- list("datatype"=type,"info1"=info1, "info2"=info2, "similarity"=temp[[1]], "assemblage1"=temp[[2]], "assemblage2"=temp[[3]])
+    z <- list("datatype"=type,"info1"=info1, "info2"=info2, "similarity"=temp[[1]]) 
   }      
   ##---------------------------------------------------------------
   if(datatype=="incidence")

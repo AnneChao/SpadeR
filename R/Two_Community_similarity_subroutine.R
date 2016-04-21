@@ -1371,7 +1371,7 @@ C1n_equ=function(method=c("relative","absolute"),X,boot=200)
          }
          C1n=1-Horn
          C1n_se=sd(boot.Horn)
-         a=c( C1n, C1n_se, max(0,C1n-1.96*C1n_se), min(1,C1n+1.96*C1n_se))
+         a=c( min(C1n,1), C1n_se, max(0,C1n-1.96*C1n_se), min(1,C1n+1.96*C1n_se))
          return(a)
       }
       if(no.community>2)
@@ -1385,7 +1385,7 @@ C1n_equ=function(method=c("relative","absolute"),X,boot=200)
          }
          C1n=1-Horn
          C1n_se=sd(boot.Horn)
-         a=c( C1n, C1n_se, max(0,C1n-1.96*C1n_se), min(1,C1n+1.96*C1n_se))
+         a=c( min(C1n,1), C1n_se, max(0,C1n-1.96*C1n_se), min(1,C1n+1.96*C1n_se))
          return(a)
       }
    }
