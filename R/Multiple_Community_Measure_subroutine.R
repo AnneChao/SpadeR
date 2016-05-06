@@ -7,7 +7,7 @@ C0n_equ=function(X)
   C0n_num=sum(rowSums(X)>0)
   C0n_dem=sum(X)
   C0n=no.community/(1-no.community)*( C0n_num-C0n_dem)/C0n_dem
-  return( min(C0n,1))
+  return( C0n)
 }
 correct_obspi<- function(X)
 {
@@ -210,7 +210,7 @@ C1n_equ=function(method=c("absolute"),X,boot=200)
          }
          C1n=1-Horn
          C1n_se=sd(boot.Horn)
-         a=c( min(C1n,1), C1n_se, max(0,C1n-1.96*C1n_se), min(1,C1n+1.96*C1n_se))
+         a=c( C1n, C1n_se, max(0,C1n-1.96*C1n_se), min(1,C1n+1.96*C1n_se))
          return(a)
       }
       if(no.community>2)
@@ -224,7 +224,7 @@ C1n_equ=function(method=c("absolute"),X,boot=200)
          }
          C1n=1-Horn
          C1n_se=sd(boot.Horn)
-         a=c( min(C1n,1), C1n_se, max(0,C1n-1.96*C1n_se), min(1,C1n+1.96*C1n_se))
+         a=c( C1n, C1n_se, max(0,C1n-1.96*C1n_se), min(1,C1n+1.96*C1n_se))
          return(a)
       }
    }
@@ -247,7 +247,7 @@ C2n_equ=function(method=c("MVUE","MLE"),X)
    }
    c2n_num=(sum(temp1^2)-temp2)/(no.community-1)
    c2n=c2n_num/c2n_dem
-   return(min(c2n,1))
+   return(c2n)
 }
 Cqn_se_equ=function(X,q=2,boot=200,method=c("relative","absolute"))
 {
@@ -266,7 +266,7 @@ Cqn_se_equ=function(X,q=2,boot=200,method=c("relative","absolute"))
           boot.C0n[h]=C0n_equ(boot.X)
       }
       C0n_se=sd(boot.C0n)
-      a=c(min(C0n,1),C0n_se,max(0,C0n-1.96*C0n_se),min(1,C0n+1.96*C0n_se) )
+      a=c(C0n,C0n_se,max(0,C0n-1.96*C0n_se),min(1,C0n+1.96*C0n_se) )
       return(a)
    }
    if(q==1)
@@ -297,7 +297,7 @@ Cqn_se_equ=function(X,q=2,boot=200,method=c("relative","absolute"))
       }
       C2n_se=sd(boot.C2n)
       Bootmean=mean(boot.C2n)
-      a=c(min(C2n,1),C2n_se,max(0,C2n-Bootmean+quantile(boot.C2n, probs = 0.025)),min(1,C2n-Bootmean+quantile(boot.C2n, probs = 0.975)),
+      a=c(C2n,C2n_se,max(0,C2n-Bootmean+quantile(boot.C2n, probs = 0.025)),min(1,C2n-Bootmean+quantile(boot.C2n, probs = 0.975)),
           max(0,1-C2n-(1-Bootmean)+(1-quantile(boot.C2n, probs = 0.975))),min(1,1-C2n-(1-Bootmean)+(1-quantile(boot.C2n, probs = 0.025)))
          )
       return(a)
@@ -324,7 +324,7 @@ C33_equ=function(method=c("MVUE","MLE"),X)
                     6*X[,1]/n[1]*X[,2]/n[2]*X[,3]/n[3])/8
       C33_dem=sum(sapply(1:3,function(k)  sum( X[,k]*(X[,k])*(X[,k])/n[k]/(n[k])/(n[k]))))
    }
-   return(min(C33_num/C33_dem,1))                      
+   return(C33_num/C33_dem)                      
 }
 C33_se_equ=function(X,boot=200)
 {
@@ -404,25 +404,46 @@ print.spadeMult <- function(x, ...){
    cat('(2) ESTIMATION OF OVERLAP MEASURE IN',N,'COMMUNITIES:\n\n')
    cat('    Estimator','     Estimate','     s.e.','     95% Confidence Interval\n\n')
    temp0n=x$overlap[1,]
+   if(temp0n[1]>1)
+   {
+   cat('    C0')
+   cat(N,'(Sorensen)',sprintf("%.3f",1)        ,'#      ',sprintf("%.3f",temp0n[2]),'        (',
+         sprintf("%.3f",temp0n[3]),',',sprintf("%.3f",temp0n[4]),')\n')
+   }
+   if(temp0n[1]<=1)
+   {
    cat('    C0')
    cat(N,'(Sorensen)',sprintf("%.3f",temp0n[1]),'       ',sprintf("%.3f",temp0n[2]),'        (',
        sprintf("%.3f",temp0n[3]),',',sprintf("%.3f",temp0n[4]),')\n')
-   
+   }
    #temp1n=x$overlap[2,]
    #cat('    C1')
    #cat(N,'          ',sprintf("%.3f",temp1n[1]),'       ',sprintf("%.3f",temp1n[2]),'        (',
    #    sprintf("%.3f",temp1n[3]),',',sprintf("%.3f",temp1n[4]),')\n')
    temp1n=x$overlap[2,]
+   if(temp1n[1]>1)
+   {
+   cat('    C1')
+   cat(N)
+   cat('*(Horn)    ',sprintf("%.3f",1)        ,'#      ',sprintf("%.3f",temp1n[2]),'        (',
+      sprintf("%.3f",temp1n[3]),',',sprintf("%.3f",temp1n[4]),')\n')
+   }
+   if(temp1n[1]<=1)
+   {
    cat('    C1')
    cat(N)
    cat('*(Horn)    ',sprintf("%.3f",temp1n[1]),'       ',sprintf("%.3f",temp1n[2]),'        (',
       sprintf("%.3f",temp1n[3]),',',sprintf("%.3f",temp1n[4]),')\n')
+     
+   }
+   
 	 #cat('*          ',sprintf("%.3f",1-temp1n[1]),'       ',sprintf("%.3f",temp1n[2]),'        (',
 	 #     sprintf("%.3f",max(1-temp1n[1]-1.96*temp1n[2],0)),',',sprintf("%.3f",min(1-temp1n[1]+1.96*temp1n[2],1)),')\n')
    temp2n=x$overlap[3,]
    cat('    C2')
    cat(N,'(Morisita)',sprintf("%.3f",temp2n[1]),'       ',sprintf("%.3f",temp2n[2]),'        (',
-       sprintf("%.3f",temp2n[3]),',',sprintf("%.3f",temp2n[4]),')\n')
+       sprintf("%.3f",temp2n[3]),',',sprintf("%.3f",temp2n[4]),')\n')  
+   
    if(N==3)
    {
       temp33=x$overlap[4,]
@@ -450,6 +471,7 @@ print.spadeMult <- function(x, ...){
    cat('    
     Confidence Interval: Based on an improved bootstrap percentile method. (recommend for use in the case when 
                          similarity is close to 0 or 1 ) \n\n')
+   cat('    # if the estimate is greater than 1, it is replaced by 1.\n\n')
    cat('    Pairwise Comparison:\n\n')
    cat('    Estimator','     Estimate','     s.e.','       95% Confidence Interval\n\n')
    Cqn_PC <- x$pairwise
@@ -466,8 +488,13 @@ print.spadeMult <- function(x, ...){
            cat(i)
            cat(',')
            cat(j)
-           cat(')','     ',sprintf("%.3f",temp[1]),'       ',sprintf("%.3f",temp[2]),'        (',
-           sprintf("%.3f",temp[3]),',',sprintf("%.3f",temp[4]),')\n')
+           if(temp[1]>1)
+           {cat(')','     ',sprintf("%.3f",1)      ,'#      ',sprintf("%.3f",temp[2]),'        (',
+            sprintf("%.3f",temp[3]),',',sprintf("%.3f",temp[4]),')\n')
+           }
+           if(temp[1]<=1)
+           {cat(')','     ',sprintf("%.3f",temp[1]),'       ',sprintf("%.3f",temp[2]),'        (',
+           sprintf("%.3f",temp[3]),',',sprintf("%.3f",temp[4]),')\n')}
            no.temp=no.temp+1
        }
    }

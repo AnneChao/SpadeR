@@ -110,13 +110,13 @@ Jaccard_Sorensen_Abundance_equ=function(datatype = c("abundance", "incidence"),X
      }
      a=matrix(0,12,6)
      a[1,]=c(min(MLE.Jaccard,1),sd(boot.Jaccard),rep(0,4))
-     a[2,]=c(min(Esti.Jaccard,1),sd(boot.Esti.Jaccard),rep(0,4))
+     a[2,]=c(Esti.Jaccard,sd(boot.Esti.Jaccard),rep(0,4))
      a[3,]=c(min(MLE.Sorensen,1),sd(boot.Sorensen),rep(0,4))
-     a[4,]=c(min(Esti.Sorensen,1),sd(boot.Esti.Sorensen),rep(0,4))
+     a[4,]=c(Esti.Sorensen,sd(boot.Esti.Sorensen),rep(0,4))
      a[5,]=c(MLE.Lennon,sd(boot.Lennon),rep(0,4))
      a[6,]=c(min(MLE.Bray_Curtis,1),sd(boot.Bray_Curtis),rep(0,4))
      a[7,]=c(min(Morisita_Horn,1),sd(boot.Morisita_Horn),rep(0,4))
-     a[8,]=c(min(Morisita_Original,1),sd(boot.Morisita_Original),rep(0,4))
+     a[8,]=c(Morisita_Original,sd(boot.Morisita_Original),rep(0,4))
      a[9,]=c(min(JAu,1),sd(boot.JAu),U_tilde,V_tilde,rep(0,2))
      a[10,]=c(min(JAa,1),sd(boot.JAa),U_hat,sd(boot.U_hat),V_hat,sd(boot.V_hat))
      a[11,]=c(min(SAu,1),sd(boot.SAu),U_tilde,V_tilde,rep(0,2))
@@ -1371,7 +1371,7 @@ C1n_equ=function(method=c("relative","absolute"),X,boot=200)
          }
          C1n=1-Horn
          C1n_se=sd(boot.Horn)
-         a=c( min(C1n,1), C1n_se, max(0,C1n-1.96*C1n_se), min(1,C1n+1.96*C1n_se))
+         a=c( C1n, C1n_se, max(0,C1n-1.96*C1n_se), min(1,C1n+1.96*C1n_se))
          return(a)
       }
       if(no.community>2)
@@ -1385,7 +1385,7 @@ C1n_equ=function(method=c("relative","absolute"),X,boot=200)
          }
          C1n=1-Horn
          C1n_se=sd(boot.Horn)
-         a=c( min(C1n,1), C1n_se, max(0,C1n-1.96*C1n_se), min(1,C1n+1.96*C1n_se))
+         a=c( C1n, C1n_se, max(0,C1n-1.96*C1n_se), min(1,C1n+1.96*C1n_se))
          return(a)
       }
    }
@@ -1419,15 +1419,18 @@ print.spadeTwo <- function(x, ...){
     cat('    ===============\n')
 	temp <- apply(as.matrix(x$similarity), 2, as.numeric)
     cat('      Jaccard incidence  (observed)   ',sprintf("%.4f",temp[1,1]),'     ',sprintf("%.4f",temp[1,2]),'\n')
-	  cat('      Jaccard incidence  (estimated)  ',sprintf("%.4f",temp[2,1]),'     ',sprintf("%.4f",temp[2,2]),'\n')
+	  if(temp[2,1]>1) {cat('      Jaccard incidence  (estimated)  ',sprintf("%.4f",1)        ,'#    ',sprintf("%.4f",temp[2,2]),'\n')}
+    if(temp[2,1]<=1){cat('      Jaccard incidence  (estimated)  ',sprintf("%.4f",temp[2,1]),'     ',sprintf("%.4f",temp[2,2]),'\n')}
     cat('      Sorensen incidence (observed)   ',sprintf("%.4f",temp[3,1]),'     ',sprintf("%.4f",temp[3,2]),'\n')
-	  cat('      Sorensen incidence (estimated)  ',sprintf("%.4f",temp[4,1]),'     ',sprintf("%.4f",temp[4,2]),'\n\n')
+	  if(temp[4,1]>1) {cat('      Sorensen incidence (estimated)  ',sprintf("%.4f",1)        ,'#    ',sprintf("%.4f",temp[4,2]),'\n\n')}
+  	if(temp[4,1]<=1){cat('      Sorensen incidence (estimated)  ',sprintf("%.4f",temp[4,1]),'     ',sprintf("%.4f",temp[4,2]),'\n\n')}
     #cat('      Lennon et al (2001)             ',sprintf("%.4f",temp[5,1]),'     ',sprintf("%.4f",temp[5,2]),'\n\n')
     cat('    Abundance-based:\n')
     cat('    ===============\n')
     #cat('      Bray-Curtis (observed)          ',sprintf("%.4f",temp[6,1]),'     ',sprintf("%.4f",temp[6,2]),'\n')
     cat('      Morisita-Horn                   ',sprintf("%.4f",temp[7,1]),'     ',sprintf("%.4f",temp[7,2]),'\n')
-    cat('      Morisita Original               ',sprintf("%.4f",temp[8,1]),'     ',sprintf("%.4f",temp[8,2]),'\n') 
+    if(temp[8,1]>1) {cat('      Morisita Original               ',sprintf("%.4f",min(temp[8,1],1)),'#    ',sprintf("%.4f",temp[8,2]),'\n') }
+    if(temp[8,1]<=1){cat('      Morisita Original               ',sprintf("%.4f",temp[8,1])       ,'     ',sprintf("%.4f",temp[8,2]),'\n')} 
    # cat('      Horn (relative)                 ',sprintf("%.4f",1-temp[6,1]),'     ',sprintf("%.4f",temp[6,2]),'\n')
     #cat('      Horn (estimated)                 ',sprintf("%.4f",temp[9,1]),'     ',sprintf("%.4f",temp[9,2]),'\n')
     cat('      Jaccard Abundance  (unadjusted) ',sprintf("%.4f",temp[10,1]),'     ',sprintf("%.4f",temp[10,2]),'     ',sprintf("%.4f",temp[10,3]),'          ',sprintf("%.4f",temp[10,4]),'\n')
@@ -1437,7 +1440,8 @@ print.spadeTwo <- function(x, ...){
                '          ',sprintf("%.4f",temp[12,4]),'\n')
     cat('      Sorensen Abundance (  adjusted) ',sprintf("%.4f",temp[13,1]),'     ',sprintf("%.4f",temp[13,2]),
         '     ',sprintf("%.4f",temp[13,3]),'(',sprintf("%.4f",temp[13,4]),')', sprintf("%.4f",temp[13,5]),'(',sprintf("%.4f",temp[13,6]),')','\n')
-    cat('     
+    cat('
+      #  if the estimate is greater than 1, it is replaced by 1.
       *  U denotes the total relative abundances of the shared species in the first assemblage;
            U_hat is an estimate of U.
       ** V denotes the total relative abundances of the shared species in the second assemblage;
@@ -1447,9 +1451,12 @@ print.spadeTwo <- function(x, ...){
 	  cat('      Bray-Curtis (observed)          ',sprintf("%.4f",temp[6,1]),'     ',sprintf("%.4f",temp[6,2]),'\n')
   	cat('      Bray-Curtis (estimated)         ',sprintf("%.4f",temp[15,1]),'     ',sprintf("%.4f",temp[15,2]),'\n')
 	  cat('      Horn (observed)                 ',sprintf("%.4f",1-temp[14,1]),'     ',sprintf("%.4f",temp[14,2]),'\n')
-	  cat('      Horn (estimated)                ',sprintf("%.4f",1-temp[9,1]),'     ',sprintf("%.4f",temp[9,2]),'\n')
+    if((1-temp[9,1])>1) {cat('      Horn (estimated)                ',sprintf("%.4f",1)          ,'#    ',sprintf("%.4f",temp[9,2]),'\n')}
+    if((1-temp[9,1])<=1){cat('      Horn (estimated)                ',sprintf("%.4f",1-temp[9,1]),'     ',sprintf("%.4f",temp[9,2]),'\n')}
 	  cat('\n')
     cat('      In this part, we assume that the sample size ratio is equal to the population size ratio.')
+	  cat('\n')
+    cat('      #  if the estimate is greater than 1, it is replaced by 1.')         
 	  cat('\n\n')
 	  cat('    Equal-weight:\n')
 	  cat('    ===============\n')
