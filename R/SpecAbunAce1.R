@@ -174,6 +174,7 @@ SpecAbunAce1 <-
     }
     
     table <- matrix(c(s_ace1, sqrt(var_ace1), CI_ACE1), ncol = 4)
+    if( (sum(x==1)/sum(x[x<=k])) == 1 ){table=SpecAbunChao1(x, k, conf)}
     colnames(table) <- c("Estimate", "Est_s.e.", paste(conf*100,"% Lower Bound"), paste(conf*100,"% Upper Bound"))
     rownames(table) <- "ACE-1 (Chao & Lee, 1992)"
     return(table)

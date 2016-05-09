@@ -143,7 +143,7 @@ entropy_MLE_equ=function(X)
 }
 entropy_MLE_bc_equ=function(X)
 {
-    entropy_MLE_equ(X)+(SpecAbunAce(X)[1]-1)/2/sum(X)
+    entropy_MLE_equ(X)+(SpecAbunChao1(X,k=10,conf=0.95)[1]-1)/2/sum(X)
 }
 Shannon_index=function(x,boot=50)
 {
@@ -489,9 +489,9 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
     print(x$SHANNON.INDEX)
     #cat("\n")
     #cat(" For a review of the four estimators, see Chao and Shen (2003).\n")
+    #MLE_bc: bias-corrected empirical estimator.
     cat("
         MLE: empirical or observed entropy.
-        MLE_bc: bias-corrected empirical estimator.
         Jackknife: see Zahl (1977).
         Chao & Shen: based on Horvitz-Thompson estimator and sample coverage method;
         see Chao and Shen (2003). 

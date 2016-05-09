@@ -222,13 +222,19 @@ Diversity=function(data, datatype=c("abundance","incidence"), q=NULL)
     
     SHANNON=Shannon_index(X)
     table1=round(SHANNON[c(1:5),],3)
+    table1=table1[-2,]              ##2016.05.09
     colnames(table1) <- c("Estimate", "s.e.", paste("95%Lower"), paste("95%Upper"))
-    rownames(table1) <- c(" MLE"," MLE_bc"," Jackknife",
-                          " Chao & Shen"," Chao et al. (2013)")
+    #rownames(table1) <- c(" MLE"," MLE_bc"," Jackknife",
+    #                      " Chao & Shen"," Chao et al. (2013)")
+    rownames(table1) <- c(" MLE"," Jackknife",
+                      " Chao & Shen"," Chao et al. (2013)")
     
     table1_exp=round(SHANNON[c(6:10),],3)
+    table1_exp=table1_exp[-2,]      ##2016.05.09
     colnames(table1_exp) <- c("Estimate", "s.e.", paste("95%Lower"), paste("95%Upper"))
-    rownames(table1_exp) <- c(" MLE"," MLE_bc"," Jackknife",
+    #rownames(table1_exp) <- c(" MLE"," MLE_bc"," Jackknife",
+     #                         " Chao & Shen"," Chao et al. (2013)")
+    rownames(table1_exp) <- c(" MLE"," Jackknife",
                               " Chao & Shen"," Chao et al. (2013)")
     
     table2=round(Simpson_index(X)[c(1:2),],5)
