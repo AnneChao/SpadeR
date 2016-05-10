@@ -597,4 +597,99 @@ SimilarityMult=function(X,q=2,nboot=200)
 }
 
 
+#
+#
+###########################################
+#' Estimation of Genetic measure 
+#' 
+#' \code{Genetic}: estimation of the multiple community similarity C_qN and dissimilarity 1-C_qN including Jost (2008) differentiation measure D.
+#' @param X a matrix (species by sites) of species abundances.
+#' @param q set diversity order \code{q = 0}, \code{Genetic} computes the estimates of Sorensen index for pairwise assemblages; 
+#' set diversity order \code{q = 1}, computes the estimates of Horn index for pairwise assemblages; 
+#' set diversity order \code{q = 2}, computes the estimates of Morisita index for pairwise assemblages. 
+#' For diversity order q = 0, 1, 2, \code{Genetic}  computes the overlap estimates among all assemblages.
+#' @param nboot an integer specifying the number of bootstrap replications.
+#' @return a list of five objects: \code{$info} for summarizing data information;
+#' \code{$overlap} for showing the C0N, C1N and C2N of this data;
+#' \code{$pairwise} for showing the pairwise data CqN output;
+#' \code{$similarity.matrix} for showing pairwise similarity of this data. \code{q} you choose.
+#' @examples
+#' data(GeneticDataAbu)
+#' Genetic(GeneticDataAbu, q=2, nboot=200)
+#' @references
+#' Chao, A., Jost, L., Chiang, S. C., Jiang, Y.-H. and Chazdon, R. (2008). A Two-stage probabilistic approach to multiple-community similarity indices. Biometrics, 64, 1178-1186.\cr\cr
+#' Jost, L. (2008). GST and its relatives do not measure differentiation. Molecular Ecology, 17, 4015-4026.
+#' @export
 
+
+Genetic=function(X,q=2,nboot=200)
+{ 
+  type <- "abundance"
+  N <- no.community <- ncol(X)
+  temp <- c("N"=ncol(X), "S.total"=sum(rowSums(X)>0))
+  n <- apply(X,2,sum)
+  D <- apply(X,2,function(x)sum(x>0))
+  
+  if(N > 2){
+    temp1 <- temp2 <- rep(0, N*(N-1)/2)
+    k <- 1
+    for(i in 1:(N-1)){     
+      for(j in (i+1):N){
+        temp1[k] <- paste('D',i,j,sep="")
+        temp2[k] <- sum(X[,i]>0 & X[,j]>0)
+        k <- k + 1
+      }
+    }
+  }
+  names(temp2) <- temp1
+  names(n) <- paste('n',1:N, sep="")
+  names(D) <- paste('D',1:N, sep="")
+  info <- c(temp, n, D, temp2)
+  if(N == 3) info <- c(temp, n, D, temp2, D123=sum(X[,1]>0 & X[,2]>0 & X[,3]>0))
+  info <- c(info, nboot=nboot)
+  
+  
+  Cqn=rbind(Cqn_se_equ(X,q=0,nboot),
+            #C1n_equ(method="relative",X,boot),
+            NA,
+            C1n_equ(method="absolute",X,nboot), 
+            Cqn_se_equ(X,q=2,nboot)[1:4])
+  #if(N==3){Cqn <- rbind(Cqn, C33_se_equ(X,boot))}
+  colnames(Cqn) <- c("Estimate", "Est_s.e.", "95%.LCL", "95%.UCL")
+  rownames(Cqn) <- c(paste("C0",N,sep=""),paste("C1",N,sep=""),paste("C1",N,"*",sep=""),paste("C2",N,sep=""),if(N==3) "C33")
+  
+  
+  if(q==0 || q==1){Cqn_PC=matrix(0,choose(no.community,2),4)}
+  if(q==2)        {Cqn_PC=matrix(0,choose(no.community,2),6)}
+  k=1
+  temp_PC <- temp_PD <- rep(0, N*(N-1)/2)
+  for(i in 1:(N-1)){  
+    for(j in (i+1):N){
+      Cqn_PC[k,] <- Cqn_se_equ(X[,c(i,j)],q,nboot,method="absolute")
+      temp_PC[k] <- paste("C",q,"2(",i,",",j,")", sep="")
+      temp_PD[k] <- paste("1-C",q,"2(",i,",",j,")", sep="")
+      k <- k+1
+    }
+  }
+  if(q==0 || q==1){
+    colnames(Cqn_PC) <- c("Estimate", "Est_s.e.", "95%.LCL", "95%.UCL")
+    rownames(Cqn_PC) <- temp_PC
+  }
+  if(q==2){
+    colnames(Cqn_PC) <- c("Estimate", "Est_s.e.", "95%.LCL", "95%.UCL", "D.95%.LCL", "D.95%.UCL")
+    rownames(Cqn_PC) <- temp_PC
+  }
+  
+  C_SM=matrix(1,N,N)
+  k <- 1
+  for(i in 1:(N-1)){
+    for(j in (i+1):N){
+      C_SM[i,j] <- C_SM[j,i] <- Cqn_PC[k,1]
+      k <- k+1
+    }
+  }
+  #z <- list("datatype"=type, "info"=info, "overlap"=Cqn, "pairwise"=Cqn_PC, "similarity.matrix"=C_SM, "method"=method, "q"=q)
+  z <- list("info"=info, "overlap"=Cqn, "pairwise"=Cqn_PC, "similarity.matrix"=C_SM, "q"=q)
+  class(z) <- c("spadeGenetic")
+  z
+}
