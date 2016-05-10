@@ -4,7 +4,7 @@
 
 SpadeR (R package)
 =====
-<h4 style="text-align: right;">Most recent update time: July 21, 2015    
+<h4 style="text-align: right;">Most recent update time: May 10, 2016    
 
 by Anne Chao, K. H., Ma and T. C., Hsieh.
 
@@ -37,7 +37,7 @@ Remark that in order to install `devtools` package, you should update R
 to the last version. Further, to get `install_github` to work, you
 should install the `httr` package.
 
-### The program is divided into five parts:
+### The program is divided into six parts:
 
 - Part I: Species (estimating species richness for one community based on abundance data or incidence data.
 
