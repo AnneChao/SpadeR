@@ -12,8 +12,8 @@ This package computes various biodiversity indices based on individual-based (ab
 \tabular{ll}{
 Package: \tab SpadeR\cr
 Type: \tab Package\cr
-Version: \tab 0.1.0\cr
-Date: \tab 2016-03-23\cr
+Version: \tab 0.1.1\cr
+Date: \tab 2016-05-09\cr
 License: \tab GPL (>= 3)\cr
 }
 functions:  ChaoShared, ChaoSpecies, Diversity, SimilarityMult, SimilarityPair, Genetic

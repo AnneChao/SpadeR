@@ -1,5 +1,7 @@
 import(stats)
 import(Rcpp)
+importFrom("grDevices", "adjustcolor")
+importFrom("graphics", "legend", "lines", "plot", "polygon")
 S3method(print,ChaoShared)
 S3method(print,ChaoSpecies)
 S3method(print,spadeDiv)

@@ -13,12 +13,12 @@ Institute of Statistics, National Tsing Hua University, Hsin-Chu, Taiwan 30043</
 
 The program SpadeR (Species Prediction And Diversity Estimation) is an updated R package from the original version SPADE from Chao and Shen (2010).
 
-Like [SPADE](http://chao.stat.nthu.edu.tw/wordpress/software_download/spader/), the program SpadeR computes various biodiversity indices based on two types of sample data (abundance data and incidence data) from one or multiple communities. This user guide attempts to explain how to use this program in an easily accessible way using numerical examples and explanations.
+Like [SPADE](http://chao.stat.nthu.edu.tw/wordpress/software_download/), the program SpadeR computes various biodiversity indices based on two types of sample data (abundance data and incidence data) from one or multiple communities. This user guide attempts to explain how to use this program in an easily accessible way using numerical examples and explanations.
 
 
 ### Software needed to run the development version
 
--   Required: [R](http://cran.rstudio.com/)
+-   Required: [R](https://cran.r-project.org/)
 -   Suggested: [RStudio IDE](http://www.rstudio.com/ide/download/)
 
 ### How to run
