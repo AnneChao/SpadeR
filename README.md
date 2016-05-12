@@ -4,7 +4,7 @@
 
 SpadeR (R package)
 =====
-<h4 style="text-align: right;">Most recent update time: May 10, 2016    
+<h4 style="text-align: right;">Most recent update time: May 12, 2016    
 
 by Anne Chao, K. H., Ma and T. C., Hsieh.
 
