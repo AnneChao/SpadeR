@@ -11,9 +11,9 @@ print.ChaoSpecies <- function(x, ...){
 		cat('\n')
 		cat('\n(3) DESCRIPTION OF ESTIMATORS/MODELS:
 
-Homogenous Model: This model assumes that all species have the same abundances or discovery probabilities. See Eq. (2.3) of Chao and Lee (1992) or Eq. (2.1) of Chao et al. (2000).
+Homogeneous Model: This model assumes that all species have the same abundances or discovery probabilities. See Eq. (2.3) of Chao and Lee (1992) or Eq. (2.1) of Chao et al. (2000).
 
-Homogenous (MLE): An approximate maximum likelihood estimate under homogenous model. See Eq. (1.1) and Eq. (1.2) of Chao and Lee (1992).
+Homogeneous (MLE): An approximate maximum likelihood estimate under homogeneous model. See Eq. (1.1) and Eq. (1.2) of Chao and Lee (1992).
 
 Chao1 (Chao, 1984): This approach uses the numbers of singletons and doubletons to estimate the number of undetected species because undetected species information is mostly concentrated on those low frequency counts; see Chao (1984), Shen, Chao and Lin (2003) and Chao and Chiu (2012).
 

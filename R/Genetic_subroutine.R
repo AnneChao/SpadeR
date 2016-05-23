@@ -42,10 +42,18 @@ print.spadeGenetic <- function(x, ...)
   if ( q==0 ) temp0n=x$overlap[1,]
   if ( q==1 ) temp0n=x$overlap[3,]
   if ( q==2 ) temp0n=x$overlap[4,]
-  cat('    1-C')
-  cat(q)
-  cat(N,sprintf("         %.3f",1-temp0n[1]),'       ',sprintf("%.3f",temp0n[2]),'        (',
-      sprintf("%.3f",1-temp0n[4]),',',sprintf("%.3f",1-temp0n[3]),')\n')
+  if ( temp0n[1]<=1 ){
+    cat('    1-C')
+    cat(q)
+    cat(N,sprintf("         %.3f",1-temp0n[1]),'       ',sprintf("%.3f",temp0n[2]),'        (',
+        sprintf("%.3f",1-temp0n[4]),',',sprintf("%.3f",1-temp0n[3]),')\n')
+  }
+  if ( temp0n[1]>1 ){
+    cat('    1-C')
+    cat(q)
+    cat(N,sprintf("         %.3f#",0),'      ',sprintf("%.3f",temp0n[2]),'        (',
+        sprintf("%.3f",1-temp0n[4]),',',sprintf("%.3f",1-temp0n[3]),')\n')
+  }
   
   cat('\n')
   cat('    1-C')
@@ -55,6 +63,8 @@ print.spadeGenetic <- function(x, ...)
   cat('    
       Confidence Interval: Based on an improved bootstrap percentile method. (recommend for use in the case when 
       similarity is close to 0 or 1 ) \n\n')
+  cat('    # If an estimator is less than 0, replace it by 0; if an estimator 
+      is greater than 1, replace it by 1.\n\n')
   cat('    Pairwise Comparison:\n\n')
   cat('    Estimator','          Estimate','     Est_s.e.','     95% Confidence Interval\n\n')
   Cqn_PC <- x$pairwise  
@@ -74,13 +84,21 @@ print.spadeGenetic <- function(x, ...)
       cat(j)
       if ( share_index[no.temp2]!=0 )
       {
-        cat(')','        ',sprintf("%.3f",1-temp[1]),'       ',sprintf("%.3f",temp[2]),'        (',
-            sprintf("%.3f",1-temp[4]),',',sprintf("%.3f",1-temp[3]),')\n')
+        if ( temp[1]>1 ){
+          cat(')','        ',sprintf("%.3f#",0),'      ',sprintf("%.3f",temp[2]),'        (',
+              sprintf("%.3f",1-temp[4]),',',sprintf("%.3f",1-temp[3]),')\n')
+        }
+        if ( temp[1]<=1 ){
+          cat(')','        ',sprintf("%.3f",1-temp[1]),'       ',sprintf("%.3f",temp[2]),'        (',
+              sprintf("%.3f",1-temp[4]),',',sprintf("%.3f",1-temp[3]),')\n')
+        }
       }
       else
       {
-        cat(')','        ',sprintf("%.3f##",1),'     ',sprintf("%.3f##",0),'      (',
-            sprintf("%.3f",1),',',sprintf("%.3f",1),')##\n')
+        cat(')','        ',sprintf("%.3f",1),'       ',sprintf("%.3f",0),'        (',
+            sprintf("%.3f",1),',',sprintf("%.3f",1),')\n')
+        #         cat(')','        ',sprintf("%.3f##",1),'     ',sprintf("%.3f##",0),'      (',
+        #             sprintf("%.3f",1),',',sprintf("%.3f",1),')##\n')
       }
       no.temp=no.temp+1
       no.temp2=no.temp2+1
@@ -89,7 +107,8 @@ print.spadeGenetic <- function(x, ...)
   cat('\n')
   cat('    Average Pairwise =',sprintf("%.3f",1-mean(Cqn_PC[1:choose(N,2),1])),'\n')
   cat('    ## There are no shared species, thus estimated similarity is zero and should be used for caution.\n\n')
-  
+  cat('    # If an estimator is less than 0, replace it by 0; if an estimator 
+      is greater than 1, replace it by 1.\n\n')
   cat('    1-C')
   cat(q)
   cat('2: This is the genetic diversity measure D defined in Jost (2008) for comparing 2 subpopulations.')
@@ -110,13 +129,16 @@ print.spadeGenetic <- function(x, ...)
     for(j in 1:N)
     {
       if(i>j){cat('\t')}
-      if(i<=j)cat(sprintf("%.3f",abs(1-C_SM[i,j])),'\t')
+      if(i<=j){
+        if (1-C_SM[i,j]>=0) cat(sprintf("%.3f",abs(1-C_SM[i,j])),'\t')
+        else cat(sprintf("%.3f#",0),'\t')
+      }
     }
     cat('\n')
   }
   cat('\n')
-  cat('     Remark: If an estimator is less than 0, replace it by 0; if an estimator 
-            is greater than 1, replace it by 1.\n\n')
+  cat('    # If an estimator is less than 0, replace it by 0; if an estimator 
+      is greater than 1, replace it by 1.\n\n')
   
   cat('(3)  NEARLY UNBIASED ESTIMATION OF MORISITA SIMILARITY IN ',N,'SUBPOPULATIONS:\n\n')
   cat('    Estimator','     Estimate','     Est_s.e.','     95% Confidence Interval\n\n')
@@ -124,10 +146,21 @@ print.spadeGenetic <- function(x, ...)
   if ( q==0 ) temp2n=x$overlap[1,]
   if ( q==1 ) temp2n=x$overlap[3,]
   if ( q==2 ) temp2n=x$overlap[4,]
-  cat('    C')
-  cat(q)
-  cat(N,sprintf("           %.3f",temp2n[1]),'       ',sprintf("%.3f",temp2n[2]),'       (',
-      sprintf("%.3f",temp2n[3]),',',sprintf("%.3f",temp2n[4]),')\n')
+  if ( temp2n[1]>=1 ){
+    cat('    C')
+    cat(q)
+    cat(N,sprintf("           %.3f#",1),'      ',sprintf("%.3f",temp2n[2]),'       (',
+        sprintf("%.3f",temp2n[3]),',',sprintf("%.3f",temp2n[4]),')\n')
+  }
+  if ( temp2n[1]<1 ){
+    cat('    C')
+    cat(q)
+    cat(N,sprintf("           %.3f",temp2n[1]),'       ',sprintf("%.3f",temp2n[2]),'       (',
+        sprintf("%.3f",temp2n[3]),',',sprintf("%.3f",temp2n[4]),')\n')
+  }
+  cat('\n')
+  cat('    # If an estimator is less than 0, replace it by 0; if an estimator 
+      is greater than 1, replace it by 1.\n\n')
   cat('\n')
   cat('    C')
   cat(q)
@@ -156,15 +189,16 @@ print.spadeGenetic <- function(x, ...)
       }
       else
       {
-        cat(')','     ',sprintf("%.3f##",0),'     ',sprintf("%.3f##",0),'      (',
-            sprintf("%.3f",0),',',sprintf("%.3f",0),')##\n')
-        Cqn_PC[i,1]=0
+        cat(')','     ',sprintf("%.3f",0),'       ',sprintf("%.3f",0),'        (',
+            sprintf("%.3f",0),',',sprintf("%.3f",0),')\n')
       }
+      Cqn_PC[i,1]=0
       no.temp=no.temp+1
       no.temp2=no.temp2+1
     }
   }
-  
+  cat('    # If an estimator is less than 0, replace it by 0; if an estimator 
+      is greater than 1, replace it by 1.\n\n')
   cat('\n')
   cat('    Average Pairwise =',sprintf("%.3f",mean(Cqn_PC[1:choose(N,2),1])),'\n')
   cat('\n')
@@ -186,17 +220,20 @@ print.spadeGenetic <- function(x, ...)
     for(j in 1:N)
     {
       if(i>j){cat('\t')}
-      if(i<=j)cat(sprintf("%.3f",abs(C_SM[i,j])),'\t')
+      if(i<=j){
+        if (C_SM[i,j]<=1) cat(sprintf("%.3f",abs(C_SM[i,j])),'\t')
+        else cat(sprintf("%.3f#",1),'\t')
+      }
     }
     cat('\n')
   }
-  cat('\n')
-  cat('    Remark: If an estimator is less than 0, replace it by 0; if an estimator 
+  cat('    # If an estimator is less than 0, replace it by 0; if an estimator 
       is greater than 1, replace it by 1.\n\n')
+  cat('\n')
   cat('    References:\n')
   cat('    Chao, A., Jost, L., Chiang, S. C., Jiang, Y.-H. and Chazdon, R. (2008). A Two-
-           stage probabilistic approach to multiple-community similarity indices. 
-           Biometrics, 64, 1178-1186.\n')
+      stage probabilistic approach to multiple-community similarity indices. 
+      Biometrics, 64, 1178-1186.\n')
   cat('    Jost, L. (2008). GST and its relatives do not measure differentiation. Molecular
-           Ecology, 17, 4015-4026.')
+      Ecology, 17, 4015-4026.')
 }

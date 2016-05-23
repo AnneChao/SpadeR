@@ -361,260 +361,268 @@ C33_se_equ=function(X,boot=200)
 
 #Multiple_Community_Measure=function(X,q=2,boot=200,method=c("relative","absolute"))
 
-	
-	
+
 print.spadeMult <- function(x, ...){
-	cat('\n(1) BASIC DATA INFORMATION:\n\n')
-	cat('    The loaded set includes abundance (or frequency) data from',x$info[1],'communities\n')
-	cat('    and a total of',x$info[2],'distinct species.\n\n')
-		cat('   (Number of observed individuals in each community)       n1 =', x$info[3],'\n')
-	N <- x$info[1]
+  cat('\n(1) BASIC DATA INFORMATION:\n\n')
+  cat('    The loaded set includes abundance (or frequency) data from',x$info[1],'communities\n')
+  cat('    and a total of',x$info[2],'distinct species.\n\n')
+  cat('   (Number of observed individuals in each community)       n1 =', x$info[3],'\n')
+  N <- x$info[1]
   q <- x$q
-	for(j in 2:N){
-		cat('                                                           ','n')
-		cat(j,'=',x$info[2+j],'\n')   
-    }
-		cat('\n')
-		cat('   (Number of observed species in one community)            D1 =', x$info[N+3],'\n')
-   
-   for(j in 2:N){
-		cat('                                                           ','D')
-		cat(j,'=',x$info[N+2+j],'\n')
-    }
-		cat('\n')
-		cat('   (Number of observed shared species in two communities)  ','D12 =', x$info[3+2*N], '\n')
-   
-   if(N>2){
+  for(j in 2:N){
+    cat('                                                           ','n')
+    cat(j,'=',x$info[2+j],'\n')   
+  }
+  cat('\n')
+  cat('   (Number of observed species in one community)            D1 =', x$info[N+3],'\n')
+  
+  for(j in 2:N){
+    cat('                                                           ','D')
+    cat(j,'=',x$info[N+2+j],'\n')
+  }
+  cat('\n')
+  cat('   (Number of observed shared species in two communities)  ','D12 =', x$info[3+2*N], '\n')
+  
+  if(N>2){
     k <- 1
     for(i in 1:(N-1)){     
-          for(j in (i+1):N){
-		  if(i==1 & j==2) next
+      for(j in (i+1):N){
+        if(i==1 & j==2) next
         cat('                                                           ','D')
         cat(i,j,' = ', x$info[3+2*N+k], '\n', sep="")
-		k <- k + 1
-          }
+        k <- k + 1
       }
     }
-   cat('\n')
-   if(N==3)
-   {
-      cat('   (Number of observed shared species in three communities)','D123','=',rev(x$info)[2],'\n\n') 
-   }
-   cat('   (Bootstrap replications for s.e. estimate)              ',rev(x$info)[1],'\n\n')
-   cat('(2) ESTIMATION OF OVERLAP MEASURE IN',N,'COMMUNITIES:\n\n')
-   cat('    Estimator','     Estimate','     s.e.','     95% Confidence Interval\n\n')
-   temp0n=x$overlap[1,]
-   if(temp0n[1]>1)
-   {
-   cat('    C0')
-   cat(N,'(Sorensen)',sprintf("%.3f",1)        ,'#      ',sprintf("%.3f",temp0n[2]),'        (',
-         sprintf("%.3f",temp0n[3]),',',sprintf("%.3f",temp0n[4]),')\n')
-   }
-   if(temp0n[1]<=1)
-   {
-   cat('    C0')
-   cat(N,'(Sorensen)',sprintf("%.3f",temp0n[1]),'       ',sprintf("%.3f",temp0n[2]),'        (',
-       sprintf("%.3f",temp0n[3]),',',sprintf("%.3f",temp0n[4]),')\n')
-   }
-   #temp1n=x$overlap[2,]
-   #cat('    C1')
-   #cat(N,'          ',sprintf("%.3f",temp1n[1]),'       ',sprintf("%.3f",temp1n[2]),'        (',
-   #    sprintf("%.3f",temp1n[3]),',',sprintf("%.3f",temp1n[4]),')\n')
-   temp1n=x$overlap[2,]
-   if(temp1n[1]>1)
-   {
-   cat('    C1')
-   cat(N)
-   cat('*(Horn)    ',sprintf("%.3f",1)        ,'#      ',sprintf("%.3f",temp1n[2]),'        (',
-      sprintf("%.3f",temp1n[3]),',',sprintf("%.3f",temp1n[4]),')\n')
-   }
-   if(temp1n[1]<=1)
-   {
-   cat('    C1')
-   cat(N)
-   cat('*(Horn)    ',sprintf("%.3f",temp1n[1]),'       ',sprintf("%.3f",temp1n[2]),'        (',
-      sprintf("%.3f",temp1n[3]),',',sprintf("%.3f",temp1n[4]),')\n')
-     
-   }
-   
-	 #cat('*          ',sprintf("%.3f",1-temp1n[1]),'       ',sprintf("%.3f",temp1n[2]),'        (',
-	 #     sprintf("%.3f",max(1-temp1n[1]-1.96*temp1n[2],0)),',',sprintf("%.3f",min(1-temp1n[1]+1.96*temp1n[2],1)),')\n')
-   temp2n=x$overlap[3,]
-   cat('    C2')
-   cat(N,'(Morisita)',sprintf("%.3f",temp2n[1]),'       ',sprintf("%.3f",temp2n[2]),'        (',
-       sprintf("%.3f",temp2n[3]),',',sprintf("%.3f",temp2n[4]),')\n')  
-   
-   if(N==3)
-   {
-      temp33=x$overlap[4,]
-      cat('    C33','          ',sprintf("%.3f",temp33[1]),'       ',sprintf("%.3f",temp33[2]),'        (',
-      sprintf("%.3f",temp33[3]),',',sprintf("%.3f",temp33[4]),')\n')
-   }
-   cat('\n')
-   cat('    C0')
-   cat(N,': A similarity measure of comparing',N,
+  }
+  cat('\n')
+  if(N==3)
+  {
+    cat('   (Number of observed shared species in three communities)','D123','=',rev(x$info)[2],'\n\n') 
+  }
+  cat('   (Bootstrap replications for s.e. estimate)              ',rev(x$info)[1],'\n\n')
+  cat('(2) ESTIMATION OF OVERLAP MEASURE IN',N,'COMMUNITIES:\n\n')
+  cat('    Estimator','     Estimate','     s.e.','     95% Confidence Interval\n\n')
+  temp0n=x$overlap[1,]
+  if(temp0n[1]>1)
+  {
+    cat('    C0')
+    cat(N,'(Sorensen)',sprintf("%.3f",1)        ,'#      ',sprintf("%.3f",temp0n[2]),'        (',
+        sprintf("%.3f",temp0n[3]),',',sprintf("%.3f",temp0n[4]),')\n')
+  }
+  if(temp0n[1]<=1)
+  {
+    cat('    C0')
+    cat(N,'(Sorensen)',sprintf("%.3f",temp0n[1]),'       ',sprintf("%.3f",temp0n[2]),'        (',
+        sprintf("%.3f",temp0n[3]),',',sprintf("%.3f",temp0n[4]),')\n')
+  }
+  #temp1n=x$overlap[2,]
+  #cat('    C1')
+  #cat(N,'          ',sprintf("%.3f",temp1n[1]),'       ',sprintf("%.3f",temp1n[2]),'        (',
+  #    sprintf("%.3f",temp1n[3]),',',sprintf("%.3f",temp1n[4]),')\n')
+  temp1n=x$overlap[2,]
+  if(temp1n[1]>1)
+  {
+    cat('    C1')
+    cat(N)
+    cat('*(Horn)    ',sprintf("%.3f",1)        ,'#      ',sprintf("%.3f",temp1n[2]),'        (',
+        sprintf("%.3f",temp1n[3]),',',sprintf("%.3f",temp1n[4]),')\n')
+  }
+  if(temp1n[1]<=1)
+  {
+    cat('    C1')
+    cat(N)
+    cat('*(Horn)    ',sprintf("%.3f",temp1n[1]),'       ',sprintf("%.3f",temp1n[2]),'        (',
+        sprintf("%.3f",temp1n[3]),',',sprintf("%.3f",temp1n[4]),')\n')
+    
+  }
+  
+  #cat('*          ',sprintf("%.3f",1-temp1n[1]),'       ',sprintf("%.3f",temp1n[2]),'        (',
+  #     sprintf("%.3f",max(1-temp1n[1]-1.96*temp1n[2],0)),',',sprintf("%.3f",min(1-temp1n[1]+1.96*temp1n[2],1)),')\n')
+  temp2n=x$overlap[3,]
+  cat('    C2')
+  cat(N,'(Morisita)',sprintf("%.3f",temp2n[1]),'       ',sprintf("%.3f",temp2n[2]),'        (',
+      sprintf("%.3f",temp2n[3]),',',sprintf("%.3f",temp2n[4]),')\n')  
+  
+  if(N==3)
+  {
+    temp33=x$overlap[4,]
+    cat('    C33','          ',sprintf("%.3f",temp33[1]),'       ',sprintf("%.3f",temp33[2]),'        (',
+        sprintf("%.3f",temp33[3]),',',sprintf("%.3f",temp33[4]),')\n')
+  }
+  cat('\n')
+  cat('    C0')
+  cat(N,': A similarity measure of comparing',N,
       'communities using empirical method.\n')
-   #cat('    C1')
-   #cat(N,': A similarity measure of comparing',N,
-   #   'communities based on equal sample size among all communities.\n')
-   cat('    C1')
-   cat(N)
-   cat('*')
-   cat(': A similarity measure of comparing',N,
+  #cat('    C1')
+  #cat(N,': A similarity measure of comparing',N,
+  #   'communities based on equal sample size among all communities.\n')
+  cat('    C1')
+  cat(N)
+  cat('*')
+  cat(': A similarity measure of comparing',N,
       'communities based on equal-effort sample size among all communities.\n')
-   cat('    C2')
-   cat(N,': A similarity measure of comparing',N,'communities based on shared information between any two communities.\n')
-   if(N==3)
-   {
-      cat('    C33',': A similarity measure of comparing 3 communities using all shared information.\n')
-   }
-   cat('    
-    Confidence Interval: Based on an improved bootstrap percentile method. (recommend for use in the case when 
-                         similarity is close to 0 or 1 ) \n\n')
-   cat('    # if the estimate is greater than 1, it is replaced by 1.\n\n')
-   cat('    Pairwise Comparison:\n\n')
-   cat('    Estimator','     Estimate','     s.e.','       95% Confidence Interval\n\n')
-   Cqn_PC <- x$pairwise
-   no.temp=1
-   for(i in 1:(N-1))
-   {
-       for(j in (i+1):N)
-       {
-           temp=Cqn_PC[no.temp,]
-           if(q==0){cat('    C02(')}
-           if(q==1 & x$method=="relative"){cat('    C12(')}
-           if(q==1 & x$method=="absolute"){cat('    C12*(')}
-           if(q==2){cat('    C22(')}
-           cat(i)
-           cat(',')
-           cat(j)
-           if(temp[1]>1)
-           {cat(')','     ',sprintf("%.3f",1)      ,'#      ',sprintf("%.3f",temp[2]),'        (',
-            sprintf("%.3f",temp[3]),',',sprintf("%.3f",temp[4]),')\n')
-           }
-           if(temp[1]<=1)
-           {cat(')','     ',sprintf("%.3f",temp[1]),'       ',sprintf("%.3f",temp[2]),'        (',
+  cat('    C2')
+  cat(N,': A similarity measure of comparing',N,'communities based on shared information between any two communities.\n')
+  if(N==3)
+  {
+    cat('    C33',': A similarity measure of comparing 3 communities using all shared information.\n')
+  }
+  cat('    
+      Confidence Interval: Based on an improved bootstrap percentile method. (recommend for use in the case when 
+      similarity is close to 0 or 1 ) \n\n')
+  cat('    # if the estimate is greater than 1, it is replaced by 1.\n\n')
+  cat('    Pairwise Comparison:\n\n')
+  cat('    Estimator','     Estimate','     s.e.','       95% Confidence Interval\n\n')
+  Cqn_PC <- x$pairwise
+  no.temp=1
+  for(i in 1:(N-1))
+  {
+    for(j in (i+1):N)
+    {
+      temp=Cqn_PC[no.temp,]
+      if(q==0){cat('    C02(')}
+      if(q==1 & x$method=="relative"){cat('    C12(')}
+      if(q==1 & x$method=="absolute"){cat('    C12*(')}
+      if(q==2){cat('    C22(')}
+      cat(i)
+      cat(',')
+      cat(j)
+      if(temp[1]>1)
+      {cat(')','     ',sprintf("%.3f",1)      ,'#      ',sprintf("%.3f",temp[2]),'        (',
+           sprintf("%.3f",temp[3]),',',sprintf("%.3f",temp[4]),')\n')
+      }
+      if(temp[1]<=1)
+      {cat(')','     ',sprintf("%.3f",temp[1]),'       ',sprintf("%.3f",temp[2]),'        (',
            sprintf("%.3f",temp[3]),',',sprintf("%.3f",temp[4]),')\n')}
-           no.temp=no.temp+1
-       }
-   }
-   
-   cat('\n')
-   cat('    Average Pairwise =',sprintf("%.3f",mean(Cqn_PC[,1])),'\n')
-   if(q==0 || q==1)
-   {
+      no.temp=no.temp+1
+    }
+  }
+  
+  cat('\n')
+  cat('    Average Pairwise =',sprintf("%.3f",mean(Cqn_PC[,1])),'\n')
+  if(q==0 || q==1)
+  {
     cat('
-    If the lower bound is less than 0, it is replaced by 0; if the upper bound
-       is greater than 1, it is replaced by 1.\n\n')
-   }
-   if(q==2)
-   {
+        If the lower bound is less than 0, it is replaced by 0; if the upper bound
+        is greater than 1, it is replaced by 1.\n\n')
+  }
+  if(q==2)
+  {
     cat('
-    MLE is used for replacing nearly unbiased estimate because the estimate 
-	        is greater than 1.
-    If the lower bound is less than 0, it is replaced by 0; if the upper bound
-       is greater than 1, it is replaced by 1.\n\n')
-   }
-   cat('    Similarity Matrix: \n\n')
-   C_SM=x$similarity.matrix
-   
-   if(q==0){cat('    C02(i,j)   \t')}
-   if(q==1 & x$method=="relative"){cat('    C12(i,j)   \t')}
-   if(q==1 & x$method=="absolute"){cat('    C12*(i,j)   ')}
-   if(q==2){cat('    C22(i,j)   \t')}
-   for(i in 1:N)
-   {
-       cat(i,'\t')
-   }
-   cat('\n')
-   for(i in 1:N)
-   {
-       cat('       ',i,'\t')
-       for(j in 1:N)
-       {
-           if(i>j){cat('\t')}
-           if(i<=j)cat(sprintf("%.3f",C_SM[i,j]),'\t')
-       }
-       cat('\n')
-   }
-   if(q==2)
-   {
-   cat('\n')
-   cat('(3) ESTIMATION OF MORISITA DISSIMILARITY IN',N,'COMMUNITIES\n\n')
-   cat('    Estimator','     Estimate','     s.e.','    95% Confidence Interval\n\n')
-   cat('    1 - C2')
-   cat(N,'      ',sprintf("%.3f",1-temp2n[1]),'       ',sprintf("%.3f",temp2n[2]),'        (',
-       sprintf("%.3f",max(0,1-temp2n[1]-1.96*temp2n[2])),',',sprintf("%.3f",min(1,1-temp2n[1]+1.96*temp2n[2])),')\n')
-   if(N==3)
-   {
+        MLE is used for replacing nearly unbiased estimate because the estimate 
+        is greater than 1.
+        If the lower bound is less than 0, it is replaced by 0; if the upper bound
+        is greater than 1, it is replaced by 1.\n\n')
+  }
+  cat('    Similarity Matrix: \n\n')
+  C_SM=x$similarity.matrix
+  
+  if(q==0){cat('    C02(i,j)   \t')}
+  if(q==1 & x$method=="relative"){cat('    C12(i,j)   \t')}
+  if(q==1 & x$method=="absolute"){cat('    C12*(i,j)   ')}
+  if(q==2){cat('    C22(i,j)   \t')}
+  for(i in 1:N)
+  {
+    cat(i,'\t')
+  }
+  cat('\n')
+  for(i in 1:N)
+  {
+    cat('       ',i,'\t')
+    for(j in 1:N)
+    {
+      if(i>j){cat('\t')}
+      if(i<=j) {
+        if(C_SM[i,j]<=1) cat(sprintf("%.3f",C_SM[i,j]),' \t')
+        else cat(sprintf("%.3f#",1),'\t')
+      }
+    }
+    cat('\n')
+  }
+  if(q==2)
+  {
+    cat('\n')
+    cat('(3) ESTIMATION OF MORISITA DISSIMILARITY IN',N,'COMMUNITIES\n\n')
+    cat('    Estimator','     Estimate','     s.e.','    95% Confidence Interval\n\n')
+    cat('    1 - C2')
+    cat(N,'      ',sprintf("%.3f",1-temp2n[1]),'       ',sprintf("%.3f",temp2n[2]),'        (',
+        sprintf("%.3f",max(0,1-temp2n[1]-1.96*temp2n[2])),',',sprintf("%.3f",min(1,1-temp2n[1]+1.96*temp2n[2])),')\n')
+    if(N==3)
+    {
       cat('    1 - C33','      ',sprintf("%.3f",1-temp33[1]),'       ',sprintf("%.3f",temp33[2]),'        (',
-      sprintf("%.3f",max(0,1-temp33[1]-1.96*temp33[2])),',',sprintf("%.3f",min(1,1-temp33[1]+1.96*temp33[2])),')\n')
-   }
-   cat('\n')
-   cat('    1 - C2')
-   cat(N,': This is the genetic diversity measure D defined in Jost (2008) for
-              comparing',N,'communities.\n')
-   if(N==3)
-   {
+          sprintf("%.3f",max(0,1-temp33[1]-1.96*temp33[2])),',',sprintf("%.3f",min(1,1-temp33[1]+1.96*temp33[2])),')\n')
+    }
+    cat('\n')
+    cat('    1 - C2')
+    cat(N,': This is the genetic diversity measure D defined in Jost (2008) for
+        comparing',N,'communities.\n')
+    if(N==3)
+    {
       cat('    1 - C33',': A genetic diversity measure for comparing 3 subpopulations based on
-              all shared information.\n')
-   }
-   cat('\n')
-   cat('    Pairwise Comparison:\n\n')
-   cat('    Estimator','          Estimate','     s.e.','       95% Confidence Interval\n\n')
-   no.temp=1
-   for(i in 1:(N-1))
-   {
-       for(j in (i+1):N)
-       {
-           temp=Cqn_PC[no.temp,]
-           cat('    1-C22(')
-           cat(i)
-           cat(',')
-           cat(j)
-           cat(')','        ',sprintf("%.3f",1-temp[1]),'       ',sprintf("%.3f",temp[2]),'        (',
-               sprintf("%.3f",temp[5]),',',sprintf("%.3f",temp[6]),')\n')
-           no.temp=no.temp+1
-       }
-   }
-   cat('\n')
-   cat('    Average Pairwise =',sprintf("%.3f",1-mean(Cqn_PC[,1])),'\n')
-   cat('
-    MLE is used for replacing nearly unbiased estimate because the estimate 
-	        is greater than 1.
-    If the lower bound is less than 0, it is replaced by 0; if the upper bound
-       is greater than 1, it is replaced by 1.\n\n')
-   cat('    1-C22: This is the genetic diversity measure D defined in Jost (2008) for
-           comparing 2 subpopulations.')
-   cat('\n\n')
-   cat('    Dissimilarity Matrix: \n\n')
-   cat('    1-C22(i,j)\t')
-   for(i in 1:N)
-   {
-       cat(i,'\t')
-   }
-   cat('\n')
-   for(i in 1:N)
-   {
-       cat('       ',i,'\t')
-       for(j in 1:N)
-       {
-           if(i>j){cat('\t')}
-           if(i<=j)cat(sprintf("%.3f",1-C_SM[i,j]),'\t')
-       }
-       cat('\n')
-   }
-   cat('\n')
-   }
-   cat('
-   References:
-   
-   Chao, A., Jost, L., Chiang, S. C., Jiang, Y.-H. and Chazdon, R. (2008). A Two-
-   stage probabilistic approach to multiple-community similarity indices. 
-   Biometrics, 64, 1178-1186.
-   
-   Jost, L. (2008). GST and its relatives do not measure differentiation. Molecular
-   Ecology, 17, 4015-4026.
-   ')
-   cat('\n')
-}
+          all shared information.\n')
+    }
+    cat('\n')
+    cat('    Pairwise Comparison:\n\n')
+    cat('    Estimator','          Estimate','     s.e.','       95% Confidence Interval\n\n')
+    no.temp=1
+    for(i in 1:(N-1))
+    {
+      for(j in (i+1):N)
+      {
+        temp=Cqn_PC[no.temp,]
+        cat('    1-C22(')
+        cat(i)
+        cat(',')
+        cat(j)
+        cat(')','        ',sprintf("%.3f",1-temp[1]),'       ',sprintf("%.3f",temp[2]),'        (',
+            sprintf("%.3f",temp[5]),',',sprintf("%.3f",temp[6]),')\n')
+        no.temp=no.temp+1
+      }
+    }
+    cat('\n')
+    cat('    Average Pairwise =',sprintf("%.3f",1-mean(Cqn_PC[,1])),'\n')
+    cat('
+        MLE is used for replacing nearly unbiased estimate because the estimate 
+        is greater than 1.
+        If the lower bound is less than 0, it is replaced by 0; if the upper bound
+        is greater than 1, it is replaced by 1.\n\n')
+    cat('    1-C22: This is the genetic diversity measure D defined in Jost (2008) for
+        comparing 2 subpopulations.')
+    cat('\n\n')
+    cat('    Dissimilarity Matrix: \n\n')
+    cat('    1-C22(i,j)\t')
+    for(i in 1:N)
+    {
+      cat(i,'\t')
+    }
+    cat('\n')
+    for(i in 1:N)
+    {
+      cat('       ',i,'\t')
+      for(j in 1:N)
+      {
+        if(i>j){cat('\t')}
+        if(i<=j){
+          if(C_SM[i,j]<=1) cat(sprintf("%.3f",1-C_SM[i,j]),' \t')
+          else cat(sprintf("%.3f#",1),' \t')
+        }
+      }
+      cat('\n')
+    }
+    cat('\n')
+    }
+  cat('
+      References:
+      
+      Chao, A., Jost, L., Chiang, S. C., Jiang, Y.-H. and Chazdon, R. (2008). A Two-
+      stage probabilistic approach to multiple-community similarity indices. 
+      Biometrics, 64, 1178-1186.
+      
+      Jost, L. (2008). GST and its relatives do not measure differentiation. Molecular
+      Ecology, 17, 4015-4026.
+      ')
+  cat('\n')
+  }
+
+	
+

@@ -15,7 +15,7 @@ function(data,
     h <- SpecAbunJack1(data, k, conf)
     i <- SpecAbunJack2(data, k, conf)
     out <- rbind(a, b, c, d, e, f, g, h, i)
-	rownames(out) <- c("Homogenous Model", 
+	rownames(out) <- c("Homogeneous Model", 
 						"Homogeneous (MLE)", 
 						"Chao1 (Chao, 1984)", 
 						"Chao1-bc",

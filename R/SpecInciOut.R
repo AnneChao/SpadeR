@@ -14,7 +14,7 @@ function(data, method = c("all", "Homogeneous", "Chao", "CE", "Jackknife"), k, c
   if (method == "all") {
     #out <- data.frame(rbind(a, b, c, d, e, f, g, h), est.cv)
 	out <- data.frame(rbind(a, b, c, d, e, f, g, h))
-	rownames(out) <- c("Homogenous Model", 
+	rownames(out) <- c("Homogeneous Model", 
 						"Chao2 (Chao, 1987)", 
 						"Chao2-bc",
 						"iChao2 (Chiu et al. 2014)", 

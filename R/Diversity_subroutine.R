@@ -436,8 +436,10 @@ Simpson_Inci_index=function(x,boot=200)
   MVUE_sd=sd(temp1)
   MLE_sd=sd(temp2)
   
-  MVUE_recip_sd=MVUE_sd/MVUE
-  MLE_recip_sd=MLE_sd/MLE
+  #MVUE_recip_sd=MVUE_sd/MVUE
+  #MLE_recip_sd=MLE_sd/MLE
+  MVUE_recip_sd=sd(1/temp1)
+  MLE_recip_sd=sd(1/temp2)
   
   a=matrix(0,4,4)
   a[1,]=c(MVUE,MVUE_sd,MVUE-1.96*MVUE_sd,MVUE+1.96*MVUE_sd)
