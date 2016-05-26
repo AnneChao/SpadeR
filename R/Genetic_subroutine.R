@@ -85,7 +85,7 @@ print.spadeGenetic <- function(x, ...)
       if ( share_index[no.temp2]!=0 )
       {
         if ( temp[1]>1 ){
-          cat(')','        ',sprintf("%.3f#",0),'      ',sprintf("%.3f",temp[2]),'        (',
+          cat(')','        ',sprintf("%.3f #",0),'     ',sprintf("%.3f",temp[2]),'        (',
               sprintf("%.3f",1-temp[4]),',',sprintf("%.3f",1-temp[3]),')\n')
         }
         if ( temp[1]<=1 ){
@@ -184,8 +184,14 @@ print.spadeGenetic <- function(x, ...)
       cat(',')
       cat(j)
       if ( share_index[no.temp2]!=0 ){
-        cat(')','     ',sprintf("%.3f",temp[1]),'       ',sprintf("%.3f",temp[2]),'        (',
-            sprintf("%.3f",temp[3]),',',sprintf("%.3f",temp[4]),')\n')
+        if ( temp[1]<=1 ){
+          cat(')','     ',sprintf("%.3f",temp[1]),'       ',sprintf("%.3f",temp[2]),'        (',
+              sprintf("%.3f",temp[3]),',',sprintf("%.3f",temp[4]),')\n')
+        }
+        else {
+          cat(')','     ',sprintf("%.3f #", 1),'     ',sprintf("%.3f",temp[2]),'        (',
+              sprintf("%.3f",temp[3]),',',sprintf("%.3f",temp[4]),')\n')
+        }
       }
       else
       {
@@ -237,3 +243,4 @@ print.spadeGenetic <- function(x, ...)
   cat('    Jost, L. (2008). GST and its relatives do not measure differentiation. Molecular
       Ecology, 17, 4015-4026.')
 }
+
