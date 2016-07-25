@@ -11,8 +11,7 @@ Description: Computing various biodiversity indices based on individual-
 License: GPL (>= 3)
 Imports:
     stats,
-    Rcpp
 Depends:
     R (>= 2.14)
 RoxygenNote: 5.0.1
-LinkingTo: Rcpp 
+
