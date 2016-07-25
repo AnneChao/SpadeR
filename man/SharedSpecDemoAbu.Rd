@@ -9,14 +9,14 @@
 }
 \usage{data(ChaoSharedDataAbu)}
 \format{
- The data input format (a matrix/data.frame with 201 rows and 2 columns) is:\cr\cr
- 39 42\cr
-  0 70\cr
-  0 1\cr
-  . .\cr  
-  . .\cr
-  . .\cr
-  1 1 
+ The data input format (a data.frame with 201 rows and 2 columns) is:\cr\cr
+ 39 42 \cr
+  0 70 \cr
+  0  1 \cr
+  .  . \cr
+  .  . \cr
+  .  . \cr
+  1  1 
 }
 \references{
  Chao, A., Hwang, W.-H., Chen, Y.-C. and Kuo. C.-Y. (2000). Estimating the number of shared species in two communities. Statistica Sinica 10, 227-246.

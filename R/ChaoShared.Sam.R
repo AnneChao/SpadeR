@@ -1,13 +1,13 @@
 ChaoShared.Sam <-
-function(y1, y2, method = c("all","Chao2-shared","Chao2-shared-bc"),conf = 0.95, se = TRUE) {  
+function(y1, y2, method = c("all","Chao2-shared","Chao2-shared-bc"),conf = 0.95, se = TRUE) {
 #function(y1, y2, method = c("all",
-#                                              "Chao2-shared", 
+#                                              "Chao2-shared",
 #                                              "Chao2-shared-bc",
 #                                              "Lower-bound",
-#                                              "Lower-bound-bc"), 
+#                                              "Lower-bound-bc"),
 #                           conf = 0.95, se = TRUE) {
   method <- match.arg(method)
-  
+
   if (method == "all") {
     #a <- Chao2_sharedFun(y1, y2, conf)
     #b <- Chao2_bcFun(y1, y2, conf)
@@ -15,19 +15,19 @@ function(y1, y2, method = c("all","Chao2-shared","Chao2-shared-bc"),conf = 0.95,
     d <- PanbcFun.Sam(y1, y2, conf)
     #out <- rbind(a, b, c, d)
     out <- rbind(c, d)
-    rownames(out)<-c("Chao2-shared","Chao2-shared-bc")
+    rownames(out)<-c("    Chao2-shared","    Chao2-shared-bc")
   }
   #if (method == "Chao2-shared")
   #  out <- Chao2_sharedFun(y1, y2, conf)
   #if (method == "Chao2-shared-bc")
   #  out <- Chao2_bcFun(y1, y2, conf)
-  if (method == "Chao2-shared") 
+  if (method == "Chao2-shared")
     out <- PanFun.Sam(y1, y2, conf)
-  if (method == "Chao2-shared-bc") 
+  if (method == "Chao2-shared-bc")
     out <- PanbcFun.Sam(y1, y2, conf)
-  
+
   if (se == FALSE) {
     out <- data.frame(Estimator = out[, 1], row.names = rownames(out))
-  } 
+  }
   return(out)
 }

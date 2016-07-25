@@ -6,7 +6,9 @@ function(data, k){
   x <- data[which(data != 0)]
   r <- c(1:k)
   Rare.Species.Group <- matrix(sapply(r, function(r)f(r, x)), 1, k)
-  rownames(Rare.Species.Group) <- c("f(i)")
-  colnames(Rare.Species.Group) <- c(1:k)
+  #rownames(Rare.Species.Group) <- c("    f(i)")
+  #colnames(Rare.Species.Group) <- c(1:k)
+  rownames(Rare.Species.Group) <- c("    Rare.Species.Group")
+  colnames(Rare.Species.Group) <- paste("f", r, sep="")
   return(Rare.Species.Group)
 }

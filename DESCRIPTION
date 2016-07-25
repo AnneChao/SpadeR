@@ -2,9 +2,9 @@ Package: SpadeR
 Type: Package
 Title: Species Prediction and Diversity Estimation with R
 Version: 0.1.1
-Date: 2016-05-12
+Date: 2016-07-20
 Author: Anne Chao, K. H. Ma and T. C. Hsieh
-Maintainer: K. H. Ma <smallmar123@gmail.com>
+Maintainer: Anne Chao <chao@stat.nthu.edu.tw>
 Description: Computing various biodiversity indices based on individual-
     based (abundance) data or sampling-unit-based (incidence) data taken from one or
     multiple assemblages.
@@ -15,3 +15,4 @@ Imports:
 Depends:
     R (>= 2.14)
 RoxygenNote: 5.0.1
+LinkingTo: Rcpp 

@@ -1,15 +1,15 @@
 ChaoShared.Ind <-
-function(x1, x2, method = c("all", "Homogeneous", 
+function(x1, x2, method = c("all", "Homogeneous",
                               "Heterogeneous(ACE-shared)",
-                              "Chao1-shared", 
+                              "Chao1-shared",
                               "Chao1-shared-bc"),
-                              B = 200, conf = 0.95, se = TRUE) {  
-#function(x1, x2, method = c("all", "Homogeneous", 
+                              B = 200, conf = 0.95, se = TRUE) {
+#function(x1, x2, method = c("all", "Homogeneous",
 #                                              "Heterogeneous(ACE-shared)",
-#                                              "Chao1(shared)", 
-#                                              "Chao1-shared-bc", 
+#                                              "Chao1(shared)",
+#                                              "Chao1-shared-bc",
 #                                              "Lower-bound",
-#                                              "Lower-bound-bc"), 
+#                                              "Lower-bound-bc"),
 #                           B = 200, conf = 0.95, se = TRUE) {
 
   method <- match.arg(method)
@@ -24,7 +24,7 @@ function(x1, x2, method = c("all", "Homogeneous",
     f <- PanbcFun(x1, x2, conf)
     #out <- rbind(a, b, c, d, e, f)
     out <- rbind(a, b, e, f)
-    rownames(out)<-c("Homogeneous","Heterogeneous(ACE-shared)","Chao1-shared","Chao1-shared-bc")
+    rownames(out)<-c("    Homogeneous","    Heterogeneous(ACE-shared)","    Chao1-shared","    Chao1-shared-bc")
   }
   if (method == "Homogeneous")
     out <- HomoFun(x1, x2, B, conf)
@@ -38,9 +38,9 @@ function(x1, x2, method = c("all", "Homogeneous",
     out <- PanFun(x1, x2, conf)
   if (method == "Lower-bound-bc")
     out <- PanbcFun(x1, x2, conf)
-  
+
   if (se == FALSE) {
     out <- data.frame(Estimator = out[, 1], row.names = rownames(out))
-  } 
+  }
   return(out)
 }

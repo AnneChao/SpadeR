@@ -4,37 +4,58 @@
 \alias{Diversity}
 \title{Estimation of species diversity}
 \usage{
-Diversity(data, datatype = c("abundance", "incidence"), q = NULL)
+Diversity(data, datatype = c("abundance", "abundance_freq_count",
+  "incidence_freq", "incidence_freq_count", "incidence_raw"), q = NULL)
 }
 \arguments{
-\item{data}{a column vector of species abundances or incidence frequencies.\cr 
-If \code{datatype = "incidence"}, then the first entry of the input data must be total number of sampling units, 
-followed by species incidence frequencies. (See example \code{data(ChaoSpeciesDataInci)}).}
+\item{data}{a matrix, data.frame of species abundances/incidences (see data format/information above).\cr}
 
-\item{datatype}{data type of input data: individual-based abundance data (\code{datatype = "abundance"}) or 
-sampling-unit-based incidence data (\code{datatype = "incidence"}).}
+\item{datatype}{type of input data, "abundance", "abundance_freq_count", "incidence_freq", "incidence_freq_count" or "incidence_raw". \cr\cr}
 
 \item{q}{a vector of nonnegative numbers for which the diversity order of Hill numbers will be estimated. If \code{NULL}, then
 Hill numbers will be estimated at order q from 0 to 3 with equally-spaced 0.25.}
 }
 \value{
-a list of seven objects: 
-\code{$BASIC.DATA} for summarizing data information; \code{$SPECIES.RICHNESS} for showing various species richness estimates along with related statistics; 
-\code{$SHANNON.INDEX} and \code{$EXPONENTIAL.OF.SHANNON.INDEX} for showing various Shannon index/diversity estimates; 
-\code{$SIMPSON.INDEX} and \code{$INVERSE.OF.SIMPSON.INDEX} for showing various Simpson index/diversity estimates; 
+a list of seven objects: \cr\cr
+\code{$BASIC.DATA} for summarizing data information. \cr\cr
+\code{$SPECIES.RICHNESS} for showing various species richness estimates along with related statistics. \cr\cr
+\code{$SHANNON.INDEX} and \code{$EXPONENTIAL.OF.SHANNON.INDEX} for showing various Shannon index/diversity estimates. \cr\cr
+\code{$SIMPSON.INDEX} and \code{$INVERSE.OF.SIMPSON.INDEX} for showing various Simpson index/diversity estimates. \cr\cr
 \code{$HILL.NUMBERS} for showing Hill number (diversity of order from 0 to 3) estimates. \cr\cr
 }
 \description{
-\code{Diversity}: estimation of various diversity indices including species richness (diversity of order 0), 
-the Shannon index/diversity (diversity of order 1), the Simpson index/diversity (diversity of order 2), 
-and Hill number (diversity of order from 0 to 3) .
+\code{Diversity}: Estimation of various diversity indices including species richness (diversity of order 0),
+the Shannon index/diversity (diversity of order 1), the Simpson index/diversity (diversity of order 2),
+and Hill number (diversity of order from 0 to 3). \cr\cr
+Five types of data (format/information) are supported: ("abundance","abundance_freq_count", "incidence_freq", "incidence_freq_count", "incidence_raw"):
+\enumerate{
+  \item{Individual-based abundance data: There are two kinds of input data.
+  \describe{
+     \item{(1)}{Abundance data (datatype="abundance"): input data is a vector of sample species abundances/frequencies for observed species in an empirical sample of individuals.}
+     \item{(1A)}{Abundance-frequemcy counts (datatype="abundance_freq_count"): input data is a vector of sample species frequency counts.}
+   }
+  }
+  \item{Sampling-unit-based incidence data: There are three kinds of input data.
+  \describe{
+     \item{(2)}{Incidence-frequency data (datatype="incidence_freq"):  input data is species sample incidence frequencies (row sums of each incidence matrix). The first entry must be the total number of sampling units.}
+     \item{(2A)}{Incidence-frequency counts (datatype="incidence_freq_count"): input data is a vector of sample species incidence counts. The first entry must be the total number of sampling units.}
+     \item{(2B)}{Incidence-raw data (datatype="incidence_raw"): input data for a reference sample consists of a species-by-sampling-unit matrix.}
+   }
+  }
+}
 }
 \examples{
 \dontrun{
 data(DiversityDataAbu)
 Diversity(DiversityDataAbu,datatype="abundance")
-data(SimilarityPairDataInci)
-Diversity(SimilarityPairDataInci[,1],datatype="incidence")
+data("DiversityDataAbu_count")
+Diversity(DiversityDataAbu_count, datatype="abundance_freq_count", q=NULL)
+data(DiversityDataInci)
+Diversity(DiversityDataInci, datatype="incidence_freq", q=NULL)
+data("DiversityDataInci_freq_count")
+Diversity(DiversityDataInci_freq_count, datatype="incidence_freq_count", q=NULL)
+data(DiversityDataInci_raw)
+Diversity(DiversityDataInci_raw, datatype="incidence_raw", q=NULL)
 }
 }
 \references{

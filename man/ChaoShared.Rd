@@ -4,39 +4,45 @@
 \alias{ChaoShared}
 \title{Estimation of the number of shared species in two assemblages}
 \usage{
-ChaoShared(data, datatype = c("abundance", "incidence"), se = TRUE,
-  nboot = 200, conf = 0.95)
+ChaoShared(data, datatype = c("abundance", "incidence_raw", "incidence_freq"),
+  se = TRUE, nboot = 200, conf = 0.95)
 }
 \arguments{
-\item{data}{a matrix, data.frame (species by sites) of species abundances or incidence frequencies with two columns. 
-If \code{datatype = "incidence"}, then the first entry of the input data must be the total number of sampling units, 
-followed by species incidence frequencies in each column (See example \code{data(ChaoSharedDataInci)}).}
+\item{data}{a matrix, data.frame, lists of species abundances/incidences, or lists of incidence frequencies (see data format/information above).\cr}
 
-\item{datatype}{data type of input data: individual-based abundance data (\code{datatype = "abundance"}) or 
-sampling-unit-based incidence data (\code{datatype = "incidence"}).}
+\item{datatype}{type of input data, "abundance", "incidence_freq" or "incidence_raw". \cr}
 
-\item{se}{a logical variable to calculate the bootstrap standard error and the associated confidence interval.}
+\item{se}{a logical variable to calculate the bootstrap standard error and the associated confidence interval. \cr}
 
-\item{nboot}{an integer specifying the number of bootstrap replications.}
+\item{nboot}{an integer specifying the number of bootstrap replications. \cr}
 
 \item{conf}{a positive number \eqn{\le} 1 specifying the level of confidence interval.}
 }
 \value{
-a list of two objects: \code{$BASIC_DATA_INFORMATION} for summarizing data information;\cr
-\code{$ESTIMATION_RESULTS_OF_THE_NUMBER_OF_SHARED_SPECIES} for showing a table of various shared richess estimates, standard errors, and the associated confidence intervals.
+a list of two objects: \cr\cr
+\code{$BASIC_DATA_INFORMATION} for summarizing data information. \cr\cr
+\code{$ESTIMATION_RESULTS_OF_THE_NUMBER_OF_SHARED_SPECIES} for showing a table of various shared richess estimates, standard errors, and the associated confidence intervals. \cr\cr
 }
 \description{
-\code{ChaoShared}: estimation of shared species richness in two assemblages based on the following two sampling schemes. \cr
+\code{ChaoShared}: Estimation of shared species richness in two assemblages based on the following two sampling schemes. \cr\cr
+Three types of data (format/information) are supported: ("abundance", "incidence_freq", "incidence_raw"):
 \enumerate{
-  \item{(Abundance data) In each assemblage, a random sample of individuals is taken and species abundances/frequencies are recorded.}
-  \item{(Incidence data) Each assemblage is sampled several times and species presence/absence data for multiple sampling units are recorded.}
+   \item{(1) Individual-based abundance data (datatype="abundance"): Input data for each assemblage/site include sample species abundances in an empirical sample of n individuals ("reference sample"). There are 2 assemblages, input data consist of an S by 2 abundance matrix, or 2 lists of species abundances.}    
+  \item{Sampling-unit-based incidence data: There are two kinds of input data.
+  \describe{
+     \item{(2)}{Incidence-raw data (datatype="incidence_raw"): for each assemblage, input data for a reference sample consist of a species-by-sampling-unit matrix; there are 2 assemblages, input data consist of 2 lists of matrices, and each matrix is a species-by-sampling-unit matrix.}
+     \item{(2B)}{Incidence-frequency data (datatype="incidence_freq"): input data for each assemblage consist of species sample incidence frequencies (row sums of each incidence matrix). There are 2 assemblages, input data consist of an S+1 by 2 matrix, or 2 lists of species incidence frequencies. The first entry of each column/list must be the total number of sampling units, followed by the species incidence frequencies.}
+   }
+  }
 }
 }
 \examples{
 data(ChaoSharedDataAbu)
 ChaoShared(ChaoSharedDataAbu, datatype="abundance", se=TRUE, nboot=200, conf=0.95)
 data(ChaoSharedDataInci)
-ChaoShared(ChaoSharedDataInci, datatype="incidence", se=TRUE, nboot=200, conf=0.95)
+ChaoShared(ChaoSharedDataInci, datatype="incidence_freq", se=TRUE, nboot=200, conf=0.95)
+data(ChaoSharedDataInci_raw)
+ChaoShared(ChaoSharedDataInci_raw, datatype="incidence_raw", se=TRUE, nboot=200, conf=0.95)
 }
 \references{
 Chao, A., Hwang, W.-H., Chen, Y.-C. and Kuo. C.-Y. (2000). Estimating the  number of shared species in two communities. Statistica Sinica 10, 227-246.\cr\cr

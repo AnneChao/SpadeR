@@ -4,35 +4,52 @@
 \alias{SimilarityPair}
 \title{Estimation of two-assemblage similarity index}
 \usage{
-SimilarityPair(X, datatype = c("abundance", "incidence"), nboot = 200)
+SimilarityPair(X, datatype = c("abundance", "incidence_freq",
+  "incidence_raw"), nboot = 200)
 }
 \arguments{
-\item{X}{a matrix (species by sites) of species abundances, or incidence frequencies with two columns.
-If \code{datatype = "incidence"}, then the first entry of the input data must be total number of sampling units in each column.
-(See example \code{data(SimilarityPairDataInci)}).}
+\item{X}{a matrix, data.frame, lists of species abundances/incidences, or lists of incidence frequencies (see data format/information above).\cr}
 
-\item{datatype}{data type of input data: individual-based abundance data (\code{datatype = "abundance"}) or 
-sampling-unit-based incidence data (\code{datatype = "incidence"}).}
+\item{datatype}{type of input data, "abundance", "incidence_freq" or "incidence_raw". \cr}
 
 \item{nboot}{an integer specifying the number of replications.}
 }
 \value{
-a list of six objects: \code{$datatype} for showing data type; 
-\code{$info1} and \code{$info2} for summarizing data information;
-\code{$similarity} for showing the various similarity index estimates along with related statistics;
-\code{$assemblage1} and {$assemblage2} for showing species richness estimates with related statistics of each assemblage.
+a list of six objects: \cr\cr
+\code{$datatype} for abundance or incidence. \cr\cr
+\code{$info1} and \code{$info2} for summarizing data information. \cr\cr
+\code{$Empirical_incidence} for showing the estimation of classic richness-based similarity indices by empirical method. \cr\cr
+\code{$Empirical_ew} for showing the estimation of similarity indices for comparing species relative abundances by empirical method. \cr \cr
+\code{$Empirical_ee} for showing the estimation of similarity indices for comparing size-weighted species relative abundances and comparing species absolute abundances by empirical method. \cr\cr
+\code{$estimated_incidence} for showing the estimation of classic richness-based similarity indices by estimated. \cr\cr
+\code{$estimated_ew} for showing the estimation of similarity indices for comparing species relative abundances by estimated. \cr\cr
+\code{$estimated_ee} for showing the estimation of similarity indices for comparing size-weighted species relative abundances and comparing species absolute abundances by estimated. \cr\cr
 }
 \description{
-\code{SimilarityPair}: estimation of various similarity indices based on either individual-based abundance data or sampling-unit-based incidence data 
-taken from two assemblages. The incidence-based indices include the classic Jaccard, Sorensen and Lennon et al. (2001) indices, 
-and the abundance-based indices include the Bray-Curtis, Morisita-Horn, Horn and abundance-based Jaccard 
-and Sorensen indices developed in Chao et al. (2005).
+\code{SimilarityPair}: Estimation of various similarity indices based on either individual-based abundance data or sampling-unit-based incidence data
+taken from two assemblages. The incidence-based indices include the classic Jaccard and Sorensen indices,
+and the abundance-based indices include the Bray-Curtis, Morisita-Horn, Horn and abundance-based Jaccard
+and Sorensen indices developed in Chao et al. (2005). \cr\cr
+Three types of data (format/information) are supported: ("abundance", "incidence_freq", "incidence_raw"):
+\enumerate{
+  \item{(1) Individual-based abundance data (datatype="abundance"): Input data for each assemblage/site include sample species abundances in an empirical sample of n individuals ("reference sample"). There are 2 assemblages, input data consist of an S by 2 abundance matrix, or 2 lists of species abundances.}
+  \item{Sampling-unit-based incidence data: There are two kinds of input data.
+  \describe{
+     \item{(2)}{Incidence-frequency data (datatype="incidence_freq"): input data for each assemblage consist of species sample incidence frequencies (row sums of each incidence matrix). There are 2 assemblages, input data consist of an S+1 by 2 matrix, or 2 lists of species incidence frequencies. The first entry of each column/list must be the total number of sampling units, followed by the species incidence frequencies.}
+     \item{(2B)}{Incidence-raw data (datatype="incidence_raw"): for each assemblage, input data for a reference sample consist of a species-by-sampling-unit matrix; there are 2 assemblages, input data consist of 2 lists of matrices, and each matrix is a species-by-sampling-unit matrix.}
+   }
+  }
+}
 }
 \examples{
+\dontrun{
 data(SimilarityPairDataAbu)
-SimilarityPair(SimilarityPairDataAbu, datatype="abundance")
+SimilarityPair(SimilarityPairDataAbu, datatype="abundance",nboot=200)
 data(SimilarityPairDataInci)
-SimilarityPair(SimilarityPairDataInci,datatype="incidence")
+SimilarityPair(SimilarityPairDataInci, datatype="incidence_freq",nboot=200)
+data(SimilarityPairDataInci_raw)
+SimilarityPair(SimilarityPairDataInci_raw, datatype="incidence_raw",nboot=200)
+}
 }
 \references{
 Chao, A. (1984). Nonparametric estimation of the number of classes in a population. Scandinavian Journal of Statistics 11, 265-270.\cr\cr

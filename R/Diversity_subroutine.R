@@ -20,33 +20,33 @@ Chao1=function(x,conf=0.95)
   if (f1 > 0 & f2 > 0)
   {
     S_Chao1 <- D + (n - 1)/n*f1^2/(2*f2)
-    var_Chao1 <- f2*((n - 1)/n*(f1/f2)^2/2 + 
+    var_Chao1 <- f2*((n - 1)/n*(f1/f2)^2/2 +
                             ((n - 1)/n)^2*(f1/f2)^3 + ((n - 1 )/n)^2*(f1/f2)^4/4)
-    
+
     t <- S_Chao1 - D
     K <- exp(z*sqrt(log(1 + var_Chao1/t^2)))
     CI_Chao1 <- c(D + t/K, D + t*K)
-  } 
+  }
   else if (f1 > 1 & f2 == 0)
   {
     S_Chao1 <- D + (n - 1)/n*f1*(f1 - 1)/(2*(f2 + 1))
-    var_Chao1 <- (n - 1)/n*f1*(f1 - 1)/2 + 
+    var_Chao1 <- (n - 1)/n*f1*(f1 - 1)/2 +
       ((n - 1)/n)^2*f1*(2*f1 - 1)^2/4 - ((n - 1)/n)^2*f1^4/4/S_Chao1
-    
+
     t <- S_Chao1 - D
     K <- exp(z*sqrt(log(1 + var_Chao1/t^2)))
     CI_Chao1 <- c(D + t/K, D + t*K)
-  } 
-  else 
+  }
+  else
   {
     S_Chao1 <- D
     i <- c(1:max(x))
     i <- i[unique(x)]
-    var_obs <- sum(sapply(i, function(i) sum(x==i)*(exp(-i) - exp(-2*i)))) - 
+    var_obs <- sum(sapply(i, function(i) sum(x==i)*(exp(-i) - exp(-2*i)))) -
       (sum(sapply(i, function(i)i*exp(-i)*sum(x==i))))^2/n
     var_Chao1 <- var_obs
     P <- sum(sapply(i, function(i) sum(x==i)*exp(-i)/D))
-    CI_Chao1 <- c(max(D, D/(1 - P) - z*sqrt(var_obs)/(1 - P)), D/(1 - P) + z*sqrt(var_obs)/(1 - P))  
+    CI_Chao1 <- c(max(D, D/(1 - P) - z*sqrt(var_obs)/(1 - P)), D/(1 - P) + z*sqrt(var_obs)/(1 - P))
   }
   return( c( round(c(S_Chao1,var_Chao1^0.5,CI_Chao1[1],CI_Chao1[2]),1),conf)    )
 }
@@ -59,28 +59,28 @@ Chao1_bc=function(x,conf=0.95)
   f1=sum(x==1)
   f2=sum(x==2)
   n=sum(x)
-  
+
   S_Chao1_bc <- D + (n - 1)/n*f1*(f1 - 1)/(2*(f2 + 1))
-  var_Chao1_bc <- (n - 1)/n*f1*(f1 - 1)/2/(f2 + 1) + 
+  var_Chao1_bc <- (n - 1)/n*f1*(f1 - 1)/2/(f2 + 1) +
     ((n - 1)/n)^2*f1*(2*f1 - 1)^2/4/(f2 + 1)^2 + ((n - 1)/n)^2*f1^2*f2*(f1 - 1)^2/4/(f2 + 1)^4
-  
+
   t <- round(S_Chao1_bc - D, 5)
   if (t != 0)
   {
     K <- exp(z*sqrt(log(1 + var_Chao1_bc/t^2)))
     CI_Chao1_bc <- c(D + t/K, D + t*K)
-  } 
+  }
   if(t == 0)
   {
     i <- c(1:max(x))
     i <- i[unique(x)]
-    var_obs <- sum(sapply(i, function(i)sum(x==i)*(exp(-i) - exp(-2*i)))) - 
+    var_obs <- sum(sapply(i, function(i)sum(x==i)*(exp(-i) - exp(-2*i)))) -
       (sum(sapply(i, function(i)i*exp(-i)*sum(x==i))))^2/n
     var_Chao1_bc <- var_obs
     P <- sum(sapply(i, function(i)sum(x==i)*exp(-i)/D))
-    CI_Chao1_bc <- c(max(D, D/(1 - P) - z*sqrt(var_obs)/(1 - P)), D/(1 - P) + z*sqrt(var_obs)/(1 - P))  
+    CI_Chao1_bc <- c(max(D, D/(1 - P) - z*sqrt(var_obs)/(1 - P)), D/(1 - P) + z*sqrt(var_obs)/(1 - P))
   }
-  round(c(S_Chao1_bc,var_Chao1_bc^0.5,CI_Chao1_bc[1],CI_Chao1_bc[2]) ,1)  
+  round(c(S_Chao1_bc,var_Chao1_bc^0.5,CI_Chao1_bc[1],CI_Chao1_bc[2]) ,1)
 }
 
 
@@ -90,7 +90,7 @@ EstiBootComm.Ind <- function(Spec)
 {
 	Sobs <- sum(Spec > 0) 	#observed species
 	n <- sum(Spec)		  	#sample size
-	f1 <- sum(Spec == 1) 	#singleton 
+	f1 <- sum(Spec == 1) 	#singleton
 	f2 <- sum(Spec == 2) 	#doubleton
 	a <- ifelse(f1 == 0, 0, (n - 1) * f1 / ((n - 1) * f1 + 2 * f2) * f1 / n)
 	b <- sum(Spec / n * (1 - Spec / n) ^ n)
@@ -133,7 +133,7 @@ entropy_J1_equ=function(X)
     X=X[X>0]
     Y=X[X>1]
     n=sum(X)
-    -n*sum(X/n*log(X/n))-(n-1)/n*sum( (n-X)*(-X/(n-1)*log(X/(n-1))) )-(n-1)/n*sum(-Y*(Y-1)/(n-1)*log((Y-1)/(n-1)))   
+    -n*sum(X/n*log(X/n))-(n-1)/n*sum( (n-X)*(-X/(n-1)*log(X/(n-1))) )-(n-1)/n*sum(-Y*(Y-1)/(n-1)*log((Y-1)/(n-1)))
 }
 entropy_MLE_equ=function(X)
 {
@@ -149,7 +149,7 @@ Shannon_index=function(x,boot=50)
 {
   x=x[x>0]
   n=sum(x)
-  MLE=entropy_MLE_equ(x) 
+  MLE=entropy_MLE_equ(x)
   MLE_bc=entropy_MLE_bc_equ(x)
   J1=entropy_J1_equ(x)
   HT=entropy_HT_equ(x)
@@ -170,7 +170,7 @@ Shannon_index=function(x,boot=50)
      MLE_exp_sd=sd(exp(temp1))
   MLE_bc_exp_sd=sd(exp(temp2))
       J1_exp_sd=sd(exp(temp3))
-      HT_exp_sd=sd(exp(temp4))  
+      HT_exp_sd=sd(exp(temp4))
      MEE_exp_sd=sd(exp(temp5))
 
   a=matrix(0,10,4)
@@ -192,14 +192,14 @@ simpson_MLE_equ=function(X)
    X=X[X>0]
    n=sum(X)
    a=sum((X/n)^2)
-   a 
+   a
 }
 simpson_MVUE_equ=function(X)
 {
    X=X[X>0]
    n=sum(X)
    a=sum(X*(X-1))/n/(n-1)
-   a 
+   a
 }
 
 Simpson_index=function(x,boot=50)
@@ -208,7 +208,7 @@ Simpson_index=function(x,boot=50)
    n=sum(x)
    MVUE=simpson_MVUE_equ(x)
    MLE=simpson_MLE_equ(x)
-   
+
    #ACE=SpecAbunAce(x)[1]
    #AA=sum(  ( x*(x-1)/n/(n-1)-x*(2*n-1)/n/(n-1)*MVUE  )^2  )
    #BB=sum( x*(x-1)/n/(n-1)-x*(2*n-1)/n/(n-1)*MVUE   )
@@ -216,7 +216,7 @@ Simpson_index=function(x,boot=50)
 
    #AA=sum(  ( (x/n)^2-2*x/n*MLE  )^2  )
    #BB=sum( (x/n)^2-2*x/n*MLE   )
-   #MLE_sd=(AA-BB^2/ACE)^0.5  
+   #MLE_sd=(AA-BB^2/ACE)^0.5
    #MVUE_recip_sd=MVUE_sd/MVUE
     #MLE_recip_sd=MLE_sd/MLE
    p_hat=EstiBootComm.Ind(x)
@@ -227,7 +227,7 @@ Simpson_index=function(x,boot=50)
    MVUE_recip_sd=sd(1/temp1)
    MLE_sd=sd(temp2)
    MLE_recip_sd=sd(1/temp2)
-   
+
    a=matrix(0,4,4)
    a[1,]=c(MVUE,MVUE_sd,MVUE-1.96*MVUE_sd,MVUE+1.96*MVUE_sd)
    a[2,]=c(MLE,MLE_sd,MLE-1.96*MLE_sd,MLE+1.96*MLE_sd)
@@ -256,7 +256,7 @@ EstiBootComm.Sam <- function(data)
   T1 <- data[1]
   X = data[-c(1)]
   U = sum(X)   #observed species
-  Q1 = length(X[X==1])   #singleton 
+  Q1 = length(X[X==1])   #singleton
   Q2 = length(X[X==2]) 	#doubleton
   if(Q2>0)
   {
@@ -268,7 +268,7 @@ EstiBootComm.Sam <- function(data)
   }else
   {
     A=0
-  }  
+  }
   C1 = 1 - Q1/U*(1 - A)
   W = U/T1*(1 - C1)/sum(X/T1*(1-X/T1)^T1)  			#adjusted factor for rare species in the sample
   Q0 = ceiling(ifelse(Q2>0, (T1-1)/T1*Q1^2/2/Q2, (T1-1)/T1*Q1*(Q1-1)/2))	#estimation of unseen species via Chao2
@@ -299,27 +299,27 @@ entropy_MLE_bc_Inci_equ <- function(X)
   if(Q1 > 0 & Q2 > 0)
   {
     A <- 2*Q2/((t-1)*Q1 + 2*Q2)
-  } 
+  }
   else if (Q1 > 0 & Q2 == 0)
   {
     A <- 2/((t-1)*(Q1 - 1) + 2)
-  } 
-  else 
+  }
+  else
   {
     A <- 1
   }
   C_infreq <- 1 - Q1/sum(X_infreq)*(1-A)
-  
+
   j <- c(1:10)
   b1 <- sum(sapply(j, function(j){j*(j-1)*sum(X == j)}))
   b2 <- sum(sapply(j, function(j){j*sum(X == j)}))
   gamma_infreq_square <- max(D_infreq/C_infreq*t/(t-1)*b1/b2/(b2-1) - 1, 0)
-  
+
   ICE <- D_freq + D_infreq/C_infreq + Q1/C_infreq*gamma_infreq_square
-  
+
   H_MLE <- -sum(X/U*log(X/U))
   H_MLE_bc <- H_MLE + (ICE/U + 1/t)/1
-  
+
   return(H_MLE_bc)
 }
 entropy_HT_Inci_equ <- function(X)
@@ -356,7 +356,7 @@ entropy_MEE_Inci_equ <- function(X)
   } else {
     A <- 1
   }
-  
+
   UE <- sum(X/t*(digamma(t)-digamma(X)))
   if(Q1 > 0 & A!=1){
     B <- Q1/t*(1-A)^(-t+1)*(-log(A)-sum(sapply(1:(t-1), function(k){1/k*(1-A)^k})))
@@ -370,7 +370,7 @@ Shannon_Inci_index=function(x,boot=50)
 {
   x = unlist(x)
   t = x[1]
-  MLE=entropy_MLE_Inci_equ(x) 
+  MLE=entropy_MLE_Inci_equ(x)
   #MLE_bc=entropy_MLE_bc_Inci_equ(x)
   #HT=entropy_HT_Inci_equ(x)
   MEE=entropy_MEE_Inci_equ(x)
@@ -386,12 +386,12 @@ Shannon_Inci_index=function(x,boot=50)
   #MLE_bc_sd=sd(temp2)
   #HT_sd=sd(temp4)
   MEE_sd=sd(temp5)
-  
+
   MLE_exp_sd=sd(exp(temp1))
   #MLE_bc_exp_sd=sd(exp(temp2))
-  #HT_exp_sd=sd(exp(temp4))  
+  #HT_exp_sd=sd(exp(temp4))
   MEE_exp_sd=sd(exp(temp5))
-  
+
   a=matrix(0,8,4)
   a[1,]=c(MLE,MLE_sd,MLE-1.96*MLE_sd,MLE+1.96*MLE_sd)
   #a[2,]=c(MLE_bc,MLE_bc_sd,MLE_bc-1.96*MLE_bc_sd,MLE_bc+1.96*MLE_bc_sd)
@@ -404,17 +404,17 @@ Shannon_Inci_index=function(x,boot=50)
   return(a)
 }
 simpson_Inci_MVUE_equ=function(Y)
-{ 
-  t=Y[1] 
-  Y=Y[-1] 
+{
+  t=Y[1]
+  Y=Y[-1]
   Y=Y[Y>0]
   U=sum(Y)
-  a=(sum(Y*(Y-1))/U^2/(1-1/t)) 
+  a=(sum(Y*(Y-1))/U^2/(1-1/t))
 }
 simpson_Inci_MLE_equ=function(Y)
 {
-  t=Y[1] 
-  Y=Y[-1] 
+  t=Y[1]
+  Y=Y[-1]
   Y=Y[Y>0]
   a=(sum(Y^2)/sum(Y)^2)
 }
@@ -424,7 +424,7 @@ Simpson_Inci_index=function(x,boot=200)
   t = x[1]
   MVUE=simpson_Inci_MVUE_equ(x)
   MLE=simpson_Inci_MLE_equ(x)
-  
+
   p_hat=EstiBootComm.Sam(x)
   #set.seed(1)
   Boot.X = sapply(1:length(p_hat), function(i){
@@ -432,15 +432,15 @@ Simpson_Inci_index=function(x,boot=200)
   Boot.X = cbind(rep(t,boot), Boot.X)
   temp1=apply(Boot.X,1,simpson_Inci_MVUE_equ)
   temp2=apply(Boot.X,1,simpson_Inci_MLE_equ)
-  
+
   MVUE_sd=sd(temp1)
   MLE_sd=sd(temp2)
-  
+
   #MVUE_recip_sd=MVUE_sd/MVUE
   #MLE_recip_sd=MLE_sd/MLE
   MVUE_recip_sd=sd(1/temp1)
   MLE_recip_sd=sd(1/temp2)
-  
+
   a=matrix(0,4,4)
   a[1,]=c(MVUE,MVUE_sd,MVUE-1.96*MVUE_sd,MVUE+1.96*MVUE_sd)
   a[2,]=c(MLE,MLE_sd,MLE-1.96*MLE_sd,MLE+1.96*MLE_sd)
@@ -458,36 +458,17 @@ conf.reg=function(x,LCL,UCL,...) polygon(c(x,rev(x)),c(LCL,rev(UCL)), ...)
 #Diversity(datatype="Frequencies_of_Frequencies",Y)
 
 print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
-  
+
   if(x$datatype=="abundance"){
-  
-    cat("\n(1)  BASIC DATA INFORMATION:\n")
+
+    cat("\n(1) BASIC DATA INFORMATION:\n")
     print(x$BASIC.DATA)
-    cat("\n(2)  ESTIMATION OF SPECIES RICHNESS (DIVERSITY OF ORDER 0):\n\n")
+    cat("\n(2) ESTIMATION OF SPECIES RICHNESS (DIVERSITY OF ORDER 0):\n\n")
     print(x$SPECIES.RICHNESS)
     cat("
-        Desriptions (See Species Part)
-        
-        Chao1 (Chao, 1984): This approach uses the numbers of singletons and doubletons to
-        estimate the number of undetected species because undetected species information is
-        mostly concentrated on those low frequency counts; see Chao (1984), and Chao and Chiu (2012).
-        
-        Chao1-bc: A bias-corrected form for the Chao1 estimator; see Chao (2005).
-      
-        iChao1: An improved Chao1 estimator; See Chiu et al. (2014).   
-
-        ACE (Abundance-based Coverage Estimator): A non-parametric estimator proposed by Chao and Lee (1992)
-        and Chao, Ma and Yang (1993). The observed species are separated as rare and abundant groups;
-        only the rare group is used to estimate the number of undetected species.
-        The estimated CV is used to characterize the degree of heterogeneity among species
-        discovery probabilities. See Eq. (2.14) in Chao and Lee (1992) or Eq. (2.2) of Chao et al. (2000).
-        
-        ACE-1: A modified ACE for highly heterogeneous communities. See Eq. (2.15) of Chao and Lee (1992).
-
-        95% Confidence interval: A log-transformation is used for all estimators so that the lower bound 
-        of the resulting interval is at least the number of observed species. See Chao (1987).
-        ")
-    cat("\n(3a)  SHANNON INDEX:\n\n")
+        Descriptions of richness estimators (See Species Part)
+       ")
+    cat("\n(3a) SHANNON ENTROPY:\n\n")
     print(x$SHANNON.INDEX)
     #cat("\n")
     #cat(" For a review of the four estimators, see Chao and Shen (2003).\n")
@@ -495,58 +476,58 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
     cat("
         MLE: empirical or observed entropy.
         Jackknife: see Zahl (1977).
-        Chao & Shen: based on Horvitz-Thompson estimator and sample coverage method;
-        see Chao and Shen (2003). 
-  	    Chao et al. (2013): A low-bias estimator of entropy; see Chao et al. (2013).
-  	    Estimated standard error is based on a bootstrap method.
+        Chao & Shen: based on the Horvitz-Thompson estimator and sample coverage method; see Chao and Shen (2003).
+        see Chao and Shen (2003).
+  	    Chao et al. (2013): A nearly optimal estimator of Shannon entropy; see Chao et al. (2013).
+  	    Estimated standard error is computed based on a bootstrap method.
         \n")
-    
-    cat("(3b)  EXPONENTIAL OF SHANNON INDEX (DIVERSITY OF ORDER 1):\n\n")
+
+    cat("(3b) SHANNON DIVERSITY (EXPONENTIAL OF SHANNON ENTROPY):\n\n")
     print(x$EXPONENTIAL.OF.SHANNON.INDEX)
-    
-    cat("\n(4a)  SIMPSON INDEX:\n\n")
+
+    cat("\n(4a) SIMPSON CONCENTRATION INDEX:\n\n")
     print(x$SIMPSON.INDEX)
-    
+
     cat("
         MVUE: minimum variance unbiased estimator; see Eq. (2.27) of Magurran (1988).
         MLE: maximum likelihood estimator or empirical index; see Eq. (2.26) of Magurran (1988).
        ")
-    
-    cat("\n(4b)  INVERSE OF SIMPSON INDEX (DIVERSITY OF ORDER 2):\n\n")
+
+    cat("\n(4b) SIMPSON DIVERSITY (INVERSE OF SIMPSON CONCENTRATION):\n\n")
     print(x$INVERSE.OF.SIMPSON.INDEX)
-    
-    cat("\n(5)  Chao and Jost (2015) estimates of Hill numbers of order q from 0 to 3\n\n")
+
+    cat("\n(5) CHAO AND JOST (2015) ESTIMATES OF HILL NUMBERS \n\n")
     print(x$HILL.NUMBERS)
-    
+
     cat("
-        ChaoJost: see Chao and Jost (2015).
+        ChaoJost: diversity profile estimator derived by Chao and Jost (2015).
   	    Empirical: maximum likelihood estimator (observed index).
        ")
   }else{
-    cat("\n(1)  BASIC DATA INFORMATION:\n")
+    cat("\n(1) BASIC DATA INFORMATION:\n")
     print(x$BASIC.DATA)
-    cat("\n(2)  ESTIMATION OF SPECIES RICHNESS (DIVERSITY OF ORDER 0):\n\n")
+    cat("\n(2) ESTIMATION OF SPECIES RICHNESS (DIVERSITY OF ORDER 0):\n\n")
     print(x$SPECIES.RICHNESS)
     cat("
-         Decriptions (see Species Part)
+         Descriptions of richness estimators (See Species Part)
         ")
-    cat("\n(3a)  SHANNON INDEX:\n\n")
+    cat("\n(3a) SHANNON INDEX:\n\n")
     print(x$SHANNON.INDEX)
-  
-    cat("\n(3b)  EXPONENTIAL OF SHANNON INDEX (DIVERSITY OF ORDER 1):\n\n")
+
+    cat("\n(3b) EXPONENTIAL OF SHANNON INDEX (DIVERSITY OF ORDER 1):\n\n")
     print(x$EXPONENTIAL.OF.SHANNON.INDEX)
-    cat("\n(4a)  SIMPSON INDEX:\n\n")
+    cat("\n(4a) SIMPSON INDEX:\n\n")
     print(x$SIMPSON.INDEX)
-    cat("\n(4b)  INVERSE OF SIMPSON INDEX (DIVERSITY OF ORDER 2):\n\n")
+    cat("\n(4b) INVERSE OF SIMPSON INDEX (DIVERSITY OF ORDER 2):\n\n")
     print(x$INVERSE.OF.SIMPSON.INDEX)
-    cat("\n(5)  Chao and Jost (2015) estimates of Hill numbers of order q from 0 to 3\n\n")
+    cat("\n(5) Chao and Jost (2015) estimates of Hill numbers of order q from 0 to 3\n\n")
     print(x$HILL.NUMBERS)
-    
+
     cat("
-        ChaoJost: see Chao and Jost (2015).
+        ChaoJost: diversity profile estimator derived by Chao and Jost (2015).
         Empirical: maximum likelihood estimator (observed index).
       ")
-   
+
   }
   Lower=min(x$HILL.NUMBERS[,3],x$HILL.NUMBERS[,6])
   Upper=max(x$HILL.NUMBERS[,4],x$HILL.NUMBERS[,7])
@@ -555,7 +536,7 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
   conf.reg(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,6],x$HILL.NUMBERS[,7], col=adjustcolor(4, 0.2), border=NA)
   lines(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,2],col=2,lwd=3)
   lines(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,5],col=4,lty=3,lwd=3)
-  legend("topright", c("ChaoJost","Empirical"),col=c(2,4),lwd=c(3,3),lty=c(1,3),bty="n",cex=0.8) 
+  legend("topright", c("ChaoJost","Empirical"),col=c(2,4),lwd=c(3,3),lty=c(1,3),bty="n",cex=0.8)
 }
 
 
@@ -566,7 +547,7 @@ Chao_Hill_abu = function(x,q){
   f1 = sum(x==1)
   f2 = sum(x==2)
   p1 = ifelse(f2>0,2*f2/((n-1)*f1+2*f2),ifelse(f1>0,2/((n-1)*(f1-1)+2),1))
-  
+
   Sub <- function(q){
     if(q==0){
       sum(x>0) + (n-1)/n*ifelse(f2>0, f1^2/2/f2, f1*(f1-1)/2)
@@ -633,8 +614,8 @@ Chao_Hill_inc = function(x,q){
 
 
 
-Chao_Hill = function(x,q,datatype = c("abundance","incidence")){
-  datatype = match.arg(datatype,c("abundance","incidence"))
+Chao_Hill = function(x,q,datatype = c("abundance","incidence_freq")){
+  datatype = match.arg(datatype,c("abundance","incidence_freq"))
   if(datatype == "abundance"){
     est = Chao_Hill_abu(x,q)
   }else{
@@ -645,8 +626,8 @@ Chao_Hill = function(x,q,datatype = c("abundance","incidence")){
 
 
 
-Hill <- function(x,q,datatype = c("abundance","incidence")){
-  if(datatype=="incidence"){x = x[-1]}
+Hill <- function(x,q,datatype = c("abundance","incidence_freq")){
+  if(datatype=="incidence_freq"){x = x[-1]}
   p <- x[x>0]/sum(x)
   Sub <- function(q){
     if(q==0) sum(p>0)
@@ -665,7 +646,7 @@ Bt_prob_abu = function(x){
   f2 = sum(x==2)
   C = 1 - f1/n*ifelse(f2>0,(n-1)*f1/((n-1)*f1+2*f2),ifelse(f1>0,(n-1)*(f1-1)/((n-1)*(f1-1)+2),0))
   W = (1-C)/sum(x/n*(1-x/n)^n)
-  
+
   p.new = x/n*(1-W*(1-x/n)^n)
   f0 = ceiling(ifelse(f2>0,(n-1)/n*f1^2/(2*f2),(n-1)/n*f1*(f1-1)/2))
   p0 = (1-C)/f0
@@ -684,7 +665,7 @@ Bt_prob_inc = function(x){
   A = ifelse(f2>0,2*f2/((n-1)*f1+2*f2),ifelse(f1>0,2/((n-1)*(f1-1)+2),1))
   C=1-f1/U*(1-A)
   W=U/n*(1-C)/sum(x/n*(1-x/n)^n)
-  
+
   p.new=x/n*(1-W*(1-x/n)^n)
   f0 = ceiling(ifelse(f2>0,(n-1)/n*f1^2/(2*f2),(n-1)/n*f1*(f1-1)/2))
   p0=U/n*(1-C)/f0
@@ -694,8 +675,8 @@ Bt_prob_inc = function(x){
 
 
 
-Bt_prob = function(x,datatype = c("abundance","incidence")){
-  datatype = match.arg(datatype,c("abundance","incidence"))
+Bt_prob = function(x,datatype = c("abundance","incidence_freq")){
+  datatype = match.arg(datatype,c("abundance","incidence_freq"))
   if(datatype == "abundance"){
     prob = Bt_prob_abu(x)
   }else{
@@ -705,21 +686,21 @@ Bt_prob = function(x,datatype = c("abundance","incidence")){
 }
 
 
-Bootstrap.CI = function(x,q,B = 200,datatype = c("abundance","incidence"),conf = 0.95){
-  datatype = match.arg(datatype,c("abundance","incidence"))
+Bootstrap.CI = function(x,q,B = 200,datatype = c("abundance","incidence_freq"),conf = 0.95){
+  datatype = match.arg(datatype,c("abundance","incidence_freq"))
   p.new = Bt_prob(x,datatype)
   n = ifelse(datatype=="abundance",sum(x),x[1])
   # set.seed(456)
   if(datatype=="abundance"){
     data.bt = rmultinom(B,n,p.new)
   }else{
-    data.bt = rbinom(length(p.new)*B,n,p.new) 
+    data.bt = rbinom(length(p.new)*B,n,p.new)
     data.bt = matrix(data.bt,ncol=B)
     #data.bt = rbind(rep(n,B),data.bt)
   }
-  
+
   mle = apply(data.bt,2,function(x)Hill(x,q,datatype))
-  
+
   ################ Abundance ###############
   if(datatype == "abundance"){
     d1 = sort(unique(data.bt[data.bt>0]))
@@ -746,20 +727,20 @@ Bootstrap.CI = function(x,q,B = 200,datatype = c("abundance","incidence"),conf =
           t2=as.numeric(names(t1))
           aa=d3[t2]
           e1=sum(t1*aa)
-          
+
           if(A==1){e2=0}else{
             r=0:(n-1)
             e2=f1/n*(1-A)^(-n+1)*(A^(q-1)-sum(choose(q-1,r)*(A-1)^r))
           }
-          
+
           if(e1+e2!=0){
             e=(e1+e2)^(1/(1-q))
-          }else{e=NA}         
-          
+          }else{e=NA}
+
         }else{
           y2=data.bt[,b][which(data.bt[,b]>0 & data.bt[,b]<=(n-1))]
           e1=sum(y2/n*(digamma(n)-digamma(y2)))
-          
+
           if(A==1){e2=0}else{
             r=1:(n-1)
             e2=f1/n*(1-A)^(-n+1)*(-log(A)-sum((1-A)^r/r))
@@ -781,7 +762,7 @@ Bootstrap.CI = function(x,q,B = 200,datatype = c("abundance","incidence"),conf =
       })
       d3 = rep(0,M)
       d3[d1] = d2
-      
+
       bt.pro = sapply(1:B,function(b){
         y2=data.bt[,b];y2 = y2[y2>0]
         U = sum(y2)
@@ -799,18 +780,18 @@ Bootstrap.CI = function(x,q,B = 200,datatype = c("abundance","incidence"),conf =
           t2=as.numeric(names(t1))
           aa=d3[t2]
           e1=sum(t1*aa)
-          
+
           if(A==1){e2=0}else{
             r=0:(n-1)
             e2=Q1/n*(1-A)^(-n+1)*(A^(q-1)-sum(choose(q-1,r)*(A-1)^r))
           }
-          
+
           if(e1+e2!=0){
             e=((n/U)^q*(e1+e2))^(1/(1-q))
-          }else{e=NA}         
-          
+          }else{e=NA}
+
         }else{
-          
+
           e1=sum(y2/U*(digamma(n)-digamma(y2)))
           r =1:(n-1)
           e2 = ifelse(Q1==0|A==1,0,Q1/U*(1-A)^(1-n)*(-log(A)-sum((1-A)^r/r)))
@@ -820,40 +801,40 @@ Bootstrap.CI = function(x,q,B = 200,datatype = c("abundance","incidence"),conf =
       })
       bt.pro
     }
-    
-    
+
+
     pro = t(sapply(q,Sub))
-    
+
   }
-  
-  
+
+
   #pro = apply(data.bt,2,function(x)Chao_Hill(x,q,datatype))
-  
+
   mle.mean = rowMeans(mle)
   pro.mean = rowMeans(pro)
-  
+
   LCI.mle =  -apply(mle,1,function(x)quantile(x,probs = (1-conf)/2)) + mle.mean
   UCI.mle = apply(mle,1,function(x)quantile(x,probs = 1-(1-conf)/2)) - mle.mean
-  
+
   LCI.pro =  -apply(pro,1,function(x)quantile(x,probs = (1-conf)/2)) + pro.mean
   UCI.pro = apply(pro,1,function(x)quantile(x,probs = 1-(1-conf)/2)) - pro.mean
-  
+
   LCI = rbind(LCI.mle,LCI.pro)
   UCI = rbind(UCI.mle,UCI.pro)
-  
+
   sd.mle = apply(mle,1,sd)
   sd.pro = apply(pro,1,function(x)sd(x,na.rm = T))
   se = rbind(sd.mle,sd.pro)
-  
+
   return(list(LCI=LCI,UCI=UCI,se=se))
-  
+
 }
 
 
-ChaoHill <- function(dat, datatype=c("abundance", "incidence"),q=NULL, from=0, to=3, interval=0.1, B=1000, conf=0.95){ 
-  datatype = match.arg(datatype,c("abundance","incidence"))
+ChaoHill <- function(dat, datatype=c("abundance", "incidence_freq"),q=NULL, from=0, to=3, interval=0.1, B=1000, conf=0.95){
+  datatype = match.arg(datatype,c("abundance","incidence_freq"))
   # for real data estimation
-  
+
   if (is.matrix(dat) == T || is.data.frame(dat) == T){
     if (ncol(dat) != 1 & nrow(dat) != 1)
       stop("Error: The data format is wrong.")
@@ -870,26 +851,26 @@ ChaoHill <- function(dat, datatype=c("abundance", "incidence"),q=NULL, from=0, t
   #Estimation
   #-------------
   MLE=Hill(dat,q,datatype)
-  
+
   qD_pro=Chao_Hill(dat,q,datatype)
-  
+
   CI_bound = Bootstrap.CI(dat,q,B,datatype,conf)
   se = CI_bound$se
   #-------------------
   #Confidence interval
   #-------------------
   tab.est=data.frame(rbind(MLE,qD_pro))
-  
+
   LCI <- tab.est - CI_bound$LCI
   UCI <- tab.est + CI_bound$UCI
-  
-  colnames(tab.est) <- colnames(se) <- colnames(LCI) <- colnames(UCI) <- paste("q = ", q, sep="")    
+
+  colnames(tab.est) <- colnames(se) <- colnames(LCI) <- colnames(UCI) <- paste("q = ", q, sep="")
   rownames(tab.est) <- rownames(se) <- rownames(LCI) <- rownames(UCI) <- c("Observed", "Chao_2015")
-  return(list(EST = tab.est, 
+  return(list(EST = tab.est,
               SD = se,
               LCI = LCI,
               UCI = UCI))
-  
+
 }
 
 
@@ -905,7 +886,7 @@ conf.reg=function(x_axis,LCL,UCL,...) {
 
 
 reshapeChaoHill <- function(out){
-  
+
   tab <- data.frame(q=as.numeric(substring(colnames(out$EST), 5)),
                     method=rep(rownames(out$EST), each=ncol(out$EST)),
                     est=c(t(out$EST)[,1],t(out$EST)[,2]),
@@ -916,7 +897,7 @@ reshapeChaoHill <- function(out){
   tab$se <- round(tab$se,3)
   tab$qD.95.LCL <- round(tab$qD.95.LCL,3)
   tab$qD.95.UCL <- round(tab$qD.95.UCL,3)
-  
+
   tab
 }
 
@@ -924,19 +905,19 @@ reshapeChaoHill <- function(out){
 Diversity_Inc=function(X)
 {
   X=X[,1]
-  
-  Hill <- reshapeChaoHill(ChaoHill(X, datatype = "incidence", from=0, to=3, interval=0.25, B=50, conf=0.95))
+
+  Hill <- reshapeChaoHill(ChaoHill(X, datatype = "incidence_freq", from=0, to=3, interval=0.25, B=50, conf=0.95))
   #df$method <- factor(df$method, c("Observed", "Chao_2013"), c("Empirical", "Estimation"))
   Hill<-cbind(Hill[1:13,1],Hill[14:26,3],Hill[1:13,3],Hill[14:26,4],Hill[1:13,4])
   Hill<-round(Hill,3)
   Hill <- data.frame(Hill)
   colnames(Hill)<-c("q","Chao","Empirical","Chao(s.e.)","Empirical(s.e.)")
-  
-  
+
+
   z <- list("HILL.NUMBERS"= Hill)
   class(z) <- c("spadeDiv_Inc")
   return(z)
-  
+
   #cat("\n")
   #cat("(5)  FISHER ALPHA INDEX:\n\n")
   #table_alpha=round(alpha(X),3)
@@ -952,14 +933,14 @@ Diversity_Inc=function(X)
 #Diversity(datatype="Frequencies_of_Frequencies",Y)
 
 print.spadeDiv_Inc <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
-  
-  
+
+
   cat("\n(5)  The estimates of Hill's number at order q from 0 to 3\n\n")
   print(x$HILL.NUMBERS)
-  
+
   cat("
       Chao: see Chao and Jost (2015).
       Empirical: maximum likelihood estimator.
       ")
-  
+
 }

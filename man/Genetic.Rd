@@ -7,23 +7,33 @@
 Genetic(X, q = 2, nboot = 200)
 }
 \arguments{
-\item{X}{a matrix (species by sites) of species abundances.}
+\item{X}{a matrix, data.frame, lists of species abundances (see data format/information above).\cr}
 
-\item{q}{set diversity order \code{q = 0}, \code{Genetic} computes the estimates of Sorensen index for pairwise assemblages; 
-set diversity order \code{q = 1}, computes the estimates of Horn index for pairwise assemblages; 
-set diversity order \code{q = 2}, computes the estimates of Morisita index for pairwise assemblages. 
+\item{q}{set diversity order \code{q = 0}, \code{Genetic} computes the estimates of Sorensen index for pairwise assemblages.
+set diversity order \code{q = 1}, computes the estimates of Horn index for pairwise assemblages;
+set diversity order \code{q = 2}, computes the estimates of Morisita index for pairwise assemblages.
 For diversity order q = 0, 1, 2, \code{Genetic}  computes the overlap estimates among all assemblages.}
 
 \item{nboot}{an integer specifying the number of bootstrap replications.}
 }
 \value{
-a list of five objects: \code{$info} for summarizing data information;
-\code{$overlap} for showing the C0N, C1N and C2N of this data;
-\code{$pairwise} for showing the pairwise data CqN output;
-\code{$similarity.matrix} for showing pairwise similarity of this data. \code{q} you choose.
+a list of ten objects: \cr\cr
+\code{$info} for summarizing data information.\cr\cr 
+\code{$Empirical_incidence} for showing the estimation of classic richness-based dis-similarity indices by empirical method. \cr\cr
+\code{$Empirical_ew} for showing the estimation of dis-similarity indices for comparing species relative abundances by empirical method. \cr \cr
+\code{$Empirical_ee} for showing the estimation of dis-similarity indices for comparing size-weighted species relative abundances and comparing species absolute abundances by empirical method. \cr\cr
+\code{$estimated_incidence} for showing the estimation of classic richness-based dis-similarity indices by estimated. \cr\cr
+\code{$estimated_ew} for showing the estimation of dis-similarity indices for comparing species relative abundances by estimated. \cr\cr
+\code{$estimated_ee} for showing the estimation of dis-similarity indices for comparing size-weighted species relative abundances and comparing species absolute abundances by estimated. \cr\cr
+\code{$pairwise} and {$similarity.matrix} for showing pairwise dis-similarity indices estimates (with related statistics) depended on which diversity order \code{q} you choose. \cr\cr
+\code{$q} for showing which diversity order \code{q} you choose.
 }
 \description{
-\code{Genetic}: estimation of the multiple community similarity C_qN and dissimilarity 1-C_qN including Jost (2008) differentiation measure D.
+\code{Genetic}: Estimation of the multiple community similarity C_qN and dissimilarity 1-C_qN including Jost (2008) differentiation measure D. \cr\cr
+One types of data (format/information) is supported: 
+\enumerate{
+  \item{Individual-based abundance data \code{(datatype="abundance")}: Input data for each assemblage/site include sample species abundances in an empirical sample of n individuals ("reference sample"). When there are N assemblages, input data consist of an S by N abundance matrix, or N lists of species abundances.}
+}
 }
 \examples{
 data(GeneticDataAbu)

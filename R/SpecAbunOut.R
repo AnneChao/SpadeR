@@ -1,5 +1,5 @@
 SpecAbunOut <-
-function(data, 
+function(data,
                        method = c("all", "Homogeneous", "Chao", "CE", "Jackknife"),
                        k, conf){
   data <- as.numeric(data)
@@ -15,17 +15,17 @@ function(data,
     h <- SpecAbunJack1(data, k, conf)
     i <- SpecAbunJack2(data, k, conf)
     out <- rbind(a, b, c, d, e, f, g, h, i)
-	rownames(out) <- c("Homogeneous Model", 
-						"Homogeneous (MLE)", 
-						"Chao1 (Chao, 1984)", 
-						"Chao1-bc",
-						"iChao1 (Chiu et al. 2014)", 
-						"ACE (Chao & Lee, 1992)", 
-						"ACE-1 (Chao & Lee, 1992)", 
-						"1st order jackknife",
-						"2nd order jackknife")
+	rownames(out) <- c("    Homogeneous Model",
+						"    Homogeneous (MLE)",
+						"    Chao1 (Chao, 1984)",
+						"    Chao1-bc",
+						"    iChao1 (Chiu et al. 2014)",
+						"    ACE (Chao & Lee, 1992)",
+						"    ACE-1 (Chao & Lee, 1992)",
+						"    1st order jackknife",
+						"    2nd order jackknife")
   }
-  
+
   if (method == "Homogeneous")
     out <- rbind(SpecAbunHomo(data, k, conf), SpecAbunHomoMle(data, k, conf))
   if (method == "Chao")

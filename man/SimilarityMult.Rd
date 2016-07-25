@@ -4,29 +4,58 @@
 \alias{SimilarityMult}
 \title{Estimation of multiple-assemblage similarity measure}
 \usage{
-SimilarityMult(X, q = 2, nboot = 200)
+SimilarityMult(X, datatype = c("abundance", "incidence_freq",
+  "incidence_raw"), q = 2, nboot = 200, method = "relative")
 }
 \arguments{
-\item{X}{a matrix (species by sites) of species abundances.}
+\item{X}{a matrix, data.frame, lists of species abundances/incidences, or lists of incidence frequencies (see data format/information above).\cr}
 
-\item{q}{set diversity order \code{q = 0}, \code{SimilarityMult} computes the estimates of Sorensen index for pairwise assemblages; 
-set diversity order \code{q = 1}, computes the estimates of Horn index for pairwise assemblages; 
-set diversity order \code{q = 2}, computes the estimates of Morisita index for pairwise assemblages. 
+\item{datatype}{type of input data, "abundance", "incidence_freq" or "incidence_raw". \cr}
+
+\item{q}{set diversity order \code{q = 0}, \code{SimilarityMult} computes the estimates of Sorensen index for pairwise assemblages;
+set diversity order \code{q = 1}, computes the estimates of Horn index for pairwise assemblages;
+set diversity order \code{q = 2}, computes the estimates of Morisita index for pairwise assemblages.
 For diversity order q = 0, 1, 2, \code{SimilarityMult}  computes the overlap estimates among all assemblages.}
 
 \item{nboot}{an integer specifying the number of bootstrap replications.}
+
+\item{method}{there are two methods: absolute or relative could be choosen for calculating pairwise similarity indices estimates depended on which diversity order q you choose; But there is no difference for q=0.}
 }
 \value{
-a list of six objects: \code{$info} for summarizing data information; \code{$overlap} for showing overlap estimates along with related statistics among all assemblages;
-\code{$pairwise} and {$similarity.matrix} for showing pairwise similarity estimates (with related statistics) depended on which diversity order \code{q} you choose;
-\code{$method}: fixed \code{method="absolute"}; \code{$q} for showing which diversity order \code{q} you choose.
+a list of eleven objects: \cr\cr
+\code{$info} for summarizing data information.\cr\cr 
+\code{$Empirical_incidence} for showing the estimation of classic richness-based similarity indices by empirical method. \cr\cr
+\code{$Empirical_ew} for showing the estimation of similarity indices for comparing species relative abundances by empirical method. \cr \cr
+\code{$Empirical_ee} for showing the estimation of similarity indices for comparing size-weighted species relative abundances and comparing species absolute abundances by empirical method. \cr\cr
+\code{$estimated_incidence} for showing the estimation of classic richness-based similarity indices by estimated. \cr\cr
+\code{$estimated_ew} for showing the estimation of similarity indices for comparing species relative abundances by estimated. \cr\cr
+\code{$estimated_ee} for showing the estimation of similarity indices for comparing size-weighted species relative abundances and comparing species absolute abundances by estimated. \cr\cr
+\code{$pairwise} and {$similarity.matrix} for showing pairwise similarity indices estimates (with related statistics) depended on which diversity order \code{q} you choose. \cr\cr
+\code{$method} absolute or relative. \cr\cr
+\code{$q} for showing which diversity order \code{q} you choose.
 }
 \description{
-\code{SimilarityMult}: estimation of the generalized Sorensen, Horn, and Morisita similarity/dissimilarity indices for comparing frequency or abundance data taken from more than two assemblages.
+\code{SimilarityMult}: Estimation of the generalized Sorensen, Horn, and Morisita similarity/dissimilarity indices for comparing frequency or abundance data taken from more than two assemblages. \cr\cr
+Three types of data (format/information) are supported: ("abundance", "incidence_freq", "incidence_raw"):
+\enumerate{
+  \item{(1) Individual-based abundance data (datatype="abundance"): Input data for each assemblage/site include sample species abundances in an empirical sample of n individuals ("reference sample"). When there are N assemblages, input data consist of an S by N abundance matrix, or N lists of species abundances.}
+  \item{Sampling-unit-based incidence data: There are two kinds of input data.
+  \describe{
+     \item{(2)}{Incidence-frequency data (datatype="incidence_freq"): input data for each assemblage consist of species sample incidence frequencies (row sums of each incidence matrix). When there are N assemblages, input data consist of an S+1 by N matrix, or N lists of species incidence frequencies. The first entry of each column/list must be the total number of sampling units, followed by the species incidence frequencies.}
+     \item{(2B)}{Incidence-raw data (datatype="incidence_raw"): for each assemblage, input data for a reference sample consist of a species-by-sampling-unit matrix; when there are N assemblages, input data consist of N lists of matrices, and each matrix is a species-by-sampling-unit matrix.}
+   }
+  }
+}
 }
 \examples{
-data(SimilarityMultDataAbu)
-SimilarityMult(SimilarityMultDataAbu,q=2,nboot=200)
+\dontrun{
+data("SimilarityMultDataAbu")
+SimilarityMult(SimilarityMultDataAbu, datatype="abundance" ,q=2, nboot=200,"relative")
+data("SimilarityMultDataInci")
+SimilarityMult(SimilarityMultDataInci, datatype="incidence_freq", q=2,nboot=200,"relative")
+data("SimilarityMultDataInci_raw")
+SimilarityMult(SimilarityMultDataInci_raw, datatype="incidence_raw", q=2,nboot=200,"relative")
+}
 }
 \references{
 Chao, A., Jost, L., Chiang, S. C., Jiang, Y.-H. and Chazdon, R. (2008). A Two- stage probabilistic approach to multiple-community similarity indices. Biometrics, 64, 1178-1186.\cr\cr

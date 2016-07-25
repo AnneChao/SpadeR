@@ -4,35 +4,54 @@
 \alias{ChaoSpecies}
 \title{Estimation of species richness}
 \usage{
-ChaoSpecies(data, datatype = c("abundance", "incidence"), k = 10,
+ChaoSpecies(data, datatype = c("abundance", "abundance_freq_count",
+  "incidence_freq", "incidence_freq_count", "incidence_raw"), k = 10,
   conf = 0.95)
 }
 \arguments{
-\item{data}{a column vector of species abundances or incidence frequencies.\cr 
-If \code{datatype = "incidence"}, then the first entry of the input data must be total number of sampling units, 
-followed by species incidence frequencies. (See example \code{data(ChaoSpeciesDataInci)}).}
+\item{data}{a matrix, data.frame of species abundances/incidences (see data format/information above).\cr}
 
-\item{datatype}{data type of input data: individual-based abundance data (\code{datatype = "abundance"}) or 
-sampling-unit-based incidence data (\code{datatype = "incidence"}).}
+\item{datatype}{type of input data, "abundance", "abundance_freq_count", "incidence_freq" or "incidence_freq_count", "incidence_raw". \cr}
 
 \item{k}{cut-off point; it is a value that separates frequency counts into abundant and rare groups.}
 
 \item{conf}{a positive number \eqn{\le} 1 specifying the level of confidence interval.}
 }
 \value{
-a list of three objects: 
-\code{$Basic.Data.Information} and \code{$Rare.Species.Group}/\code{$Infreq.Species.Group} 
-for summarizing data information; \code{$Species.Table} for showing a table of various species richness estimates, standard errors, 
-and the associated confidence intervals.
+a list of three objects: \cr\cr
+\code{$Basic.Data.Information} and \code{$Rare.Species.Group}/\code{$Infreq.Species.Group} for summarizing data information. \cr\cr
+\code{$Species.Table} for showing a table of various species richness estimates, standard errors, and the associated confidence intervals. \cr\cr
 }
 \description{
-\code{ChaoSpecies}: estimation of species richness in one assemblage
+\code{ChaoSpecies}: Estimation of species richness in one assemblage. \cr\cr
+Five types of data (format/information) are supported: ("abundance","abundance_freq_count", "incidence_freq", "incidence_freq_count", "incidence_raw"):
+\enumerate{
+  \item{Individual-based abundance data: There are two kinds of input data.
+  \describe{
+     \item{(1)}{Abundance data (datatype="abundance"): input data is a vector of sample species abundances/frequencies for observed species in an empirical sample of individuals.}
+     \item{(1A)}{Abundance-frequency counts (datatype="abundance_freq_count"): input data is a vector of sample species frequency counts.}
+   }
+  }
+  \item{Sampling-unit-based incidence data: There are three kinds of input data.
+  \describe{
+     \item{(2)}{Incidence-frequency data (datatype="incidence_freq"): input data consists of species sample incidence frequencies (row sums of each incidence matrix). The first entry must be the total number of sampling units, followed by the species incidence frequencies.}
+     \item{(2A)}{Incidence-frequency counts (datatype="incidence_freq_count"): input data is a vector of sample species incidence counts. The first entry must be the total number of sampling units.}
+     \item{(2B)}{Incidence-raw data (datatype="incidence_raw"): input data for a reference sample consists of a species-by-sampling-unit matrix.}
+   }
+  }
+}
 }
 \examples{
 data(ChaoSpeciesDataAbu)
-ChaoSpecies(ChaoSpeciesDataAbu, datatype="abundance", k = 10, conf = 0.95)
+ChaoSpecies(ChaoSpeciesDataAbu, datatype="abundance", k=10, conf=0.95)
+data("ChaoSpeciesDataAbu_count")
+ChaoSpecies(ChaoSpeciesDataAbu_count,datatype="abundance_freq_count",k=10,conf=0.95)
 data(ChaoSpeciesDataInci)
-ChaoSpecies(ChaoSpeciesDataInci, datatype="incidence", k = 10, conf = 0.95)
+ChaoSpecies(ChaoSpeciesDataInci, datatype="incidence_freq", k=10, conf=0.95)
+data("ChaoSpeciesDataInci_freq_count")
+ChaoSpecies(ChaoSpeciesDataInci_freq_count, datatype="incidence_freq_count",k=10,conf=0.95)
+data(ChaoSpeciesDataInci_raw)
+ChaoSpecies(ChaoSpeciesDataInci_raw, datatype="incidence_raw", k=10, conf=0.95)
 }
 \references{
 Burnham, K. P. and Overton, W. S. (1978). Estimation of the size of a closed population when capture probabilities vary among animals. Biometrika 65, 625-633.\cr\cr
