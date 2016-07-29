@@ -6,7 +6,7 @@ SpadeR (R package)
 =====
 <h4 style="text-align: right;">Most recent update time: May 12, 2016    
 
-by Anne Chao, K. H., Ma and T. C., Hsieh.
+by Anne Chao, K. H., Ma, T. C., Hsieh. and C. H. Chiu
 
 Institute of Statistics, National Tsing Hua University, Hsin-Chu, Taiwan 30043</h4>
 
