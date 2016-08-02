@@ -2,63 +2,81 @@
 % Please edit documentation in R/spader.R
 \name{SimilarityMult}
 \alias{SimilarityMult}
-\title{Estimation of multiple-assemblage similarity measure}
+\title{Estimation of multiple-community similarity measure}
 \usage{
 SimilarityMult(X, datatype = c("abundance", "incidence_freq",
-  "incidence_raw"), q = 2, nboot = 200, method = "relative")
+  "incidence_raw"), units = c(19, 17, 15), q = 2, nboot = 200,
+  goal = "relative")
 }
 \arguments{
-\item{X}{a matrix, data.frame, lists of species abundances/incidences, or lists of incidence frequencies (see data format/information above).\cr}
+\item{X}{a matrix/data.frame of species abundances/incidences.\cr}
 
 \item{datatype}{type of input data, "abundance", "incidence_freq" or "incidence_raw". \cr}
 
-\item{q}{set diversity order \code{q = 0}, \code{SimilarityMult} computes the estimates of Sorensen index for pairwise assemblages;
-set diversity order \code{q = 1}, computes the estimates of Horn index for pairwise assemblages;
-set diversity order \code{q = 2}, computes the estimates of Morisita index for pairwise assemblages.
-For diversity order q = 0, 1, 2, \code{SimilarityMult}  computes the overlap estimates among all assemblages.}
+\item{units}{number of sampling units in each community. For \code{datatype = "incidence_raw"}, users must specify in the number of sampling units taken from each community. This argument is not needed for "abundance" and "incidence_freq" data. \cr}
+
+\item{q}{a specified order to compute pairwise similarity measures. If \code{q = 0}, this function computes the estimated pairwise richness-based Jaccard and
+Sorensen similarity indices.
+If \code{q = 1} and \code{goal=relative}, this function computes the estimated pairwise equal-weighted and size-weighted Horn indices based on Shannon entropy;
+If \code{q = 1} and \code{goal=absolute}, this function computes the estimated pairwise Shannon-entropy-based measure for comparing absolute abundances. If \code{q = 2} and \code{goal=relative}, 
+this function computes the estimated pairwise Morisita-Horn and regional species-overlap indices based on species relative abundances.
+If \code{q = 2} and \code{goal=absolute}, 
+this function computes the estimated pairwise Morisita-Horn and regional species-overlap indices based on species absolute abundances.}
 
 \item{nboot}{an integer specifying the number of bootstrap replications.}
 
-\item{method}{there are two methods: absolute or relative could be choosen for calculating pairwise similarity indices estimates depended on which diversity order q you choose; But there is no difference for q=0.}
+\item{goal}{a specified estimating goal to use to compute pairwise similarity measures,:comparing species relative abundances (\code{goal=relative}) or comparing species absolute abundances  \code{goal=absolute}. \cr\cr}
 }
 \value{
-a list of eleven objects: \cr\cr
+a list of thirteen objects: \cr\cr
 \code{$info} for summarizing data information.\cr\cr 
-\code{$Empirical_incidence} for showing the estimation of classic richness-based similarity indices by empirical method. \cr\cr
-\code{$Empirical_ew} for showing the estimation of similarity indices for comparing species relative abundances by empirical method. \cr \cr
-\code{$Empirical_ee} for showing the estimation of similarity indices for comparing size-weighted species relative abundances and comparing species absolute abundances by empirical method. \cr\cr
-\code{$estimated_incidence} for showing the estimation of classic richness-based similarity indices by estimated. \cr\cr
-\code{$estimated_ew} for showing the estimation of similarity indices for comparing species relative abundances by estimated. \cr\cr
-\code{$estimated_ee} for showing the estimation of similarity indices for comparing size-weighted species relative abundances and comparing species absolute abundances by estimated. \cr\cr
-\code{$pairwise} and {$similarity.matrix} for showing pairwise similarity indices estimates (with related statistics) depended on which diversity order \code{q} you choose. \cr\cr
-\code{$method} absolute or relative. \cr\cr
-\code{$q} for showing which diversity order \code{q} you choose.
+\code{$Empirical_richness} for showing the observed values of the richness-based similarity indices
+include the classic N-community Jaccard and Sorensen indices. \cr\cr
+\code{$Empirical_relative} for showing the observed values of the equal-weighted similarity indices
+for comparing species relative abundances including Horn, Morisita-Horn and regional overlap measures. \cr \cr
+\code{$Empirical_WtRelative} for showing the observed values of the similarity indices for comparing
+size-weighted species relative abundances based on Shannon entropy. \cr\cr
+\code{$Empirical_absolute} for showing the observed values of the similarity indices for comparing
+absolute abundances. These measures include the Shannon-entropy- based measure, the absolute-
+version of the Morisita-Horn and the regional overlap mesaures, as well as the Bray-Curtis index.
+All measures are valid only under equal-effort sampling. \cr\cr
+The corresponding four objects for showing the estimated similarity indices are:
+\code{$estimated_richness}, \code{$estimated_relative}, \code{$estimated_WtRelative} and \code{$estimated_absolute}. \cr\cr
+\code{$pairwise} and {$similarity.matrix} for showing respectively the pairwise dis-similarity
+estimates (with related statistics) and the similarity matrix for various measures depending on the
+diversity order \code{q} and the \code{goal} aspecified in the function arguments. \cr\cr
+\code{$goal} for showing the goal specified in the argument goal (absolute or relative) used to compute pairwise similarity.\cr\cr
+\code{$q} for showing which diversity order q specified to compute pairwise similarity. \cr\cr
 }
 \description{
-\code{SimilarityMult}: Estimation of the generalized Sorensen, Horn, and Morisita similarity/dissimilarity indices for comparing frequency or abundance data taken from more than two assemblages. \cr\cr
-Three types of data (format/information) are supported: ("abundance", "incidence_freq", "incidence_raw"):
-\enumerate{
-  \item{(1) Individual-based abundance data (datatype="abundance"): Input data for each assemblage/site include sample species abundances in an empirical sample of n individuals ("reference sample"). When there are N assemblages, input data consist of an S by N abundance matrix, or N lists of species abundances.}
-  \item{Sampling-unit-based incidence data: There are two kinds of input data.
-  \describe{
-     \item{(2)}{Incidence-frequency data (datatype="incidence_freq"): input data for each assemblage consist of species sample incidence frequencies (row sums of each incidence matrix). When there are N assemblages, input data consist of an S+1 by N matrix, or N lists of species incidence frequencies. The first entry of each column/list must be the total number of sampling units, followed by the species incidence frequencies.}
-     \item{(2B)}{Incidence-raw data (datatype="incidence_raw"): for each assemblage, input data for a reference sample consist of a species-by-sampling-unit matrix; when there are N assemblages, input data consist of N lists of matrices, and each matrix is a species-by-sampling-unit matrix.}
-   }
-  }
-}
+\code{SimilarityMult}: Estimation various N-community similarity indices. The richness-based indices
+include the classic N-community Jaccard and Sorensen indices; the abundance-based indices include the Horn, Morisita-Horn, regional species-overlap, and the N-community Bray-Curtis indices.
+Three types of data are supported: Type (1) abundance data (datatype="abundance"), Type (2)
+incidence-frequency data (datatype="incidence_freq"), and Type (2B) incidence-raw data
+(datatype="incidence_raw"); see SpadeR-package details for data input formats.
 }
 \examples{
 \dontrun{
+# Load Type (1) abundance data observed in samples from three communities (seedlings,
+#saplings and trees) collected in an old-growth rain forest
 data("SimilarityMultDataAbu")
-SimilarityMult(SimilarityMultDataAbu, datatype="abundance" ,q=2, nboot=200,"relative")
+SimilarityMult(SimilarityMultDataAbu,"abundance",q=2,nboot=200,"relative")
+# Load Type (2) incidence frequencies of tropical ants in 217Berlese soil samples, 459 canopy
+#fogging samples, and 62 Malaise trap samples.
 data("SimilarityMultDataInci")
-SimilarityMult(SimilarityMultDataInci, datatype="incidence_freq", q=2,nboot=200,"relative")
+SimilarityMult(SimilarityMultDataInci,"incidence_freq",q=2,nboot=200,"relative")
+# Load Type (2B) soil ciliates incidence-raw data observed in three areas with 19, 17 and 15
+#soil samples respectively
 data("SimilarityMultDataInci_raw")
-SimilarityMult(SimilarityMultDataInci_raw, datatype="incidence_raw", q=2,nboot=200,"relative")
+SimilarityMult(SimilarityMultDataInci_raw,"incidence_raw",
+units=c(19,17,15),q=2,nboot=200,"relative")
 }
 }
 \references{
-Chao, A., Jost, L., Chiang, S. C., Jiang, Y.-H. and Chazdon, R. (2008). A Two- stage probabilistic approach to multiple-community similarity indices. Biometrics, 64, 1178-1186.\cr\cr
-Jost, L. (2008). GST and its relatives do not measure differentiation. Molecular Ecology, 17, 4015-4026.
+Chao, A., and Chiu, C. H. (2016c). Bridging the variance and diversity decomposition approaches to beta diversity via similarity and differentiation measures. Methods in Ecology and Evolution. Early view at http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12551/abstract.\cr\cr
+Chao, A., Jost, L., Hsieh, T. C., Ma, K. H., Sherwin, W. B. and Rollins, L. A.. (2015). Expected Shannon entropy and Shannon differentiation between subpopulations for neutral genes under the finite island model. Plos One, 10:e0125471.\cr\cr
+Chiu, C. H., Jost, L. and Chao, A. (2014). Phylogenetic beta diversity, similarity, and differentiation measures based on Hill numbers. Ecological Monographs, 84, 21-44.\cr\cr
+Gotelli, N. G. and Chao, A. (2013). Measuring and estimating species richness, species diver- sity,
+and biotic similarity from sampling data. Encyclopedia of Biodiversity, 2nd Edition, Vol. 5, 195-211, Waltham, MA.
 }
 

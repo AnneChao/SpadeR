@@ -5,65 +5,66 @@
 \title{Estimation of two-assemblage similarity index}
 \usage{
 SimilarityPair(X, datatype = c("abundance", "incidence_freq",
-  "incidence_raw"), nboot = 200)
+  "incidence_raw"), units = c(19, 17), nboot = 200)
 }
 \arguments{
-\item{X}{a matrix, data.frame, lists of species abundances/incidences, or lists of incidence frequencies (see data format/information above).\cr}
+\item{X}{a matrix/data.frame of species abundances/incidences.\cr}
 
 \item{datatype}{type of input data, "abundance", "incidence_freq" or "incidence_raw". \cr}
+
+\item{units}{number of sampling units in each community. For \code{datatype = "incidence_raw"}, users must specify in the number of sampling units taken from each community. This argument is not needed for "abundance" and "incidence_freq" data. \cr}
 
 \item{nboot}{an integer specifying the number of replications.}
 }
 \value{
-a list of six objects: \cr\cr
-\code{$datatype} for abundance or incidence. \cr\cr
-\code{$info1} and \code{$info2} for summarizing data information. \cr\cr
-\code{$Empirical_incidence} for showing the estimation of classic richness-based similarity indices by empirical method. \cr\cr
-\code{$Empirical_ew} for showing the estimation of similarity indices for comparing species relative abundances by empirical method. \cr \cr
-\code{$Empirical_ee} for showing the estimation of similarity indices for comparing size-weighted species relative abundances and comparing species absolute abundances by empirical method. \cr\cr
-\code{$estimated_incidence} for showing the estimation of classic richness-based similarity indices by estimated. \cr\cr
-\code{$estimated_ew} for showing the estimation of similarity indices for comparing species relative abundances by estimated. \cr\cr
-\code{$estimated_ee} for showing the estimation of similarity indices for comparing size-weighted species relative abundances and comparing species absolute abundances by estimated. \cr\cr
+a list of ten objects: \cr\cr
+\code{$datatype} for showing the specified data types (abundance or incidence). \cr\cr
+\code{$info} for summarizing data information. \cr\cr
+\code{$Empirical_richness} for showing the observed values of the richness-based similarity indices
+include the classic two-community Jaccard and Sorensen indices. \cr\cr
+\code{$Empirical_relative} for showing the observed values of the equal-weighted similarity indices
+for comparing species relative abundances including Horn, Morisita-Horn, regional overlap, and
+Chao-Jaccard and Chao-Sorensen abundance (or incidence) measures. \cr \cr
+\code{$Empirical_WtRelative} for showing the observed values of the similarity indices for comparing
+size-weighted species relative abundances based on Shannon entropy. \cr\cr
+\code{$Empirical_absolute} for showing the observed values of the similarity indices for comparing
+absolute abundances. These measures include the Shannon-entropy- based measure, the absolute-
+version of the Morisita-Horn and the regional overlap measures, as well as the Bray-Curtis index.
+All measures are valid only under equal-effort sampling. \cr\cr
+The corresponding four objects for showing the estimated similarity indices are:
+\code{$estimated_richness}, \code{$estimated_relative}, \code{$estimated_WtRelative} and \code{$estimated_Absolute}. \cr\cr
 }
 \description{
-\code{SimilarityPair}: Estimation of various similarity indices based on either individual-based abundance data or sampling-unit-based incidence data
-taken from two assemblages. The incidence-based indices include the classic Jaccard and Sorensen indices,
-and the abundance-based indices include the Bray-Curtis, Morisita-Horn, Horn and abundance-based Jaccard
-and Sorensen indices developed in Chao et al. (2005). \cr\cr
-Three types of data (format/information) are supported: ("abundance", "incidence_freq", "incidence_raw"):
-\enumerate{
-  \item{(1) Individual-based abundance data (datatype="abundance"): Input data for each assemblage/site include sample species abundances in an empirical sample of n individuals ("reference sample"). There are 2 assemblages, input data consist of an S by 2 abundance matrix, or 2 lists of species abundances.}
-  \item{Sampling-unit-based incidence data: There are two kinds of input data.
-  \describe{
-     \item{(2)}{Incidence-frequency data (datatype="incidence_freq"): input data for each assemblage consist of species sample incidence frequencies (row sums of each incidence matrix). There are 2 assemblages, input data consist of an S+1 by 2 matrix, or 2 lists of species incidence frequencies. The first entry of each column/list must be the total number of sampling units, followed by the species incidence frequencies.}
-     \item{(2B)}{Incidence-raw data (datatype="incidence_raw"): for each assemblage, input data for a reference sample consist of a species-by-sampling-unit matrix; there are 2 assemblages, input data consist of 2 lists of matrices, and each matrix is a species-by-sampling-unit matrix.}
-   }
-  }
-}
+\code{SimilarityPair}: Estimation various similarity indices for two assemblages. The richness-based
+indices include the classic two-community Jaccard and Sorensen indices; the abundance-based
+indices include the Horn, Morisita-Horn, regional species-overlap, two-community Bray-Curtis and the
+abundance-based Jaccard and Sorensen indices. Three types of data are supported: Type (1)
+abundance data (datatype="abundance"), Type (2) incidence-frequency data
+(datatype="incidence_freq"), and Type (2B) incidence-raw data (datatype="incidence_raw"); see
+SpadeR-package details for data input formats.
 }
 \examples{
 \dontrun{
+# Load Type (1) abundance data observed in samples from two communities (seedlings and
+#trees) collected in an old-growth rain forest
 data(SimilarityPairDataAbu)
-SimilarityPair(SimilarityPairDataAbu, datatype="abundance",nboot=200)
+SimilarityPair(SimilarityPairDataAbu,"abundance",nboot=200)
+# Load Type (2) incidence frequencies of tropical ants in 217 Berlese soil samples and 62
+#Malaise trap samples
 data(SimilarityPairDataInci)
-SimilarityPair(SimilarityPairDataInci, datatype="incidence_freq",nboot=200)
+SimilarityPair(SimilarityPairDataInci,"incidence_freq",nboot=200)
+# Load Type (2B) soil ciliates incidence-raw data observed in two areas with 19 and 17 soil
+#samples respectively
 data(SimilarityPairDataInci_raw)
-SimilarityPair(SimilarityPairDataInci_raw, datatype="incidence_raw",nboot=200)
+SimilarityPair(SimilarityPairDataInci_raw,"incidence_raw",units=c(19,17),nboot=200)
 }
 }
 \references{
-Chao, A. (1984). Nonparametric estimation of the number of classes in a population. Scandinavian Journal of Statistics 11, 265-270.\cr\cr
-Chao, A. (1987). Estimating the population size for capture-recapture data with unequal catchability. Biometrics 43, 783-791.\cr\cr
-Chao, A. (2005). Species estimation and applications. Encyclopedia of Statistical Sciences, Second Edition, Vol. 12, 7907-7916 (N. Balakrishnan, C. B. Read and B. Vidakovic, Editors), Wiley, New York.\cr\cr
-Chao, A., Chazdon, R. L., Colwell, R. K. and Shen, T.-J. (2005). A new statistical approach for assessing similarity of species composition with incidence and abundance data. Ecology Letters 8, 148-159.\cr\cr
-Chao, A., Chazdon, R. L., Colwell, R. K. and Shen, T.-J. (2006). Abundance-based similarity indices and their estimation when there are unseen species in samples. Biometrics, 62, 361-371.\cr\cr
-Chao, A., Hwang, W.-H., Chen, Y.-C. and Kuo. C.-Y. (2000). Estimating the number of shared species in two communities. Statistica Sinica 10, 227-246.\cr\cr
-Chao, A. and Lee, S.-M. (1992). Estimating the number of classes via sample coverage. Journal of the American Statistical Association 87, 210-217.\cr\cr
-Chao, A., Ma, M-C. and Yang, M. C. K. (1993). Stopping rule and estimation for recapture debugging with unequal detection rates. Biometrika 80, 193-201.\cr\cr
-Chao, A., Shen, T.-J. and Hwang, W.-H. (2006). Application of Laplace boundary-mode approximations to estimate species and shared species richness. Australian and New Zealand Journal of Statistics 48, 117-128.\cr\cr
-Lee, S.-M. and Chao, A. (1994). Estimating population size via sample coverage for closed capture-recapture models. Biometrics 50, 88-97.\cr\cr
-Lennon, J. J., Koleff, P., Greenwood, J. J. D. and Gaston, K. J. (2001). The geographical structure of British bird distributions: diversity, spatial turnover and scale. J. Anim. Ecol., 70, 966-979.\cr\cr
-Shen, T.-J. (2003). Prediction of Biodiversity, Ph.D. dissertation, National Tsing-Hua University, HsinChu, Taiwan.\cr\cr
-Shen, T.-J., Chao, A. and Lin, J.-F. (2003). Predicting the number of new species in further taxonomic sampling. Ecology 84, 798-804.
+Chao, A., Chazdon, R. L., Colwell, R. K. and Shen, T.-J. (2005). A new statistical approach for assessing similarity of species composition with incidence and abundance data. Ecology Letters, 8, 148-159.\cr\cr
+Chao, A., and Chiu, C. H. (2016). Bridging the variance and diversity decomposition approaches to beta diversity via similarity and differentiation measures. Methods in Ecology and Evolution.
+Early view at http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12551/abstract. \cr\cr
+Chao, A., Jost, L., Hsieh, T. C., Ma, K. H., Sherwin, W. B. and Rollins, L. A.. (2015). Expected
+Shannon entropy and Shannon differentiation between subpopulations for neutral genes under the finite island model. Plos One, 10:e0125471. \cr\cr
+Chiu, C. H., Jost, L. and Chao, A. (2014). Phylogenetic beta diversity, similarity, and differentiation measures based on Hill numbers. Ecological Monographs, 84, 21-44.\cr\cr
 }
 

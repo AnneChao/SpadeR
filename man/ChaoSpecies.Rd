@@ -2,69 +2,57 @@
 % Please edit documentation in R/spader.R
 \name{ChaoSpecies}
 \alias{ChaoSpecies}
-\title{Estimation of species richness}
+\title{Estimation of species richness in a community}
 \usage{
 ChaoSpecies(data, datatype = c("abundance", "abundance_freq_count",
   "incidence_freq", "incidence_freq_count", "incidence_raw"), k = 10,
   conf = 0.95)
 }
 \arguments{
-\item{data}{a matrix, data.frame of species abundances/incidences (see data format/information above).\cr}
+\item{data}{a matrix/data.frame of species abundances/incidences.\cr}
 
-\item{datatype}{type of input data, "abundance", "abundance_freq_count", "incidence_freq" or "incidence_freq_count", "incidence_raw". \cr}
+\item{datatype}{type of input data, "abundance", "abundance_freq_count", "incidence_freq", "incidence_freq_count" or "incidence_raw". \cr}
 
-\item{k}{cut-off point; it is a value that separates frequency counts into abundant and rare groups.}
+\item{k}{the cut-off point (default = 10), which separates species into "abundant" and "rare" groups for abundance data for the estimator ACE; it separates species into "frequent" and
+"infrequent" groups for incidence data for the estimator ICE.}
 
 \item{conf}{a positive number \eqn{\le} 1 specifying the level of confidence interval.}
 }
 \value{
 a list of three objects: \cr\cr
-\code{$Basic.Data.Information} and \code{$Rare.Species.Group}/\code{$Infreq.Species.Group} for summarizing data information. \cr\cr
-\code{$Species.Table} for showing a table of various species richness estimates, standard errors, and the associated confidence intervals. \cr\cr
+\code{$Basic_data_information} and \code{$Rare_species_group}/\code{$Infreq_species_group} for summarizing data information. \cr\cr
+\code{$Species_table} for showing a table of various species richness estimates, standard errors, and the associated confidence intervals. \cr\cr
 }
 \description{
-\code{ChaoSpecies}: Estimation of species richness in one assemblage. \cr\cr
-Five types of data (format/information) are supported: ("abundance","abundance_freq_count", "incidence_freq", "incidence_freq_count", "incidence_raw"):
-\enumerate{
-  \item{Individual-based abundance data: There are two kinds of input data.
-  \describe{
-     \item{(1)}{Abundance data (datatype="abundance"): input data is a vector of sample species abundances/frequencies for observed species in an empirical sample of individuals.}
-     \item{(1A)}{Abundance-frequency counts (datatype="abundance_freq_count"): input data is a vector of sample species frequency counts.}
-   }
-  }
-  \item{Sampling-unit-based incidence data: There are three kinds of input data.
-  \describe{
-     \item{(2)}{Incidence-frequency data (datatype="incidence_freq"): input data consists of species sample incidence frequencies (row sums of each incidence matrix). The first entry must be the total number of sampling units, followed by the species incidence frequencies.}
-     \item{(2A)}{Incidence-frequency counts (datatype="incidence_freq_count"): input data is a vector of sample species incidence counts. The first entry must be the total number of sampling units.}
-     \item{(2B)}{Incidence-raw data (datatype="incidence_raw"): input data for a reference sample consists of a species-by-sampling-unit matrix.}
-   }
-  }
-}
+\code{ChaoSpecies}: Estimation of species richness in a single community based on five types of data:
+Type (1) abundance data (datatype="abundance"), Type (1A) abundance-frequency counts \cr
+(datatype="abundance_freq_count"), Type (2) incidence-frequency data (datatype =
+"incidence_freq"), Type (2A) incidence-frequency counts (datatype="incidence_freq_count"), and
+Type (2B) incidence-raw data (datatype="incidence_raw"); see SpadeR-package details for data input formats.
 }
 \examples{
+# Load Type (1) observed birds abundance data from a community
 data(ChaoSpeciesDataAbu)
-ChaoSpecies(ChaoSpeciesDataAbu, datatype="abundance", k=10, conf=0.95)
+ChaoSpecies(ChaoSpeciesDataAbu,"abundance",k=10,conf=0.95)
+# Load Type (1A) vascular plant abundance-frequency counts data observed in a community
 data("ChaoSpeciesDataAbu_count")
-ChaoSpecies(ChaoSpeciesDataAbu_count,datatype="abundance_freq_count",k=10,conf=0.95)
+ChaoSpecies(ChaoSpeciesDataAbu_count,"abundance_freq_count",k=10,conf=0.95)
+# Load Type (2) seed-bank incidence-frequency data observed in 121 soil samples
 data(ChaoSpeciesDataInci)
-ChaoSpecies(ChaoSpeciesDataInci, datatype="incidence_freq", k=10, conf=0.95)
+ChaoSpecies(ChaoSpeciesDataInci,"incidence_freq",k=10,conf=0.95)
+# Load Type (2A) cottontail rabbit incidence-frequency counts data conducted in 18 trapping
+# occasions
 data("ChaoSpeciesDataInci_freq_count")
-ChaoSpecies(ChaoSpeciesDataInci_freq_count, datatype="incidence_freq_count",k=10,conf=0.95)
+ChaoSpecies(ChaoSpeciesDataInci_freq_count,"incidence_freq_count",k=10,conf=0.95)
+# Load Type (2B) cottontail rabbit incidence-raw data conducted in 18 trapping occasions
 data(ChaoSpeciesDataInci_raw)
-ChaoSpecies(ChaoSpeciesDataInci_raw, datatype="incidence_raw", k=10, conf=0.95)
+ChaoSpecies(ChaoSpeciesDataInci_raw,"incidence_raw",k=10,conf=0.95)
 }
 \references{
-Burnham, K. P. and Overton, W. S. (1978). Estimation of the size of a closed population when capture probabilities vary among animals. Biometrika 65, 625-633.\cr\cr
-Chao, A. (1984). Nonparametric estimation of the number of classes in a population. Scandinavian Journal of Statistics 11, 265-270.\cr\cr
-Chao, A. (1987). Estimating the population size for capture-recapture data with unequal catchability. Biometrics 43, 783-791.\cr\cr
-Chao, A. (2005). Species estimation and applications. Encyclopedia of Statistical Sciences, Second Edition, Vol. 12, 7907-7916 (N. Balakrishnan, C. B. Read and B. Vidakovic, Editors), Wiley, New York.\cr\cr
-Chao, A., Hwang, W.-H., Chen, Y.-C. and Kuo. C.-Y. (2000). Estimating the number of shared species in two communities. Statistica Sinica 10, 227-246.\cr\cr
-Chao, A. and Lee, S.-M. (1992). Estimating the number of classes via sample coverage. Journal of the American Statistical Association 87, 210-217.\cr\cr
-Chao, A., Ma, M-C. and Yang, M. C. K. (1993). Stopping rule and estimation for recapture debugging with unequal detection rates. Biometrika 80, 193-201.\cr\cr
-Chao, A., Shen, T.-J. and Hwang, W. H. (2006). Application of Laplace boundary-mode approximations to estimate species and shared species richness. Australian and New Zealand Journal of Statistics 48, 117-128.\cr\cr
-Chiu, C.-H., Wang Y. T., Walther B. A. and Chao A. (2014). An improved non-parametric lower bound of species richness via the Good-Turing frequency formulas. Biometrics 70, 671-682.\cr\cr
-Lee, S.-M. and Chao, A. (1994). Estimating population size via sample coverage for closed capture-recapture models. Biometrics 50, 88-97.\cr\cr
-Shen, T.-J. (2003). Prediction of Biodiversity, Ph.D. dissertation, National Tsing-Hua University, HsinChu, Taiwan.\cr\cr
-Shen, T.-J., Chao, A. and Lin, J.-F. (2003). Predicting the number of new species in further taxonomic sampling. Ecology 84, 798-804.
+Chao, A., and Chiu, C. H. (2012). Estimation of species richness and shared species richness. In N. Balakrishnan (ed). Methods and Applications of Statistics in the Atmospheric and Earth Sciences. p.76-111, Wiley, New York.\cr\cr
+Chao, A., and Chiu, C. H. (2016). Nonparametric estimation and comparison of species richness. Wiley Online Reference in the Life Science. In: eLS. John Wiley and Sons, Ltd: Chichester. DOI: 10.1002/9780470015902.a0026329.\cr\cr
+Chao, A., and Chiu, C. H. (2016). Species richness: estimation and comparison. Wiley StatsRef: Statistics Reference Online. 1-26.\cr\cr
+Chiu, C. H., Wang Y. T., Walther B. A. and Chao A. (2014). An improved non-parametric lower bound of species richness via the Good-Turing frequency formulas. Biometrics, 70, 671-682. \cr\cr
+Gotelli, N. G. and Chao, A. (2013). Measuring and estimating species richness, species diver- sity, and biotic similarity from sampling data. Encyclopedia of Biodiversity, 2nd Edition, Vol. 5, 195-211, Waltham, MA. \cr\cr
 }
 

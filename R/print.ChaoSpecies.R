@@ -1,14 +1,14 @@
 print.ChaoSpecies <- function(x, ...){
   cat('\n(1) BASIC DATA INFORMATION:\n\n')
   if(names(x)[2]=="Rare.Species.Group"){
-    print(x$Basic.Data.Information[1:4,])
+    print(x$Basic_data_information[1:4,])
     cat('\n')
-    print(x$Basic.Data.Information[-c(1:4),])
+    print(x$Basic_data_information[-c(1:4),])
     cat('\n')
-    print(x$Rare.Species.Group)
+    print(x$Rare_species.Group)
     cat('\n')
     cat('\n(2) SPECIES RICHNESS ESTIMATORS TABLE:\n\n')
-    print(x$Species.Table)
+    print(x$Species_table)
     cat('\n')
     cat('\n(3) DESCRIPTION OF ESTIMATORS/MODELS:
 
@@ -33,14 +33,14 @@ ACE-1: A modified ACE for highly-heterogeneous communities when CV of the entire
 95% Confidence interval: A log-transformation is used for all estimators so that the lower bound of the resulting interval is at least the number of observed species. See Chao (1987).
 ')}
 	if(names(x)[2]!="Rare.Species.Group"){
-	  print(x$Basic.Data.Information[1:5,])
+	  print(x$Basic_data_information[1:5,])
 	  cat('\n')
-	  print(x$Basic.Data.Information[-c(1:5),])
+	  print(x$Basic_data_information[-c(1:5),])
 	  cat('\n')
-	  print(x$Infreq.Species.Group)
+	  print(x$Infreq_species_group)
 	  cat('\n')
 	  cat('\n(2) SPECIES RICHNESS ESTIMATORS TABLE:\n\n')
-	  print(x$Species.Table)
+	  print(x$Species_table)
 	  cat('\n')
 	  cat('\n(3) DESCRIPTION OF ESTIMATORS/MODELS:
 

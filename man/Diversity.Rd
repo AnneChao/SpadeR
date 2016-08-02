@@ -8,69 +8,54 @@ Diversity(data, datatype = c("abundance", "abundance_freq_count",
   "incidence_freq", "incidence_freq_count", "incidence_raw"), q = NULL)
 }
 \arguments{
-\item{data}{a matrix, data.frame of species abundances/incidences (see data format/information above).\cr}
+\item{data}{a matrix/data.frame of species abundances/incidences.\cr}
 
-\item{datatype}{type of input data, "abundance", "abundance_freq_count", "incidence_freq", "incidence_freq_count" or "incidence_raw". \cr\cr}
+\item{datatype}{type of input data, "abundance", "abundance_freq_count", "incidence_freq", "incidence_freq_count" or "incidence_raw". \cr}
 
-\item{q}{a vector of nonnegative numbers for which the diversity order of Hill numbers will be estimated. If \code{NULL}, then
+\item{q}{a vector of nonnegative numbers specifying the diversity orders for which Hill numbers will be estimated. If \code{NULL}, then
 Hill numbers will be estimated at order q from 0 to 3 with equally-spaced 0.25.}
 }
 \value{
 a list of seven objects: \cr\cr
-\code{$BASIC.DATA} for summarizing data information. \cr\cr
-\code{$SPECIES.RICHNESS} for showing various species richness estimates along with related statistics. \cr\cr
-\code{$SHANNON.INDEX} and \code{$EXPONENTIAL.OF.SHANNON.INDEX} for showing various Shannon index/diversity estimates. \cr\cr
-\code{$SIMPSON.INDEX} and \code{$INVERSE.OF.SIMPSON.INDEX} for showing various Simpson index/diversity estimates. \cr\cr
-\code{$HILL.NUMBERS} for showing Hill number (diversity of order from 0 to 3) estimates. \cr\cr
+\code{$Basic_data} for summarizing data information. \cr\cr
+\code{$Species_richness} for showing various species richness estimates along with related statistics. \cr\cr
+\code{$Shannon_index} and \code{$Shannon_diversity} for showing various Shannon index/diversity estimates. \cr\cr
+\code{$Simpson_index} and \code{$Simpson_diversity} for showing various Simpson index/diversity estimates. \cr\cr
+\code{$Hill_numbers} for showing Hill number (diversity) estimates of diversity orders specified in the argument \code{q}. \cr\cr
 }
 \description{
-\code{Diversity}: Estimation of various diversity indices including species richness (diversity of order 0),
-the Shannon index/diversity (diversity of order 1), the Simpson index/diversity (diversity of order 2),
-and Hill number (diversity of order from 0 to 3). \cr\cr
-Five types of data (format/information) are supported: ("abundance","abundance_freq_count", "incidence_freq", "incidence_freq_count", "incidence_raw"):
-\enumerate{
-  \item{Individual-based abundance data: There are two kinds of input data.
-  \describe{
-     \item{(1)}{Abundance data (datatype="abundance"): input data is a vector of sample species abundances/frequencies for observed species in an empirical sample of individuals.}
-     \item{(1A)}{Abundance-frequemcy counts (datatype="abundance_freq_count"): input data is a vector of sample species frequency counts.}
-   }
-  }
-  \item{Sampling-unit-based incidence data: There are three kinds of input data.
-  \describe{
-     \item{(2)}{Incidence-frequency data (datatype="incidence_freq"):  input data is species sample incidence frequencies (row sums of each incidence matrix). The first entry must be the total number of sampling units.}
-     \item{(2A)}{Incidence-frequency counts (datatype="incidence_freq_count"): input data is a vector of sample species incidence counts. The first entry must be the total number of sampling units.}
-     \item{(2B)}{Incidence-raw data (datatype="incidence_raw"): input data for a reference sample consists of a species-by-sampling-unit matrix.}
-   }
-  }
-}
+\code{Diversity}: Estimating a continuous diversity profile in one community including species rich-
+ness, Shannon diversity and Simpson diversity). This function also supplies plots of empirical and
+estimated continuous diversity profiles. Various estimates for Shannon entropy and the Gini-
+Simpson index are also computed. All five types of data are supported: Type (1) abundance data
+(datatype="abundance"), Type (1A) abundance-frequency counts
+(datatype="abundance_freq_count"), Type (2) incidence-frequency data (datatype =
+"incidence_freq"), Type (2A) incidence-frequency counts (datatype="incidence_freq_count"), and
+Type (2B) incidence-raw data (datatype="incidence_raw"); see SpadeR-package details for data input formats.
 }
 \examples{
 \dontrun{
+# Load Type (1) tree abundance data observed in a sample from a rain forest
 data(DiversityDataAbu)
-Diversity(DiversityDataAbu,datatype="abundance")
+Diversity(DiversityDataAbu,"abundance",q=NULL)
+# Load Type (1A) beetles abundance-frequency counts data collected in an old-growth forest
 data("DiversityDataAbu_count")
-Diversity(DiversityDataAbu_count, datatype="abundance_freq_count", q=NULL)
+Diversity(DiversityDataAbu_count,"abundance_freq_count",q=NULL)
+# Load Type (2) incidence-frequency data of tropical ants collected in 217 Berlese soil
+#samples
 data(DiversityDataInci)
-Diversity(DiversityDataInci, datatype="incidence_freq", q=NULL)
+Diversity(DiversityDataInci,"incidence_freq",q=NULL)
+# Load Type (2A) seed-bank incidence-frequency counts data found in 121 soil samples
 data("DiversityDataInci_freq_count")
-Diversity(DiversityDataInci_freq_count, datatype="incidence_freq_count", q=NULL)
+Diversity(DiversityDataInci_freq_count,"incidence_freq_count",q=NULL)
+# Load Type (2B) seed-bank incidence-raw data in 121 soil samples
 data(DiversityDataInci_raw)
-Diversity(DiversityDataInci_raw, datatype="incidence_raw", q=NULL)
+Diversity(DiversityDataInci_raw,"incidence_raw",q=NULL)
 }
 }
 \references{
-Chao, A. (1984). Nonparametric estimation of the number of classes in a population. Scandinavian Journal of Statistics 11, 265-270.\cr\cr
-Chao, A. (1987). Estimating the population size for capture-recapture data with  unequal catchability. Biometrics 43, 783-791.\cr\cr
-Chao, A. (2005). Species estimation and applications. Encyclopedia of Statistical Sciences, Second Edition, Vol. 12, 7907-7916 (N. Balakrishnan, C. B. Read and B. Vidakovic, Editors), Wiley, New York.\cr\cr
-Chao, A., Hwang, W.-H., Chen, Y.-C. and Kuo. C.-Y. (2000). Estimating the number of shared species in two communities. Statistica Sinica 10, 227-246.\cr\cr
-Chao, A. and Jost, L. (2015). Estimating diversity and entropy profiles via discovery rates of new species. Methods in Ecology and Evolution.\cr\cr
-Chao, A. and Lee, S.-M. (1992). Estimating the number of classes via sample coverage. Journal of the American Statistical Association 87, 210-217.\cr\cr
-Chao, A., Ma, M-C. and Yang, M. C. K. (1993). Stopping rule and estimation for recapture debugging with unequal detection rates. Biometrika 80, 193-201.\cr\cr
-Chao, A. and Shen, T.-J. (2003). Nonparametric estimation of Shannon index of diversity when there are unseen species in sample. Environmental and Ecological Statistics 10, 429-443.\cr\cr
-Chao, A., Shen, T.-J. and Hwang, W. H. (2006). Application of Laplace boundary-mode approximations to estimate species and shared species richness. Australian and New Zealand Journal of Statistics 48, 117-128.\cr\cr
+Chao, A., and Chiu, C. H. (2012). Estimation of species richness and shared species richness. In N. Balakrishnan (ed). Methods and Applications of Statistics in the Atmospheric and Earth Sciences. p.76-111, Wiley, New York.\cr\cr
+Chao, A. and Jost, L. (2015). Estimating diversity and entropy profiles via discovery rates of new species. Methods in Ecology and Evolution, 6, 873-882.\cr\cr
 Chao, A., Wang, Y. T. and Jost, L. (2013). Entropy and the species accumulation curve: a novel estimator of entropy via discovery rates of new species. Methods in Ecology and Evolution 4, 1091-1110.\cr\cr
-Magurran, A. E. (1988). Ecological Diversity and Its Measurement. Princeton, Princeton University Press, New Jersey.\cr\cr
-Shen, T.-J., Chao, A. and Lin, J.-F. (2003). Predicting the number of new species in further taxonomic sampling. Ecology 84, 798-804.\cr\cr
-Zahl, S. (1977). Jackknifing an index of diversity. Ecology 58, 907-913.
 }
 

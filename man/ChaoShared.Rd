@@ -2,15 +2,17 @@
 % Please edit documentation in R/spader.R
 \name{ChaoShared}
 \alias{ChaoShared}
-\title{Estimation of the number of shared species in two assemblages}
+\title{Estimation of the number of shared species between two communities/assemblages}
 \usage{
-ChaoShared(data, datatype = c("abundance", "incidence_raw", "incidence_freq"),
-  se = TRUE, nboot = 200, conf = 0.95)
+ChaoShared(data, datatype = c("abundance", "incidence_freq", "incidence_raw"),
+  units = c(16, 17), se = TRUE, nboot = 200, conf = 0.95)
 }
 \arguments{
-\item{data}{a matrix, data.frame, lists of species abundances/incidences, or lists of incidence frequencies (see data format/information above).\cr}
+\item{data}{a matrix/data.frame of species abundances/incidences.\cr}
 
 \item{datatype}{type of input data, "abundance", "incidence_freq" or "incidence_raw". \cr}
+
+\item{units}{number of sampling units in each community. For \code{datatype = "incidence_raw"}, users must type in the number of sampling units taken from each community. This argument is not needed for "abundance" and "incidence_freq" data.\cr}
 
 \item{se}{a logical variable to calculate the bootstrap standard error and the associated confidence interval. \cr}
 
@@ -20,33 +22,30 @@ ChaoShared(data, datatype = c("abundance", "incidence_raw", "incidence_freq"),
 }
 \value{
 a list of two objects: \cr\cr
-\code{$BASIC_DATA_INFORMATION} for summarizing data information. \cr\cr
-\code{$ESTIMATION_RESULTS_OF_THE_NUMBER_OF_SHARED_SPECIES} for showing a table of various shared richess estimates, standard errors, and the associated confidence intervals. \cr\cr
+\code{$Basic_data_information} for summarizing data information. \cr\cr
+\code{$Estimation_results} for showing a table of various shared richess estimates, standard errors, and the associated confidence intervals. \cr\cr
 }
 \description{
-\code{ChaoShared}: Estimation of shared species richness in two assemblages based on the following two sampling schemes. \cr\cr
-Three types of data (format/information) are supported: ("abundance", "incidence_freq", "incidence_raw"):
-\enumerate{
-   \item{(1) Individual-based abundance data (datatype="abundance"): Input data for each assemblage/site include sample species abundances in an empirical sample of n individuals ("reference sample"). There are 2 assemblages, input data consist of an S by 2 abundance matrix, or 2 lists of species abundances.}    
-  \item{Sampling-unit-based incidence data: There are two kinds of input data.
-  \describe{
-     \item{(2)}{Incidence-raw data (datatype="incidence_raw"): for each assemblage, input data for a reference sample consist of a species-by-sampling-unit matrix; there are 2 assemblages, input data consist of 2 lists of matrices, and each matrix is a species-by-sampling-unit matrix.}
-     \item{(2B)}{Incidence-frequency data (datatype="incidence_freq"): input data for each assemblage consist of species sample incidence frequencies (row sums of each incidence matrix). There are 2 assemblages, input data consist of an S+1 by 2 matrix, or 2 lists of species incidence frequencies. The first entry of each column/list must be the total number of sampling units, followed by the species incidence frequencies.}
-   }
-  }
-}
+\code{ChaoShared}: Estimation of shared species richness between two communities/assemblages based on
+three types of data: Type (1) abundance data (datatype="abundance"), Type (2) incidence-frequency
+data (datatype="incidence_freq"), and Type (2B) incidence-raw data (datatype="incidence_raw");
+see SpadeR-package details for data input formats.
 }
 \examples{
+# Load Type (1) birds abundance data observed in samples from two estuaries
 data(ChaoSharedDataAbu)
-ChaoShared(ChaoSharedDataAbu, datatype="abundance", se=TRUE, nboot=200, conf=0.95)
+ChaoShared(ChaoSharedDataAbu,"abundance",se=TRUE,nboot=200,conf=0.95)
+# Load Type (2) birds incidence-frequency data observed in 2015 (by 16 teams) and 2016 (by 
+# 17 teams) in the Hong Kong Big Bird Race
 data(ChaoSharedDataInci)
-ChaoShared(ChaoSharedDataInci, datatype="incidence_freq", se=TRUE, nboot=200, conf=0.95)
+ChaoShared(ChaoSharedDataInci,"incidence_freq",se=TRUE,nboot=200,conf=0.95)
+# Load Type (2B) birds species-by-team incidence-raw data of birds observed  
+# in 2015 (by 16 teams) and 2016 (by 17 teams) in the Hong Kong Big Bird Race
 data(ChaoSharedDataInci_raw)
-ChaoShared(ChaoSharedDataInci_raw, datatype="incidence_raw", se=TRUE, nboot=200, conf=0.95)
+ChaoShared(ChaoSharedDataInci_raw,"incidence_raw",units=c(16,17),se=TRUE,nboot=200,conf=0.95)
 }
 \references{
-Chao, A., Hwang, W.-H., Chen, Y.-C. and Kuo. C.-Y. (2000). Estimating the  number of shared species in two communities. Statistica Sinica 10, 227-246.\cr\cr
-Chao, A., Shen, T.-J. and Hwang, W.-H. (2006). Application of Laplace boundary-mode approximations to estimate species and shared species richness.  Australian and New Zealand Journal of Statistics 48, 117-128.\cr\cr
-Pan, H. Y., Chao, A. and Foissner, W. (2009). A non-parametric lower bound for the number of species shared by multiple communities. Journal of Agricultural, Biological and Environmental Statistics 14, 452-468.
+Chao, A., Hwang, W.-H., Chen, Y.-C. and Kuo. C.-Y. (2000). Estimating the  number of shared species in two communities. Statistica Sinica, 10, 227-246.\cr\cr
+Pan, H.-Y., Chao, A. and Foissner, W. (2009). A non-parametric lower bound for the number of species shared by multiple communities. Journal of Agricultural, Biological and Environmental Statistics, 14, 452-468.
 }
 

@@ -462,14 +462,14 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
   if(x$datatype=="abundance"){
 
     cat("\n(1) BASIC DATA INFORMATION:\n")
-    print(x$BASIC.DATA)
+    print(x$Basic_data)
     cat("\n(2) ESTIMATION OF SPECIES RICHNESS (DIVERSITY OF ORDER 0):\n\n")
-    print(x$SPECIES.RICHNESS)
+    print(x$Species_richness)
     cat("
         Descriptions of richness estimators (See Species Part)
        ")
     cat("\n(3a) SHANNON ENTROPY:\n\n")
-    print(x$SHANNON.INDEX)
+    print(x$Shannon_index)
     #cat("\n")
     #cat(" For a review of the four estimators, see Chao and Shen (2003).\n")
     #MLE_bc: bias-corrected empirical estimator.
@@ -483,10 +483,10 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
         \n")
 
     cat("(3b) SHANNON DIVERSITY (EXPONENTIAL OF SHANNON ENTROPY):\n\n")
-    print(x$EXPONENTIAL.OF.SHANNON.INDEX)
+    print(x$Shannon_diversity)
 
     cat("\n(4a) SIMPSON CONCENTRATION INDEX:\n\n")
-    print(x$SIMPSON.INDEX)
+    print(x$Simpson_index)
 
     cat("
         MVUE: minimum variance unbiased estimator; see Eq. (2.27) of Magurran (1988).
@@ -494,10 +494,10 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
        ")
 
     cat("\n(4b) SIMPSON DIVERSITY (INVERSE OF SIMPSON CONCENTRATION):\n\n")
-    print(x$INVERSE.OF.SIMPSON.INDEX)
+    print(x$Simpson_diversity)
 
     cat("\n(5) CHAO AND JOST (2015) ESTIMATES OF HILL NUMBERS \n\n")
-    print(x$HILL.NUMBERS)
+    print(x$Hill_numbers)
 
     cat("
         ChaoJost: diversity profile estimator derived by Chao and Jost (2015).
@@ -505,23 +505,23 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
        ")
   }else{
     cat("\n(1) BASIC DATA INFORMATION:\n")
-    print(x$BASIC.DATA)
+    print(x$Basic_data)
     cat("\n(2) ESTIMATION OF SPECIES RICHNESS (DIVERSITY OF ORDER 0):\n\n")
-    print(x$SPECIES.RICHNESS)
+    print(x$Species_richness)
     cat("
          Descriptions of richness estimators (See Species Part)
         ")
     cat("\n(3a) SHANNON INDEX:\n\n")
-    print(x$SHANNON.INDEX)
+    print(x$Shannon_index)
 
     cat("\n(3b) EXPONENTIAL OF SHANNON INDEX (DIVERSITY OF ORDER 1):\n\n")
-    print(x$EXPONENTIAL.OF.SHANNON.INDEX)
+    print(x$Shannon_diversity)
     cat("\n(4a) SIMPSON INDEX:\n\n")
-    print(x$SIMPSON.INDEX)
+    print(x$Simpson_index)
     cat("\n(4b) INVERSE OF SIMPSON INDEX (DIVERSITY OF ORDER 2):\n\n")
-    print(x$INVERSE.OF.SIMPSON.INDEX)
+    print(x$Simpson_diversity)
     cat("\n(5) Chao and Jost (2015) estimates of Hill numbers of order q from 0 to 3\n\n")
-    print(x$HILL.NUMBERS)
+    print(x$Hill_numbers)
 
     cat("
         ChaoJost: diversity profile estimator derived by Chao and Jost (2015).
@@ -529,13 +529,13 @@ print.spadeDiv <- function(x, digits = max(3L, getOption("digits") - 3L), ...){
       ")
 
   }
-  Lower=min(x$HILL.NUMBERS[,3],x$HILL.NUMBERS[,6])
-  Upper=max(x$HILL.NUMBERS[,4],x$HILL.NUMBERS[,7])
-  plot(0,type="n",xlim=c(min(x$HILL.NUMBERS[,1]),max(x$HILL.NUMBERS[,1])),ylim=c(Lower,Upper),xlab="Order  q",ylab="Hill  numbers")
-  conf.reg(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,3],x$HILL.NUMBERS[,4], col=adjustcolor(2, 0.2), border=NA)
-  conf.reg(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,6],x$HILL.NUMBERS[,7], col=adjustcolor(4, 0.2), border=NA)
-  lines(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,2],col=2,lwd=3)
-  lines(x$HILL.NUMBERS[,1],x$HILL.NUMBERS[,5],col=4,lty=3,lwd=3)
+  Lower=min(x$Hill_numbers[,3],x$Hill_numbers[,6])
+  Upper=max(x$Hill_numbers[,4],x$Hill_numbers[,7])
+  plot(0,type="n",xlim=c(min(x$Hill_numbers[,1]),max(x$Hill_numbers[,1])),ylim=c(Lower,Upper),xlab="Order  q",ylab="Hill  numbers")
+  conf.reg(x$Hill_numbers[,1],x$Hill_numbers[,3],x$Hill_numbers[,4], col=adjustcolor(2, 0.2), border=NA)
+  conf.reg(x$Hill_numbers[,1],x$Hill_numbers[,6],x$Hill_numbers[,7], col=adjustcolor(4, 0.2), border=NA)
+  lines(x$Hill_numbers[,1],x$Hill_numbers[,2],col=2,lwd=3)
+  lines(x$Hill_numbers[,1],x$Hill_numbers[,5],col=4,lty=3,lwd=3)
   legend("topright", c("ChaoJost","Empirical"),col=c(2,4),lwd=c(3,3),lty=c(1,3),bty="n",cex=0.8)
 }
 

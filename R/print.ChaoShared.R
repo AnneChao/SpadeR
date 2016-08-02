@@ -45,7 +45,7 @@ print.ChaoShared <- function(x, ...){
   
 	cat('\n')
 	cat('\n(2) ESTIMATION RESULTS OF THE NUMBER OF SHARED SPECIES:\n\n')
-	print(round(x$ESTIMATION_RESULTS_OF_THE_NUMBER_OF_SHARED_SPECIES,3))
+	print(round(x$Estimation_results,3))
 	cat('\n')
 	if(nrow(x[[2]])==4){
 	cat('
