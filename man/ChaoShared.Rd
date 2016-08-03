@@ -5,14 +5,14 @@
 \title{Estimation of the number of shared species between two communities/assemblages}
 \usage{
 ChaoShared(data, datatype = c("abundance", "incidence_freq", "incidence_raw"),
-  units = c(16, 17), se = TRUE, nboot = 200, conf = 0.95)
+  units, se = TRUE, nboot = 200, conf = 0.95)
 }
 \arguments{
 \item{data}{a matrix/data.frame of species abundances/incidences.\cr}
 
 \item{datatype}{type of input data, "abundance", "incidence_freq" or "incidence_raw". \cr}
 
-\item{units}{number of sampling units in each community. For \code{datatype = "incidence_raw"}, users must type in the number of sampling units taken from each community. This argument is not needed for "abundance" and "incidence_freq" data.\cr}
+\item{units}{number of sampling units in each community. For \code{datatype = "incidence_raw"}, users must specify the number of sampling units taken from each community. This argument is not needed for "abundance" and "incidence_freq" data.\cr}
 
 \item{se}{a logical variable to calculate the bootstrap standard error and the associated confidence interval. \cr}
 
@@ -28,8 +28,8 @@ a list of two objects: \cr\cr
 \description{
 \code{ChaoShared}: Estimation of shared species richness between two communities/assemblages based on
 three types of data: Type (1) abundance data (datatype="abundance"), Type (2) incidence-frequency
-data (datatype="incidence_freq"), and Type (2B) incidence-raw data (datatype="incidence_raw");
-see SpadeR-package details for data input formats.
+data (datatype="incidence_freq"), and Type (2B) incidence-raw data (datatype="incidence\cr 
+_raw"); see \code{SpadeR-package} details for data input formats.
 }
 \examples{
 # Load Type (1) birds abundance data observed in samples from two estuaries

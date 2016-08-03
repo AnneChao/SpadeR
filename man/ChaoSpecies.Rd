@@ -28,7 +28,7 @@ a list of three objects: \cr\cr
 Type (1) abundance data (datatype="abundance"), Type (1A) abundance-frequency counts \cr
 (datatype="abundance_freq_count"), Type (2) incidence-frequency data (datatype =
 "incidence_freq"), Type (2A) incidence-frequency counts (datatype="incidence_freq_count"), and
-Type (2B) incidence-raw data (datatype="incidence_raw"); see SpadeR-package details for data input formats.
+Type (2B) incidence-raw data (datatype="incidence_raw"); see \code{SpadeR-package} details for data input formats.
 }
 \examples{
 # Load Type (1) observed birds abundance data from a community

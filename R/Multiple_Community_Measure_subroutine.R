@@ -781,7 +781,7 @@ print.spadeMult <- function(x, ...){
     cat('    Sample size in each community                            n1   =', x$info[3],'\n')
     N <- x$info[1]
     q <- x$q
-    method <- x$method
+    method <- x$goal
     for(j in 2:N){
       cat('                                                            ','n')
       cat(j,'  =',x$info[2+j],'\n')   
@@ -866,7 +866,7 @@ print.spadeMult <- function(x, ...){
     cat('    Number of sample units in each community                 T1   =', x$info[3],'\n')
     N <- x$info[1]
     q <- x$q
-    method <- x$method
+    method <- x$goal
     for(j in 2:N){
       cat('                                                            ','T')
       cat(j,'  =',x$info[2+j],'\n')   
@@ -875,7 +875,7 @@ print.spadeMult <- function(x, ...){
     cat('    Number of total incidences in each community             U1   =', x$info[N+3],'\n')
     N <- x$info[1]
     q <- x$q
-    method <- x$method
+    method <- x$goal
     for(j in 2:N){
       cat('                                                            ','U')
       cat(j,'  =',x$info[N+2+j],'\n')   

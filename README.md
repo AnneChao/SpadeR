@@ -6,7 +6,7 @@ SpadeR (R package)
 =====
 <h4 style="text-align: right;">Most recent update time: May 12, 2016    
 
-by Anne Chao, K. H., Ma and T. C., Hsieh.
+by Anne Chao, K. H., Ma, T. C., Hsieh and Chun-Huo Chiu.
 
 Institute of Statistics, National Tsing Hua University, Hsin-Chu, Taiwan 30043</h4>
 
@@ -71,11 +71,11 @@ ChaoSpecies(ChaoSpeciesDataInci_raw,"incidence_raw",k=10,conf=0.95)
 ```r
 # Example1: (abundance data)
 data(DiversityDataAbu)
-Diversity(DiversityDataAbu,"abundance")
+Diversity(DiversityDataAbu,"abundance",q=c(0,0.5,1,1.5,2))
 
 # Example2: (abundance frequency counts data)
 data("DiversityDataAbu_count")
-Diversity(DiversityDataAbu_count,"abundance_freq_count",q=NULL)
+Diversity(DiversityDataAbu_count,"abundance_freq_count",q=seq(0,3,by=0.5))
 
 # Example3: (incidence frequency data)
 data(DiversityDataInci)

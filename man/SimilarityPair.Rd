@@ -2,17 +2,17 @@
 % Please edit documentation in R/spader.R
 \name{SimilarityPair}
 \alias{SimilarityPair}
-\title{Estimation of two-assemblage similarity index}
+\title{Estimation of two-assemblage similarity measures}
 \usage{
 SimilarityPair(X, datatype = c("abundance", "incidence_freq",
-  "incidence_raw"), units = c(19, 17), nboot = 200)
+  "incidence_raw"), units, nboot = 200)
 }
 \arguments{
 \item{X}{a matrix/data.frame of species abundances/incidences.\cr}
 
 \item{datatype}{type of input data, "abundance", "incidence_freq" or "incidence_raw". \cr}
 
-\item{units}{number of sampling units in each community. For \code{datatype = "incidence_raw"}, users must specify in the number of sampling units taken from each community. This argument is not needed for "abundance" and "incidence_freq" data. \cr}
+\item{units}{number of sampling units in each community. For \code{datatype = "incidence_raw"}, users must specify the number of sampling units taken from each community. This argument is not needed for "abundance" and "incidence_freq" data. \cr}
 
 \item{nboot}{an integer specifying the number of replications.}
 }
@@ -23,13 +23,13 @@ a list of ten objects: \cr\cr
 \code{$Empirical_richness} for showing the observed values of the richness-based similarity indices
 include the classic two-community Jaccard and Sorensen indices. \cr\cr
 \code{$Empirical_relative} for showing the observed values of the equal-weighted similarity indices
-for comparing species relative abundances including Horn, Morisita-Horn, regional overlap, and
-Chao-Jaccard and Chao-Sorensen abundance (or incidence) measures. \cr \cr
-\code{$Empirical_WtRelative} for showing the observed values of the similarity indices for comparing
-size-weighted species relative abundances based on Shannon entropy. \cr\cr
+for comparing species relative abundances including Horn, Morisita-Horn, regional overlap,
+Chao-Jaccard and Chao-Sorensen abundance (or incidence) measures based on species relative abundances. \cr \cr
+\code{$Empirical_WtRelative} for showing the observed value of the Horn similarity index for comparing
+size-weighted species relative abundances based on Shannon entropy under equal-effort sampling. \cr\cr
 \code{$Empirical_absolute} for showing the observed values of the similarity indices for comparing
-absolute abundances. These measures include the Shannon-entropy- based measure, the absolute-
-version of the Morisita-Horn and the regional overlap measures, as well as the Bray-Curtis index.
+absolute abundances. These measures include the Shannon-entropy-based measure, 
+Morisita-Horn and the regional overlap measures based on species absolute abundances, as well as the Bray-Curtis index.
 All measures are valid only under equal-effort sampling. \cr\cr
 The corresponding four objects for showing the estimated similarity indices are:
 \code{$estimated_richness}, \code{$estimated_relative}, \code{$estimated_WtRelative} and \code{$estimated_Absolute}. \cr\cr
@@ -41,7 +41,7 @@ indices include the Horn, Morisita-Horn, regional species-overlap, two-community
 abundance-based Jaccard and Sorensen indices. Three types of data are supported: Type (1)
 abundance data (datatype="abundance"), Type (2) incidence-frequency data
 (datatype="incidence_freq"), and Type (2B) incidence-raw data (datatype="incidence_raw"); see
-SpadeR-package details for data input formats.
+\code{SpadeR-package} details for data input formats.
 }
 \examples{
 \dontrun{

@@ -13,14 +13,14 @@ Diversity(data, datatype = c("abundance", "abundance_freq_count",
 \item{datatype}{type of input data, "abundance", "abundance_freq_count", "incidence_freq", "incidence_freq_count" or "incidence_raw". \cr}
 
 \item{q}{a vector of nonnegative numbers specifying the diversity orders for which Hill numbers will be estimated. If \code{NULL}, then
-Hill numbers will be estimated at order q from 0 to 3 with equally-spaced 0.25.}
+Hill numbers will be estimated at order q from 0 to 3 with increments of 0.25.}
 }
 \value{
 a list of seven objects: \cr\cr
 \code{$Basic_data} for summarizing data information. \cr\cr
 \code{$Species_richness} for showing various species richness estimates along with related statistics. \cr\cr
 \code{$Shannon_index} and \code{$Shannon_diversity} for showing various Shannon index/diversity estimates. \cr\cr
-\code{$Simpson_index} and \code{$Simpson_diversity} for showing various Simpson index/diversity estimates. \cr\cr
+\code{$Simpson_index} and \code{$Simpson_diversity} for showing two Simpson index/diversity estimates. \cr\cr
 \code{$Hill_numbers} for showing Hill number (diversity) estimates of diversity orders specified in the argument \code{q}. \cr\cr
 }
 \description{
@@ -31,16 +31,16 @@ Simpson index are also computed. All five types of data are supported: Type (1) 
 (datatype="abundance"), Type (1A) abundance-frequency counts
 (datatype="abundance_freq_count"), Type (2) incidence-frequency data (datatype =
 "incidence_freq"), Type (2A) incidence-frequency counts (datatype="incidence_freq_count"), and
-Type (2B) incidence-raw data (datatype="incidence_raw"); see SpadeR-package details for data input formats.
+Type (2B) incidence-raw data (datatype="incidence_raw"); see \code{SpadeR-package} details for data input formats.
 }
 \examples{
 \dontrun{
 # Load Type (1) tree abundance data observed in a sample from a rain forest
 data(DiversityDataAbu)
-Diversity(DiversityDataAbu,"abundance",q=NULL)
+Diversity(DiversityDataAbu,"abundance",q=c(0,0.5,1,1.5,2))
 # Load Type (1A) beetles abundance-frequency counts data collected in an old-growth forest
 data("DiversityDataAbu_count")
-Diversity(DiversityDataAbu_count,"abundance_freq_count",q=NULL)
+Diversity(DiversityDataAbu_count,"abundance_freq_count",q=seq(0,3,by=0.5))
 # Load Type (2) incidence-frequency data of tropical ants collected in 217 Berlese soil
 #samples
 data(DiversityDataInci)
