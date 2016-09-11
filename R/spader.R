@@ -17,22 +17,17 @@
 #' \code{$Basic_data_information} and \code{$Rare_species_group}/\code{$Infreq_species_group} for summarizing data information. \cr\cr
 #' \code{$Species_table} for showing a table of various species richness estimates, standard errors, and the associated confidence intervals. \cr\cr
 #' @examples
-#' # Load Type (1) observed birds abundance data from a community
-#' data(ChaoSpeciesDataAbu)
-#' ChaoSpecies(ChaoSpeciesDataAbu,"abundance",k=10,conf=0.95)
-#' # Load Type (1A) vascular plant abundance-frequency counts data observed in a community
-#' data("ChaoSpeciesDataAbu_count")
-#' ChaoSpecies(ChaoSpeciesDataAbu_count,"abundance_freq_count",k=10,conf=0.95)
-#' # Load Type (2) seed-bank incidence-frequency data observed in 121 soil samples
-#' data(ChaoSpeciesDataInci)
-#' ChaoSpecies(ChaoSpeciesDataInci,"incidence_freq",k=10,conf=0.95)
-#' # Load Type (2A) cottontail rabbit incidence-frequency counts data conducted in 18 trapping
-#' # occasions
-#' data("ChaoSpeciesDataInci_freq_count")
-#' ChaoSpecies(ChaoSpeciesDataInci_freq_count,"incidence_freq_count",k=10,conf=0.95)
-#' # Load Type (2B) cottontail rabbit incidence-raw data conducted in 18 trapping occasions
-#' data(ChaoSpeciesDataInci_raw)
-#' ChaoSpecies(ChaoSpeciesDataInci_raw,"incidence_raw",k=10,conf=0.95)
+#' data(ChaoSpeciesData)
+#' # Type (1) abundance data
+#' ChaoSpecies(ChaoSpeciesData$Abu,"abundance",k=10,conf=0.95)
+#' # Type (1A) abundance-frequency counts data
+#' ChaoSpecies(ChaoSpeciesData$Abu_count,"abundance_freq_count",k=10,conf=0.95)
+#' # Type (2) incidence-frequency data
+#' ChaoSpecies(ChaoSpeciesData$Inci,"incidence_freq",k=10,conf=0.95)
+#' # Type (2A) incidence-frequency counts data
+#' ChaoSpecies(ChaoSpeciesData$Inci_count,"incidence_freq_count",k=10,conf=0.95)
+#' # Type (2B) incidence-raw data 
+#' ChaoSpecies(ChaoSpeciesData$Inci_raw,"incidence_raw",k=10,conf=0.95)
 #' @references
 #' Chao, A., and Chiu, C. H. (2012). Estimation of species richness and shared species richness. In N. Balakrishnan (ed). Methods and Applications of Statistics in the Atmospheric and Earth Sciences. p.76-111, Wiley, New York.\cr\cr
 #' Chao, A., and Chiu, C. H. (2016). Nonparametric estimation and comparison of species richness. Wiley Online Reference in the Life Science. In: eLS. John Wiley and Sons, Ltd: Chichester. DOI: 10.1002/9780470015902.a0026329.\cr\cr
@@ -135,17 +130,13 @@ ChaoSpecies <- function(data, datatype = c("abundance","abundance_freq_count", "
 #' \code{$Basic_data_information} for summarizing data information. \cr\cr
 #' \code{$Estimation_results} for showing a table of various shared richess estimates, standard errors, and the associated confidence intervals. \cr\cr
 #' @examples
-#' # Load Type (1) birds abundance data observed in samples from two estuaries
-#' data(ChaoSharedDataAbu)
-#' ChaoShared(ChaoSharedDataAbu,"abundance",se=TRUE,nboot=200,conf=0.95)
-#' # Load Type (2) birds incidence-frequency data observed in 2015 (by 16 teams) and 2016 (by 
-#' # 17 teams) in the Hong Kong Big Bird Race
-#' data(ChaoSharedDataInci)
-#' ChaoShared(ChaoSharedDataInci,"incidence_freq",se=TRUE,nboot=200,conf=0.95)
-#' # Load Type (2B) birds species-by-team incidence-raw data of birds observed  
-#' # in 2015 (by 16 teams) and 2016 (by 17 teams) in the Hong Kong Big Bird Race
-#' data(ChaoSharedDataInci_raw)
-#' ChaoShared(ChaoSharedDataInci_raw,"incidence_raw",units=c(16,17),se=TRUE,nboot=200,conf=0.95)
+#' data(ChaoSharedData)
+#' # Type (1) abundance data
+#' ChaoShared(ChaoSharedData$Abu,"abundance",se=TRUE,nboot=200,conf=0.95)
+#' # Type (2) incidence-frequency data 
+#' ChaoShared(ChaoSharedData$Inci,"incidence_freq",se=TRUE,nboot=200,conf=0.95)
+#' # Type (2B) incidence-raw data   
+#' ChaoShared(ChaoSharedData$Inci_raw,"incidence_raw",units=c(16,17),se=TRUE,nboot=200,conf=0.95)
 #' @references
 #' Chao, A., Hwang, W.-H., Chen, Y.-C. and Kuo. C.-Y. (2000). Estimating the  number of shared species in two communities. Statistica Sinica, 10, 227-246.\cr\cr
 #' Pan, H.-Y., Chao, A. and Foissner, W. (2009). A non-parametric lower bound for the number of species shared by multiple communities. Journal of Agricultural, Biological and Environmental Statistics, 14, 452-468.
@@ -220,7 +211,7 @@ ChaoShared <-
 #
 #
 ###########################################
-#' Estimation of species diversity
+#' Estimation of species diversity (Hill numbers)
 #'
 #' \code{Diversity}: Estimating a continuous diversity profile in one community including species rich-
 #' ness, Shannon diversity and Simpson diversity). This function also supplies plots of empirical and
@@ -242,22 +233,17 @@ ChaoShared <-
 #' \code{$Hill_numbers} for showing Hill number (diversity) estimates of diversity orders specified in the argument \code{q}. \cr\cr
 #' @examples
 #' \dontrun{
-#' # Load Type (1) tree abundance data observed in a sample from a rain forest
-#' data(DiversityDataAbu)
-#' Diversity(DiversityDataAbu,"abundance",q=c(0,0.5,1,1.5,2))
-#' # Load Type (1A) beetles abundance-frequency counts data collected in an old-growth forest
-#' data("DiversityDataAbu_count")
-#' Diversity(DiversityDataAbu_count,"abundance_freq_count",q=seq(0,3,by=0.5))
-#' # Load Type (2) incidence-frequency data of tropical ants collected in 217 Berlese soil
-#' #samples
-#' data(DiversityDataInci)
-#' Diversity(DiversityDataInci,"incidence_freq",q=NULL)
-#' # Load Type (2A) seed-bank incidence-frequency counts data found in 121 soil samples
-#' data("DiversityDataInci_freq_count")
-#' Diversity(DiversityDataInci_freq_count,"incidence_freq_count",q=NULL)
-#' # Load Type (2B) seed-bank incidence-raw data in 121 soil samples
-#' data(DiversityDataInci_raw)
-#' Diversity(DiversityDataInci_raw,"incidence_raw",q=NULL)
+#' data(DiversityData)
+#' # Type (1) abundance data 
+#' Diversity(DiversityData$Abu,"abundance",q=c(0,0.5,1,1.5,2))
+#' # Type (1A) abundance-frequency counts data 
+#' Diversity(DiversityData$Abu_count,"abundance_freq_count",q=seq(0,3,by=0.5))
+#' # Type (2) incidence-frequency data 
+#' Diversity(DiversityData$Inci,"incidence_freq",q=NULL)
+#' # Type (2A) incidence-frequency counts data 
+#' Diversity(DiversityData$Inci_freq_count,"incidence_freq_count",q=NULL)
+#' # Type (2B) incidence-raw data 
+#' Diversity(DiversityData$Inci_raw,"incidence_raw",q=NULL)
 #' }
 #' @references
 #' Chao, A., and Chiu, C. H. (2012). Estimation of species richness and shared species richness. In N. Balakrishnan (ed). Methods and Applications of Statistics in the Atmospheric and Earth Sciences. p.76-111, Wiley, New York.\cr\cr
@@ -575,24 +561,18 @@ Diversity=function(data, datatype=c("abundance","abundance_freq_count", "inciden
 #' \code{$estimated_richness}, \code{$estimated_relative}, \code{$estimated_WtRelative} and \code{$estimated_Absolute}. \cr\cr
 #' @examples
 #' \dontrun{
-#' # Load Type (1) abundance data observed in samples from two communities (seedlings and
-#' #trees) collected in an old-growth rain forest
-#' data(SimilarityPairDataAbu)
-#' SimilarityPair(SimilarityPairDataAbu,"abundance",nboot=200)
-#' # Load Type (2) incidence frequencies of tropical ants in 217 Berlese soil samples and 62
-#' #Malaise trap samples
-#' data(SimilarityPairDataInci)
-#' SimilarityPair(SimilarityPairDataInci,"incidence_freq",nboot=200)
-#' # Load Type (2B) soil ciliates incidence-raw data observed in two areas with 19 and 17 soil
-#' #samples respectively
-#' data(SimilarityPairDataInci_raw)
-#' SimilarityPair(SimilarityPairDataInci_raw,"incidence_raw",units=c(19,17),nboot=200)
+#' data(SimilarityPairData)
+#' # Type (1) abundance data 
+#' SimilarityPair(SimilarityPairData$Abu,"abundance",nboot=200)
+#' # Type (2) incidence-frequency data 
+#' SimilarityPair(SimilarityPairData$Inci,"incidence_freq",nboot=200)
+#' # Type (2B) incidence-raw data 
+#' SimilarityPair(SimilarityPairData$Inci_raw,"incidence_raw",units=c(19,17),nboot=200)
 #' }
 #' @references
 #' Chao, A., Chazdon, R. L., Colwell, R. K. and Shen, T.-J. (2005). A new statistical approach for assessing similarity of species composition with incidence and abundance data. Ecology Letters, 8, 148-159.\cr\cr
-#' Chao, A., and Chiu, C. H. (2016). Bridging the variance and diversity decomposition approaches to beta diversity via similarity and differentiation measures. Methods in Ecology and Evolution.
-#' Early view at http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12551/abstract. \cr\cr
-#' Chao, A., Jost, L., Hsieh, T. C., Ma, K. H., Sherwin, W. B. and Rollins, L. A.. (2015). Expected
+#' Chao, A., and Chiu, C. H. (2016). Bridging the variance and diversity decomposition approaches to beta diversity via similarity and differentiation measures. Methods in Ecology and Evolution, 7, 919-928. \cr\cr
+#' Chao, A., Jost, L., Hsieh, T. C., Ma, K. H., Sherwin, W. B. and Rollins, L. A. (2015). Expected
 #' Shannon entropy and Shannon differentiation between subpopulations for neutral genes under the finite island model. Plos One, 10:e0125471. \cr\cr
 #' Chiu, C. H., Jost, L. and Chao, A. (2014). Phylogenetic beta diversity, similarity, and differentiation measures based on Hill numbers. Ecological Monographs, 84, 21-44.\cr\cr
 #' @export
@@ -808,8 +788,8 @@ SimilarityPair=function(X, datatype = c("abundance","incidence_freq", "incidence
 #' If \code{q = 2} and \code{goal=absolute}, 
 #' this function computes the estimated pairwise Morisita-Horn and regional species-overlap indices based on species absolute abundances.
 #' @param nboot an integer specifying the number of bootstrap replications.
-#' @param goal a specified estimating goal to use to compute pairwise similarity measures,:comparing species relative abundances (\code{goal=relative}) or comparing species absolute abundances  \code{goal=absolute}. \cr\cr
-#' @return a list of thirteen objects: \cr\cr
+#' @param goal a specified estimating goal to use to compute pairwise similarity measures:comparing species relative abundances (\code{goal=relative}) or comparing species absolute abundances (\code{goal=absolute}). \cr\cr
+#' @return a list of fourteen objects: \cr\cr
 #' \code{$datatype} for showing the specified data types (abundance or incidence).\cr\cr
 #' \code{$info} for summarizing data information.\cr\cr 
 #' \code{$Empirical_richness} for showing the observed values of the richness-based similarity indices
@@ -830,23 +810,18 @@ SimilarityPair=function(X, datatype = c("abundance","incidence_freq", "incidence
 #' \code{$q} for showing which diversity order \code{q} specified to compute pairwise similarity. \cr\cr
 #' @examples
 #' \dontrun{
-#' # Load Type (1) abundance data observed in samples from three communities (seedlings,
-#' #saplings and trees) collected in an old-growth rain forest
-#' data("SimilarityMultDataAbu")
-#' SimilarityMult(SimilarityMultDataAbu,"abundance",q=2,nboot=200,"relative")
-#' # Load Type (2) incidence frequencies of tropical ants in 217Berlese soil samples, 459 canopy
-#' #fogging samples, and 62 Malaise trap samples.
-#' data("SimilarityMultDataInci")
-#' SimilarityMult(SimilarityMultDataInci,"incidence_freq",q=2,nboot=200,"relative")
-#' # Load Type (2B) soil ciliates incidence-raw data observed in three areas with 19, 17 and 15
-#' #soil samples respectively
-#' data("SimilarityMultDataInci_raw")
-#' SimilarityMult(SimilarityMultDataInci_raw,"incidence_raw",
+#' data(SimilarityMultData)
+#' # Type (1) abundance data 
+#' SimilarityMult(SimilarityMultData$Abu,"abundance",q=2,nboot=200,"relative")
+#' # Type (2) incidence-frequency data 
+#' SimilarityMult(SimilarityMultData$Inci,"incidence_freq",q=2,nboot=200,"relative")
+#' # Type (2B) incidence-raw data 
+#' SimilarityMult(SimilarityMultData$Inci_raw,"incidence_raw",
 #' units=c(19,17,15),q=2,nboot=200,"relative")
 #' }
 #' @references
-#' Chao, A., and Chiu, C. H. (2016c). Bridging the variance and diversity decomposition approaches to beta diversity via similarity and differentiation measures. Methods in Ecology and Evolution. Early view at http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12551/abstract.\cr\cr
-#' Chao, A., Jost, L., Hsieh, T. C., Ma, K. H., Sherwin, W. B. and Rollins, L. A.. (2015). Expected Shannon entropy and Shannon differentiation between subpopulations for neutral genes under the finite island model. Plos One, 10:e0125471.\cr\cr
+#' Chao, A., and Chiu, C. H. (2016). Bridging the variance and diversity decomposition approaches to beta diversity via similarity and differentiation measures. Methods in Ecology and Evolution, 7, 919-928. \cr\cr
+#' Chao, A., Jost, L., Hsieh, T. C., Ma, K. H., Sherwin, W. B. and Rollins, L. A. (2015). Expected Shannon entropy and Shannon differentiation between subpopulations for neutral genes under the finite island model. Plos One, 10:e0125471.\cr\cr
 #' Chiu, C. H., Jost, L. and Chao, A. (2014). Phylogenetic beta diversity, similarity, and differentiation measures based on Hill numbers. Ecological Monographs, 84, 21-44.\cr\cr
 #' Gotelli, N. G. and Chao, A. (2013). Measuring and estimating species richness, species diver- sity,
 #' and biotic similarity from sampling data. Encyclopedia of Biodiversity, 2nd Edition, Vol. 5, 195-211, Waltham, MA. 
@@ -1249,13 +1224,13 @@ SimilarityMult=function(X,datatype=c("abundance","incidence_freq", "incidence_ra
 #' \code{$q} for showing which diversity order \code{q} to compute pairwise dissimilarity.
 #' @examples
 #' \dontrun{
-#' # Load Type (1) human allele frequency data from four subpopulations
+#' # Type (1) abundance data 
 #' data(GeneticsDataAbu)
 #' Genetics(GeneticsDataAbu,q=2,nboot=200)
 #' }
 #' @references
-#' Chao, A., and Chiu, C. H. (2016). Bridging the variance and diversity decomposition approaches to beta diversity via similarity and differentiation measures. Methods in Ecology and Evolution. Early view at http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12551/abstract.\cr\cr
-#' Chao, A., Jost, L., Hsieh, T. C., Ma, K. H., Sherwin, W. B. and Rollins, L. A.. (2015). Expected Shannon entropy and Shannon differentiation between subpopulations for neutral genes under the finite island model. Plos One, 10:e0125471.\cr\cr
+#' Chao, A., and Chiu, C. H. (2016). Bridging the variance and diversity decomposition approaches to beta diversity via similarity and differentiation measures. Methods in Ecology and Evolution, 7, 919-928. \cr\cr
+#' Chao, A., Jost, L., Hsieh, T. C., Ma, K. H., Sherwin, W. B. and Rollins, L. A. (2015). Expected Shannon entropy and Shannon differentiation between subpopulations for neutral genes under the finite island model. Plos One, 10:e0125471.\cr\cr
 #' Jost, L. (2008). \eqn{G_{ST}} and its relatives do not measure differentiation. Molecular Ecology, 17, 4015-4026.\cr\cr
 #' @export
 

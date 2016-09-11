@@ -2,7 +2,7 @@
 % Please edit documentation in R/spader.R
 \name{Diversity}
 \alias{Diversity}
-\title{Estimation of species diversity}
+\title{Estimation of species diversity (Hill numbers)}
 \usage{
 Diversity(data, datatype = c("abundance", "abundance_freq_count",
   "incidence_freq", "incidence_freq_count", "incidence_raw"), q = NULL)
@@ -35,22 +35,17 @@ Type (2B) incidence-raw data (datatype="incidence_raw"); see \code{SpadeR-packag
 }
 \examples{
 \dontrun{
-# Load Type (1) tree abundance data observed in a sample from a rain forest
-data(DiversityDataAbu)
-Diversity(DiversityDataAbu,"abundance",q=c(0,0.5,1,1.5,2))
-# Load Type (1A) beetles abundance-frequency counts data collected in an old-growth forest
-data("DiversityDataAbu_count")
-Diversity(DiversityDataAbu_count,"abundance_freq_count",q=seq(0,3,by=0.5))
-# Load Type (2) incidence-frequency data of tropical ants collected in 217 Berlese soil
-#samples
-data(DiversityDataInci)
-Diversity(DiversityDataInci,"incidence_freq",q=NULL)
-# Load Type (2A) seed-bank incidence-frequency counts data found in 121 soil samples
-data("DiversityDataInci_freq_count")
-Diversity(DiversityDataInci_freq_count,"incidence_freq_count",q=NULL)
-# Load Type (2B) seed-bank incidence-raw data in 121 soil samples
-data(DiversityDataInci_raw)
-Diversity(DiversityDataInci_raw,"incidence_raw",q=NULL)
+data(DiversityData)
+# Type (1) abundance data 
+Diversity(DiversityData$Abu,"abundance",q=c(0,0.5,1,1.5,2))
+# Type (1A) abundance-frequency counts data 
+Diversity(DiversityData$Abu_count,"abundance_freq_count",q=seq(0,3,by=0.5))
+# Type (2) incidence-frequency data 
+Diversity(DiversityData$Inci,"incidence_freq",q=NULL)
+# Type (2A) incidence-frequency counts data 
+Diversity(DiversityData$Inci_freq_count,"incidence_freq_count",q=NULL)
+# Type (2B) incidence-raw data 
+Diversity(DiversityData$Inci_raw,"incidence_raw",q=NULL)
 }
 }
 \references{

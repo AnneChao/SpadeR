@@ -45,25 +45,19 @@ abundance data (datatype="abundance"), Type (2) incidence-frequency data
 }
 \examples{
 \dontrun{
-# Load Type (1) abundance data observed in samples from two communities (seedlings and
-#trees) collected in an old-growth rain forest
-data(SimilarityPairDataAbu)
-SimilarityPair(SimilarityPairDataAbu,"abundance",nboot=200)
-# Load Type (2) incidence frequencies of tropical ants in 217 Berlese soil samples and 62
-#Malaise trap samples
-data(SimilarityPairDataInci)
-SimilarityPair(SimilarityPairDataInci,"incidence_freq",nboot=200)
-# Load Type (2B) soil ciliates incidence-raw data observed in two areas with 19 and 17 soil
-#samples respectively
-data(SimilarityPairDataInci_raw)
-SimilarityPair(SimilarityPairDataInci_raw,"incidence_raw",units=c(19,17),nboot=200)
+data(SimilarityPairData)
+# Type (1) abundance data 
+SimilarityPair(SimilarityPairData$Abu,"abundance",nboot=200)
+# Type (2) incidence-frequency data 
+SimilarityPair(SimilarityPairData$Inci,"incidence_freq",nboot=200)
+# Type (2B) incidence-raw data 
+SimilarityPair(SimilarityPairData$Inci_raw,"incidence_raw",units=c(19,17),nboot=200)
 }
 }
 \references{
 Chao, A., Chazdon, R. L., Colwell, R. K. and Shen, T.-J. (2005). A new statistical approach for assessing similarity of species composition with incidence and abundance data. Ecology Letters, 8, 148-159.\cr\cr
-Chao, A., and Chiu, C. H. (2016). Bridging the variance and diversity decomposition approaches to beta diversity via similarity and differentiation measures. Methods in Ecology and Evolution.
-Early view at http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12551/abstract. \cr\cr
-Chao, A., Jost, L., Hsieh, T. C., Ma, K. H., Sherwin, W. B. and Rollins, L. A.. (2015). Expected
+Chao, A., and Chiu, C. H. (2016). Bridging the variance and diversity decomposition approaches to beta diversity via similarity and differentiation measures. Methods in Ecology and Evolution, 7, 919-928. \cr\cr
+Chao, A., Jost, L., Hsieh, T. C., Ma, K. H., Sherwin, W. B. and Rollins, L. A. (2015). Expected
 Shannon entropy and Shannon differentiation between subpopulations for neutral genes under the finite island model. Plos One, 10:e0125471. \cr\cr
 Chiu, C. H., Jost, L. and Chao, A. (2014). Phylogenetic beta diversity, similarity, and differentiation measures based on Hill numbers. Ecological Monographs, 84, 21-44.\cr\cr
 }

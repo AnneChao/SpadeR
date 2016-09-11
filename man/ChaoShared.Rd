@@ -32,17 +32,13 @@ data (datatype="incidence_freq"), and Type (2B) incidence-raw data (datatype="in
 _raw"); see \code{SpadeR-package} details for data input formats.
 }
 \examples{
-# Load Type (1) birds abundance data observed in samples from two estuaries
-data(ChaoSharedDataAbu)
-ChaoShared(ChaoSharedDataAbu,"abundance",se=TRUE,nboot=200,conf=0.95)
-# Load Type (2) birds incidence-frequency data observed in 2015 (by 16 teams) and 2016 (by 
-# 17 teams) in the Hong Kong Big Bird Race
-data(ChaoSharedDataInci)
-ChaoShared(ChaoSharedDataInci,"incidence_freq",se=TRUE,nboot=200,conf=0.95)
-# Load Type (2B) birds species-by-team incidence-raw data of birds observed  
-# in 2015 (by 16 teams) and 2016 (by 17 teams) in the Hong Kong Big Bird Race
-data(ChaoSharedDataInci_raw)
-ChaoShared(ChaoSharedDataInci_raw,"incidence_raw",units=c(16,17),se=TRUE,nboot=200,conf=0.95)
+data(ChaoSharedData)
+# Type (1) abundance data
+ChaoShared(ChaoSharedData$Abu,"abundance",se=TRUE,nboot=200,conf=0.95)
+# Type (2) incidence-frequency data 
+ChaoShared(ChaoSharedData$Inci,"incidence_freq",se=TRUE,nboot=200,conf=0.95)
+# Type (2B) incidence-raw data   
+ChaoShared(ChaoSharedData$Inci_raw,"incidence_raw",units=c(16,17),se=TRUE,nboot=200,conf=0.95)
 }
 \references{
 Chao, A., Hwang, W.-H., Chen, Y.-C. and Kuo. C.-Y. (2000). Estimating the  number of shared species in two communities. Statistica Sinica, 10, 227-246.\cr\cr

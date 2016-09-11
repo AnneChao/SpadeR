@@ -31,22 +31,17 @@ Type (1) abundance data (datatype="abundance"), Type (1A) abundance-frequency co
 Type (2B) incidence-raw data (datatype="incidence_raw"); see \code{SpadeR-package} details for data input formats.
 }
 \examples{
-# Load Type (1) observed birds abundance data from a community
-data(ChaoSpeciesDataAbu)
-ChaoSpecies(ChaoSpeciesDataAbu,"abundance",k=10,conf=0.95)
-# Load Type (1A) vascular plant abundance-frequency counts data observed in a community
-data("ChaoSpeciesDataAbu_count")
-ChaoSpecies(ChaoSpeciesDataAbu_count,"abundance_freq_count",k=10,conf=0.95)
-# Load Type (2) seed-bank incidence-frequency data observed in 121 soil samples
-data(ChaoSpeciesDataInci)
-ChaoSpecies(ChaoSpeciesDataInci,"incidence_freq",k=10,conf=0.95)
-# Load Type (2A) cottontail rabbit incidence-frequency counts data conducted in 18 trapping
-# occasions
-data("ChaoSpeciesDataInci_freq_count")
-ChaoSpecies(ChaoSpeciesDataInci_freq_count,"incidence_freq_count",k=10,conf=0.95)
-# Load Type (2B) cottontail rabbit incidence-raw data conducted in 18 trapping occasions
-data(ChaoSpeciesDataInci_raw)
-ChaoSpecies(ChaoSpeciesDataInci_raw,"incidence_raw",k=10,conf=0.95)
+data(ChaoSpeciesData)
+# Type (1) abundance data
+ChaoSpecies(ChaoSpeciesData$Abu,"abundance",k=10,conf=0.95)
+# Type (1A) abundance-frequency counts data
+ChaoSpecies(ChaoSpeciesData$Abu_count,"abundance_freq_count",k=10,conf=0.95)
+# Type (2) incidence-frequency data
+ChaoSpecies(ChaoSpeciesData$Inci,"incidence_freq",k=10,conf=0.95)
+# Type (2A) incidence-frequency counts data
+ChaoSpecies(ChaoSpeciesData$Inci_count,"incidence_freq_count",k=10,conf=0.95)
+# Type (2B) incidence-raw data 
+ChaoSpecies(ChaoSpeciesData$Inci_raw,"incidence_raw",k=10,conf=0.95)
 }
 \references{
 Chao, A., and Chiu, C. H. (2012). Estimation of species richness and shared species richness. In N. Balakrishnan (ed). Methods and Applications of Statistics in the Atmospheric and Earth Sciences. p.76-111, Wiley, New York.\cr\cr

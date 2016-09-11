@@ -24,10 +24,10 @@ this function computes the estimated pairwise Morisita-Horn and regional species
 
 \item{nboot}{an integer specifying the number of bootstrap replications.}
 
-\item{goal}{a specified estimating goal to use to compute pairwise similarity measures,:comparing species relative abundances (\code{goal=relative}) or comparing species absolute abundances  \code{goal=absolute}. \cr\cr}
+\item{goal}{a specified estimating goal to use to compute pairwise similarity measures:comparing species relative abundances (\code{goal=relative}) or comparing species absolute abundances (\code{goal=absolute}). \cr\cr}
 }
 \value{
-a list of thirteen objects: \cr\cr
+a list of fourteen objects: \cr\cr
 \code{$datatype} for showing the specified data types (abundance or incidence).\cr\cr
 \code{$info} for summarizing data information.\cr\cr 
 \code{$Empirical_richness} for showing the observed values of the richness-based similarity indices
@@ -56,24 +56,19 @@ incidence-frequency data (datatype="incidence_freq"), and Type (2B) incidence-ra
 }
 \examples{
 \dontrun{
-# Load Type (1) abundance data observed in samples from three communities (seedlings,
-#saplings and trees) collected in an old-growth rain forest
-data("SimilarityMultDataAbu")
-SimilarityMult(SimilarityMultDataAbu,"abundance",q=2,nboot=200,"relative")
-# Load Type (2) incidence frequencies of tropical ants in 217Berlese soil samples, 459 canopy
-#fogging samples, and 62 Malaise trap samples.
-data("SimilarityMultDataInci")
-SimilarityMult(SimilarityMultDataInci,"incidence_freq",q=2,nboot=200,"relative")
-# Load Type (2B) soil ciliates incidence-raw data observed in three areas with 19, 17 and 15
-#soil samples respectively
-data("SimilarityMultDataInci_raw")
-SimilarityMult(SimilarityMultDataInci_raw,"incidence_raw",
+data(SimilarityMultData)
+# Type (1) abundance data 
+SimilarityMult(SimilarityMultData$Abu,"abundance",q=2,nboot=200,"relative")
+# Type (2) incidence-frequency data 
+SimilarityMult(SimilarityMultData$Inci,"incidence_freq",q=2,nboot=200,"relative")
+# Type (2B) incidence-raw data 
+SimilarityMult(SimilarityMultData$Inci_raw,"incidence_raw",
 units=c(19,17,15),q=2,nboot=200,"relative")
 }
 }
 \references{
-Chao, A., and Chiu, C. H. (2016c). Bridging the variance and diversity decomposition approaches to beta diversity via similarity and differentiation measures. Methods in Ecology and Evolution. Early view at http://onlinelibrary.wiley.com/doi/10.1111/2041-210X.12551/abstract.\cr\cr
-Chao, A., Jost, L., Hsieh, T. C., Ma, K. H., Sherwin, W. B. and Rollins, L. A.. (2015). Expected Shannon entropy and Shannon differentiation between subpopulations for neutral genes under the finite island model. Plos One, 10:e0125471.\cr\cr
+Chao, A., and Chiu, C. H. (2016). Bridging the variance and diversity decomposition approaches to beta diversity via similarity and differentiation measures. Methods in Ecology and Evolution, 7, 919-928. \cr\cr
+Chao, A., Jost, L., Hsieh, T. C., Ma, K. H., Sherwin, W. B. and Rollins, L. A. (2015). Expected Shannon entropy and Shannon differentiation between subpopulations for neutral genes under the finite island model. Plos One, 10:e0125471.\cr\cr
 Chiu, C. H., Jost, L. and Chao, A. (2014). Phylogenetic beta diversity, similarity, and differentiation measures based on Hill numbers. Ecological Monographs, 84, 21-44.\cr\cr
 Gotelli, N. G. and Chao, A. (2013). Measuring and estimating species richness, species diver- sity,
 and biotic similarity from sampling data. Encyclopedia of Biodiversity, 2nd Edition, Vol. 5, 195-211, Waltham, MA.

@@ -111,12 +111,16 @@ SpecInciiChao2 <- function(data, k, conf){
   j <- rep(sort(unique(ind)),length(unique(ind)))       # all combination
   
   #    if (q1 - q2*q3/2/q4 > 0 & q3 != 0){
-  if (q1 - (t - 3)/(t - 1)*q2*q3/2/q4 > 0 | 
-        q1 - (t - 3)/(t - 1)*q2*q3/2 > 0){
+  if(q4 != 0){
+    if (q1 - (t - 3)/(t - 1)*q2*q3/2/q4 > 0 | q1 - (t - 3)/(t - 1)*q2*q3/2 > 0){
     var_iChao2 <- sum(mapply(function(i, j)diff(i, x)*diff(j, x)*COV.q(i, j), i, j))
   } else {
     var_iChao2 <- var_Chao2
   }
+  }else{
+    var_iChao2 <- var_Chao2
+  }
+  
   
   if (var_iChao2 > 0){
     var_iChao2 <- var_iChao2
