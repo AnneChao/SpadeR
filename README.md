@@ -199,23 +199,23 @@ Genetics(GeneticsDataAbu,q=2,nboot=200)
 
 If you publish your work based on results from `SpadeR`, please make references to our relevant methodology papers mentioned below and also use the following reference for citing SpadeR:
 
-Chao, A., Ma, K. H., Hsieh, T. C. and Chiu, C. H. (2016). SpadeR (Species-richness Prediction And Diversity Estimation in R): an R package in CRAN. Program and User?€™s Guide also published at http://chao.stat.nthu.edu.tw/blog/software-download/
+Chao, A., Ma, K. H., Hsieh, T. C. and Chiu, C. H. (2016). SpadeR (Species-richness Prediction And Diversity Estimation in R): an R package in CRAN. Program and User' Guide also published at http://chao.stat.nthu.edu.tw/blog/software-download/
 
 ### References
 
-We recommend the following recent papers for pertinent background on biodiversity measures and statistical analyses. These papers can be directly downloaded from Anne Chao?€™s website. 
+We recommend the following recent papers for pertinent background on biodiversity measures and statistical analyses. These papers can be directly downloaded from Anne Chao'website. 
 
-Chao, A., and Chiu, C. H. (2012). Estimation of species richness and shared species richness. In N. Balakrishnan (ed). Methods and Applications of Statistics in the Atmospheric and Earth Sciences. p.76?€?111, Wiley, New York. (<font color="blue">Background on species richness and shared species richness estimation</font>)
+Chao, A., and Chiu, C. H. (2012). Estimation of species richness and shared species richness. In N. Balakrishnan (ed). Methods and Applications of Statistics in the Atmospheric and Earth Sciences. p.76-111, Wiley, New York. (<font color="blue">Background on species richness and shared species richness estimation</font>)
 
 Chao, A., and Chiu, C. H. (2016). Nonparametric estimation and comparison of species richness. Wiley Online Reference in the Life Science. In: eLS. John Wiley & Sons, Ltd: Chichester.  (<font color="blue">Background on comparing species richness across communities</font>)
 
 Chao, A., and Chiu, C. H. (2016). Bridging the variance and diversity decomposition approaches to beta diversity via similarity and differentiation measures. Methods in Ecology and Evolution, 7, 919?€?928. (<font color="blue">A unified theoretical framework on similarity/differentiation measures</font>)
 
-Chao, A., Chiu, C. H. and Jost, L. (2014). Unifying species diversity, phylogenetic diversity, functional diversity, and related similarity/differentiation measures through Hill numbers. Annual Reviews of Ecology, Evolution, and Systematics, 45, 297?€?324. (<font color="blue">A unified theoretical framework on diversity measures</font>)
+Chao, A., Chiu, C. H. and Jost, L. (2014). Unifying species diversity, phylogenetic diversity, functional diversity, and related similarity/differentiation measures through Hill numbers. Annual Reviews of Ecology, Evolution, and Systematics, 45, 297-324. (<font color="blue">A unified theoretical framework on diversity measures</font>)
 
 Chao, A., Gotelli, N. J., Hsieh, T. C., Sander, E. L., Ma, K. H., Colwell, R. K. and Ellison, A. M. (2014). Rarefaction and extrapolation with Hill numbers: a framework for sampling and estimation in species diversity studies. Ecological Monographs, 84, 45?€?67. (<font color="blue">Background on comparing diversity measures across communities</font>)
 
-Chao, A. and Jost, L. (2015). Estimating diversity and entropy profiles via discovery rates of new species. Methods in Ecology and Evolution, 6, 873?€?882. (<font color="blue">A unified approach to estimating diversity in a community based on incomplete samples</font>)
+Chao, A. and Jost, L. (2015). Estimating diversity and entropy profiles via discovery rates of new species. Methods in Ecology and Evolution, 6, 873-882. (<font color="blue">A unified approach to estimating diversity in a community based on incomplete samples</font>)
 
-Chao, A., Wang, Y. T. and Jost, L. (2013). Entropy and the species accumulation curve: a novel entropy estimator via discovery rates of new species. Methods in Ecology and Evolution, 4, 1091?€?1100. (<font color="blue">A nearly optimal estimator of Shannon entropy/diversity based on incomplete samples</font>)
+Chao, A., Wang, Y. T. and Jost, L. (2013). Entropy and the species accumulation curve: a novel entropy estimator via discovery rates of new species. Methods in Ecology and Evolution, 4, 1091-1100. (<font color="blue">A nearly optimal estimator of Shannon entropy/diversity based on incomplete samples</font>)
 
