@@ -18,12 +18,12 @@ SpadeR (Species-Richness Prediction and Diversity Estimation with R) is an updat
 Both SpadeR (R package) and SpadeR Online include nearly all of the important features from the original program SPADE while also having the advantages of expanded output displays and simplified data input formats. See [SpadeR Manual](https://cran.r-project.org/web/packages/SpadeR/SpadeR.pdf) for all details of the functions supplied in the package. For numerical examples with proper interpretations, see the detailed Online [SpadeR User's Guide](http://chao.stat.nthu.edu.tw/wordpress/wp-content/uploads/software/SpadeR_UserGuide.pdf).
 
 This package contains six main functions: <br>
-1. <font color="red">ChaoSpecies</font> (estimating species richness for one community). <br>
-2. <font color="red">Diversity</font> (estimating a continuous diversity profile and various diversity indices in one community including species richness, Shannon diversity and Simpson diversity). This function also features plots of empirical and estimated continuous diversity profiles. <br>
-3. <font color="red">ChaoShared</font> (estimating the number of shared species between two communities). <br>
-4. <font color="red">SimilartyPair</font> (estimating various similarity indices between two assemblages). Both richness and abundance-based two-community similarity indices are included. <br>
-5. <font color="red">SimilarityMult</font> (estimating various similarity indices among N communities). Both richness and abundance-based N-community similarity indices are included. <br>
-6. <font color="red">Genetics</font> (estimating allelic dissimilarity/differentiation among sub-populations based on multiple subpopulation genetics data). <br>
+1. <font color="red">ChaoSpecies</font> (estimating species richness for one community). <br><br>
+2. <font color="red">Diversity</font> (estimating a continuous diversity profile and various diversity indices in one community including species richness, Shannon diversity and Simpson diversity). This function also features plots of empirical and estimated continuous diversity profiles. <br><br>
+3. <font color="red">ChaoShared</font> (estimating the number of shared species between two communities). <br><br>
+4. <font color="red">SimilartyPair</font> (estimating various similarity indices between two assemblages). Both richness and abundance-based two-community similarity indices are included. <br><br>
+5. <font color="red">SimilarityMult</font> (estimating various similarity indices among N communities). Both richness and abundance-based N-community similarity indices are included. <br><br>
+6. <font color="red">Genetics</font> (estimating allelic dissimilarity/differentiation among sub-populations based on multiple subpopulation genetics data). <br><br>
 
 Except for the Genetics function, there are at least three types of data are supported for each function.
 
