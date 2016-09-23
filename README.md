@@ -5,7 +5,7 @@ A Brief Introduction to SpadeR (R package): Species-Richness Prediction and Dive
 =====
 
 <h4>Anne Chao, K. H., Ma, T. C., Hsieh and Chun-Huo Chiu.
-
+<br><br>
 Institute of Statistics, National Tsing Hua University, Hsin-Chu, Taiwan 30043</h4>
 
 ### Overview
