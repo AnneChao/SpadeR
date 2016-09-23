@@ -1,10 +1,3 @@
----
-output: html_document
----
-<!-- README.md is generated from README.Rmd. Please edit that file -->
-
-
-
 A Brief Introduction to SpadeR (R package): Species-Richness Prediction and Diversity Estimation
 =====
 <h4 style="text-align: right;">Latest version: Sep 9, 2016    
@@ -17,8 +10,8 @@ Institute of Statistics, National Tsing Hua University, Hsin-Chu, Taiwan 30043</
 
 SpadeR (Species-Richness Prediction and Diversity Estimation with R) is an updated R package from the original version of SPADE. SpadeR provides simple R functions to compute various biodiversity indices and related (dis)similarity measures based on individual-based (abundance) data or sampling-unit-based (incidence) data taken from one or multiple communities/assemblages. The SpadeR package is available in [CRAN](https://cran.r-project.org/web/packages/SpadeR/index.html). We have been updating SpadeR and you can download the latest version from Github (see below) or from [Anne Chao's website](http://chao.stat.nthu.edu.tw/wordpress/software_download/). 
 
-<li>	You need to acquire basic knowledge about R to use functions supplied by SpadeR.
-<li> For readers without R background, please try our SpadeR Online, an R-based online version via the link[Anne Chao's website](http://chao.stat.nthu.edu.tw/wordpress/software_download/) or https://chao.shinyapps.io/SpadeR/. Users do not need to learn/understand R to run SpadeR Online.
+<li> You need to acquire basic knowledge about R to use functions supplied by SpadeR.
+<li> For readers without R background, please try our SpadeR Online, an R-based online version via the link[Anne Chao's website](http://chao.stat.nthu.edu.tw/wordpress/software_download/) or https://chao.shinyapps.io/SpadeR/. Users do not need to learn/understand R to run SpadeR Online.
 
 Both SpadeR (R package) and SpadeR Online include nearly all of the important features from the original program SPADE while also having the advantages of expanded output displays and simplified data input formats. See [SpadeR Manual](https://cran.r-project.org/web/packages/SpadeR/SpadeR.pdf) for all details of the functions supplied in the package. For numerical examples with proper interpretations, see the detailed Online [SpadeR User's Guide](http://chao.stat.nthu.edu.tw/wordpress/wp-content/uploads/software/SpadeR_UserGuide.pdf).
 
@@ -36,11 +29,11 @@ Except for the Genetics function, there are at least three types of data are sup
 
 It is very important to prepare your data in correct format. Data are generally classified as abundance data and incidence data and there are five types of data input formats options (datatype="abundance", "abundance_freq_count", "incidence_freq", "incidence_freq_count", "incidence_raw"). 
 
-<li>	Individual-based abundance data when a sample of individuals is taken from each community. <br> 
+<li> Individual-based abundance data when a sample of individuals is taken from each community. <br> 
 <font color="red">Type (1) abundance data</font> (datatype = "abundance"): Input data consist of species (in rows) by community (in columns) matrix. The entries of each row are the observed abundances of a species in N communities. <br>
 <font color="red">Type (1A) abundance-frequency counts data</font> only for a single community (datatype = "abundance_freq_count"): input data are arranged as (1 f1 2 f2 ... r fr)(each number needs to be separated by at least one blank space or separated by rows), where r denotes the maximum frequency and fk denotes the number of species represented by exactly k individuals/times in the sample. Here the data (f1, f2,..., fr) are referred to as "abundance-frequency counts".
 
-<li> 	Sampling-unit-based incidence data when a number of sampling units are randomly taken from each community. Only the incidence (detection/non-detection) of species is recorded in each sampling unit. There are three data formats options. <br>
+<li> Sampling-unit-based incidence data when a number of sampling units are randomly taken from each community. Only the incidence (detection/non-detection) of species is recorded in each sampling unit. There are three data formats options. <br>
 
 <font color="red">Type (2) incidence-frequency data</font> (datatype="incidence_freq"): The first row of the input data must be the number of sampling units in each community. Beginning with the second row, input data consist of species (in rows) by community (in columns) matrix. The entries of each row are the observed incidence frequencies (the number of detections or the number of sampling units in which a species are detected) of a species in N communities. <br>
 <font color="red">Type (2A) incidence-frequency counts data</font> only for a single community (datatype="incidence_ freq_count"): input data are arranged as (T 1 Q1 2 Q2 ... r Qr) (each number needs to be separated by at least one blank space or separated by rows), where Qk denotes the number of species that were detected in exactly k sampling units, while r denotes the number of sampling units in which the most frequent species were found. The first entry must be the total number of sampling units, T. The data (Q1,Q2,...,Qr) are referred to as "incidence frequency counts". <br>
