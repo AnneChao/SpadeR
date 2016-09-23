@@ -1,9 +1,11 @@
+<h5 align="right">
+Latest version: Sept. 9, 2016
+</h5>
 A Brief Introduction to SpadeR (R package): Species-Richness Prediction and Diversity Estimation
 =====
-<h4 style="text-align: right;">Latest version: Sep 9, 2016    
 
-by Anne Chao, K. H., Ma, T. C., Hsieh and Chun-Huo Chiu.
-<br><br>
+<h4>Anne Chao, K. H., Ma, T. C., Hsieh and Chun-Huo Chiu.
+
 Institute of Statistics, National Tsing Hua University, Hsin-Chu, Taiwan 30043</h4>
 
 ### Overview
