@@ -31,13 +31,9 @@ Except for the Genetics function, there are at least three types of data are sup
 
 It is very important to prepare your data in correct format. Data are generally classified as abundance data and incidence data and there are five types of data input formats options (datatype="abundance", "abundance_freq_count", "incidence_freq", "incidence_freq_count", "incidence_raw"). 
 
-<script type="text/javascript"
-src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
-</script>
-
 <li> Individual-based abundance data when a sample of individuals is taken from each community. <br> 
 <font color="red">Type (1) abundance data</font> (datatype = "abundance"): Input data consist of species (in rows) by community (in columns) matrix. The entries of each row are the observed abundances of a species in N communities. <br>
-<font color="red">Type (1A) abundance-frequency counts data</font> only for a single community (datatype = "abundance_freq_count"): input data are arranged as (1 $f_1$ 2 f2 ... r fr)(each number needs to be separated by at least one blank space or separated by rows), where r denotes the maximum frequency and fk denotes the number of species represented by exactly k individuals/times in the sample. Here the data (f1, f2,..., fr) are referred to as "abundance-frequency counts".
+<font color="red">Type (1A) abundance-frequency counts data</font> only for a single community (datatype = "abundance_freq_count"): input data are arranged as (1 f1 2 f2 ... r fr)(each number needs to be separated by at least one blank space or separated by rows), where r denotes the maximum frequency and fk denotes the number of species represented by exactly k individuals/times in the sample. Here the data (f1, f2,..., fr) are referred to as "abundance-frequency counts".
 
 <li> Sampling-unit-based incidence data when a number of sampling units are randomly taken from each community. Only the incidence (detection/non-detection) of species is recorded in each sampling unit. There are three data formats options. <br>
 
