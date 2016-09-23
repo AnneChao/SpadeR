@@ -23,7 +23,7 @@ This package contains six main functions: <br>
 3. <font color="red">ChaoShared</font> (estimating the number of shared species between two communities). <br><br>
 4. <font color="red">SimilartyPair</font> (estimating various similarity indices between two assemblages). Both richness and abundance-based two-community similarity indices are included. <br><br>
 5. <font color="red">SimilarityMult</font> (estimating various similarity indices among N communities). Both richness and abundance-based N-community similarity indices are included. <br><br>
-6. <font color="red">Genetics</font> (estimating allelic dissimilarity/differentiation among sub-populations based on multiple subpopulation genetics data). <br><br>
+6. <font color="red">Genetics</font> (estimating allelic dissimilarity/differentiation among sub-populations based on multiple subpopulation genetics data). <br>
 
 Except for the Genetics function, there are at least three types of data are supported for each function.
 
